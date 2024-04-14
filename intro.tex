@@ -34,9 +34,11 @@ For the formalization of Android multitasking mechanism, the most complete exist
 %do not address more complicated activity attributes such as allowTaskReparenting,
 %which are left as the future work.
 
-Based on {\AMASS}, we also make the first step towards a formal analysis of Android multitasking apps by investigating the \emph{reachability problem} which is fundamental to all such analysis. {\AMASS} is akin to pushdown systems with multiple stacks, so it is perhaps not surprising that the problem is hard in general; 
+Based on {\AMASS}, we also %make the first step towards a 
+investigate formal analysis of Android multitasking apps, %by investigating 
+in particular, the \emph{reachability problem} which is fundamental to all such analysis. {\AMASS} is akin to pushdown systems with multiple stacks, so it is perhaps not surprising that the problem is hard in general; 
 %in fact, we show undecidability for most interesting fragments even with just two launch modes. %(See Theorem~\ref{thm:undec}---\ref{prop:tridec} for details.)
-In the interest of seeking more expressive, practice-relevant decidable fragments,
+in the interest of seeking more expressive, practice-relevant decidable fragments,
 %observe that $\standard/\singletop$ activities must be supported, and %$\singletask/\singleinstance$
 %$\singleinstance$ activities are desirable.\zhilin{seems strange ?}  %commonly used in Android apps. %\footnote{statistics data?}.
 %Although the combination of all of them is unfortunately undecidable,

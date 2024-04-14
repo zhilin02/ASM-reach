@@ -7,3 +7,4 @@ main.aux
 main.pdf
 *.spl
 *.gz
+*.synctex(busy)
