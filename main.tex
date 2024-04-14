@@ -1,22 +1,3 @@
-%% 
-%% Copyright 2019-2021 Elsevier Ltd
-%% 
-%% This file is part of the 'CAS Bundle'.
-%% --------------------------------------
-%% 
-%% It may be distributed under the conditions of the LaTeX Project Public
-%% License, either version 1.2 of this license or (at your option) any
-%% later version.  The latest version of this license is in
-%%    http://www.latex-project.org/lppl.txt
-%% and version 1.2 or later is part of all distributions of LaTeX
-%% version 1999/12/01 or later.
-%% 
-%% The list of all files belonging to the 'CAS Bundle' is
-%% given in the file `manifest.txt'.
-%% 
-%% Template article for cas-sc documentclass for 
-%% single column output.
-
 \documentclass[preprint,12pt]{elsarticle}
 
 %% Use the option review to obtain double line spacing
@@ -207,7 +188,7 @@
 \author[a1,a2]{Zhilin Wu}
 \ead{wuzl@ios.ac.cn}
 \author[a3]{Taolue Chen}
-\ead{taolue.chen@gmail.com}
+\ead{t.chen@bbk.ac.uk}
 
 %\hide{
 \affiliation[a1]{organization={State Key Laboratory of Computer Science, Institute of Software, Chinese Academy of Sciences},
@@ -248,9 +229,9 @@
 
 % Address/affiliation
 
-% Here goes the abstract
+ 
 \begin{abstract}
-In this paper, we propose Android Stack Machine (ASM), a formal model to capture key mechanisms of Android multi-tasking such as activities, back stacks, launch modes, as well as task affinities. The model is based on pushdown systems with multiple stacks, and focuses on the evolution of the back stack of the Android system when interacting with activities carrying specific launch modes and task affinities. For formal analysis, we study the reachability problem of ASM. While the general problem is shown to be undecidable, we identify  expressive fragments for which various verification techniques for pushdown systems or their extensions are harnessed to show decidability of the  problem.
+In this paper, we propose Android Stack Machine (ASM), a formal model to capture key mechanisms of Android multi-tasking such as activities, back stacks, launch modes, and task affinities. The model is based on pushdown systems with multiple stacks, and focuses on the evolution of the back stack of the Android system when interacting with activities carrying specific launch modes and task affinities. For formal analysis, we study the reachability problem of ASM. While the general problem is shown to be undecidable, we identify  expressive fragments for which various verification techniques for pushdown systems or their extensions are harnessed to show the decidability of the problem.
 \end{abstract}
 
 % Use if graphical abstract is present
@@ -263,7 +244,7 @@ In this paper, we propose Android Stack Machine (ASM), a formal model to capture
 % Keywords
 % Each keyword is seperated by \sep
 \begin{keyword}
-Android, multitasking mechanism, stack, configuration reachability, pushdown systems, transductions, decision procedure
+Android, multitasking mechanism, stack, configuration reachability, pushdown system, transduction, decision procedure
 \end{keyword}
 \end{frontmatter}
 
