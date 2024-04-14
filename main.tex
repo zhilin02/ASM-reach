@@ -1,0 +1,359 @@
+%% 
+%% Copyright 2019-2021 Elsevier Ltd
+%% 
+%% This file is part of the 'CAS Bundle'.
+%% --------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'CAS Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+%% Template article for cas-sc documentclass for 
+%% single column output.
+
+\documentclass[preprint,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+% If the frontmatter runs over more than one page
+% use the longmktitle option.
+
+%\documentclass[a4paper,fleqn,longmktitle]{cas-sc}
+
+%\usepackage[numbers]{natbib}
+%\usepackage[authoryear]{natbib}
+%\usepackage[authoryear,longnamesfirst]{natbib}
+\usepackage{hyperref}
+\usepackage{latexsym}
+\usepackage{setspace}
+\usepackage{cancel}
+\usepackage{graphicx}
+\usepackage{appendix}
+\usepackage{amssymb}
+%\usepackage{dsfont}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{chngpage}
+%\usepackage{fullpage}
+\usepackage{color}
+\usepackage{mathrsfs}
+\usepackage{url}
+%\usepackage{stmaryrd}
+\usepackage{mathtools}
+\usepackage{textcomp}
+%\usepackage{circle}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{array}
+\setlistdepth{9}
+
+
+\setlist[itemize,1]{label=$\bullet$}
+\setlist[itemize,2]{label=$-$}
+\setlist[itemize,3]{label=$\ast$}
+\setlist[itemize,4]{label=$\cdot$}
+\setlist[itemize,5]{label=$\diamond$}
+\setlist[itemize,6]{label=$\circ$}
+\setlist[itemize,7]{label=$\star$}
+\setlist[itemize,8]{label=$\triangleright$}
+\setlist[itemize,9]{label=$\square$}
+
+\renewlist{itemize}{itemize}{9}
+\makeatletter
+\newcommand\mathcircled[1]{%
+  \mathpalette\@mathcircled{#1}%
+}
+\newcommand\@mathcircled[2]{%
+  \tikz[baseline=(math.base)] \node[draw,circle,inner sep=0.2pt] (math) {$\m@th#1#2$};%
+}
+
+\newcommand{\hcancel}[1]{%
+    \tikz[baseline=(tocancel.base)]{
+        \node[inner sep=0pt,outer sep=0pt] (tocancel) {#1};
+        \draw[black] (tocancel.south east) -- (tocancel.north west);
+    }%
+}%
+
+\usetikzlibrary{shapes,snakes}
+\newcommand\rectangled[1]{\tikz[baseline=(torect.base)]{
+    \node[shape = rectangle, draw, inner sep=0pt, outer sep = 0pt] (torect) {#1}
+    }
+}
+
+\newcommand{\mrectangled}[1]{\text{\rectangled{\ensuremath{#1}}}}
+\newcommand{\mhcancel}[1]{\mrectangled{#1}}
+
+\makeatother
+
+
+
+%%%Author macros
+%\def\tsc#1{\csdef{#1}{\textsc{\lowercase{#1}}\xspace}}
+%\tsc{WGM}
+%\tsc{QE}
+%%%
+
+% Uncomment and use as if needed
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newdefinition{rmk}{Remark}
+\newproof{proof}{Proof}
+%\newproof{pot}{Proof of Theorem \ref{thm}}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}{Example}
+\newtheorem{question}{Open Question}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{Algo}{Algorithm}
+\newtheorem{remark}[theorem]{Remark}
+
+\definecolor{highlightcolor}{rgb}{0.9,0.9,0.9}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\input{macro.tex}
+
+\newcommand\shortlong[2]{#2}
+%\newcommand\shortlong[2]{#1}
+
+\newif\ifdraft\drafttrue
+%\newif\ifdraft\draftfalse
+\ifdraft
+\newcommand{\jinlong}[1]{\color{red} {JL: #1 :LJ} \color{black}}
+\newcommand{\zhilin}[1]{\color{blue} {ZL: #1 :LZ} \color{black}}
+\newcommand{\tl}[1]{\color{magenta} {TL: #1 :LT} \color{black}}
+\else
+\newcommand{\jinlong}[1]{}
+\newcommand{\zhilin}[1]{}
+\newcommand{\tl}[1]{}
+\fi
+
+\journal{Information and Computation}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for theassociated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for theassociated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for theassociated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \affiliation{organization={},
+%%             addressline={},
+%%             city={},
+%%             postcode={},
+%%             state={},
+%%             country={}}
+%% \fntext[label3]{}
+
+\title{A Decision Procedure for Configuration Reachability of Android Stack Machine}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{}
+%% \affiliation[label1]{organization={},
+%%             addressline={},
+%%             city={},
+%%             postcode={},
+%%             state={},
+%%             country={}}
+%%
+%% \affiliation[label2]{organization={},
+%%             addressline={},
+%%             city={},
+%%             postcode={},
+%%             state={},
+%%             country={}}
+
+\author[a1,a2]{Jinlong He}
+\ead{hejl@ios.ac.cn}
+\author[a1,a2]{Zhilin Wu}
+\ead{wuzl@ios.ac.cn}
+\author[a3]{Taolue Chen}
+\ead{taolue.chen@gmail.com}
+
+%\hide{
+\affiliation[a1]{organization={State Key Laboratory of Computer Science, Institute of Software, Chinese Academy of Sciences},
+            %addressline={}, 
+            city={Beijing},
+            %postcode={}, 
+            %state={},
+            country={China}}
+
+\affiliation[a2]{organization={University of Chinese Academy of Sciences},
+            %addressline={}, 
+            city={Beijing},
+%%          citysep={}, % Uncomment if no comma needed between city and postcode
+            %postcode={}, 
+            %state={Beijing},
+            country={China}}
+            
+\affiliation[a3]{organization={Birkbeck, University of London},
+	%addressline={}, 
+	city={London},
+	%%          citysep={}, % Uncomment if no comma needed between city and postcode
+	%postcode={}, 
+	%state={Beijing},
+	country={UK}}
+%}
+
+% Footnote of the second author
+%\fnmark[2]
+
+% Email id of the second author
+%\ead{}
+
+% URL of the second author
+%\ead[url]{}
+
+% Credit authorship
+%\credit{}
+
+% Address/affiliation
+
+% Here goes the abstract
+\begin{abstract}
+In this paper, we propose Android Stack Machine (ASM), a formal model to capture key mechanisms of Android multi-tasking such as activities, back stacks, launch modes, as well as task affinities. The model is based on pushdown systems with multiple stacks, and focuses on the evolution of the back stack of the Android system when interacting with activities carrying specific launch modes and task affinities. For formal analysis, we study the reachability problem of ASM. While the general problem is shown to be undecidable, we identify  expressive fragments for which various verification techniques for pushdown systems or their extensions are harnessed to show decidability of the  problem.
+\end{abstract}
+
+% Use if graphical abstract is present
+%\begin{graphicalabstract}
+%\includegraphics{}
+%\end{graphicalabstract}
+
+% Research highlights
+
+% Keywords
+% Each keyword is seperated by \sep
+\begin{keyword}
+Android, multitasking mechanism, stack, configuration reachability, pushdown systems, transductions, decision procedure
+\end{keyword}
+\end{frontmatter}
+
+%\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction} \label{sec:intro}
+\input{intro.tex}
+
+%======================================================================
+
+ 
+\section{Android Multitasking mechanism} \label{sec:amm}
+\input{amm.tex}
+
+
+%===================================================================================
+
+
+\section{Preliminaries}  \label{appendix:prel}
+\input{prel.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Android stack machine} \label{sec:amass}
+
+\input{amass.tex}
+
+%===================================================================================================
+% \section{Doubly-Nested Stack Systems} \label{sec:dnss}
+
+% \input{dnss.tex}
+
+%===================================================================================================
+% \section{Pushdown systems with well-partially-ordered transductions} \label{sec:wpotrpds}
+
+% \input{wpotrpds.tex}
+
+%===================================================================================================
+%\section{Configuration reachability problem of $\STK$-dominating $\AMASS$} \label{sec:reach}
+
+\input{reach_new.tex}
+
+%===================================================================================================
+
+
+\section{Related work}
+%
+%\input{rel.tex}
+
+%===================================================================================================
+
+\section{Conclusion}
+% 
+%
+%In this paper, we have introduced Android stack machine to formalize the back stack system of the Android platform. %We have done extensive experiments to make sure that the ASM model conforms to the actual behavior of the  Android platform. Moreover, 
+%We have also investigated the decidability of the reachability problem of ASM. While the reachability problem of ASM is undecidable in general, we have identified a fragment, i.e., $\singletask$-dominating ASM, which is expressive and admits decision procedures for reachability.
+%
+%
+%The implementation of the decision procedures is in progress. We also plan to consider other features of Android back stack systems, e.g., the ``allowTaskReparenting'' attribute of activities. A long-term program is to develop an efficient and scalable formal analysis and verification framework for Android apps, towards which the work reported in this paper is the first cornerstone.
+
+\newpage
+%\bibliographystyle{cas-model2-names}
+ \bibliographystyle{elsarticle-num-names} 
+\bibliography{reference}
+
+
+
+%
+
+% Main text
+%% Loading bibliography style file
+%\bibliographystyle{model1-num-names}
+%\bibliographystyle{plain}
+%
+%% Loading bibliography database
+%\bibliography{}
+%
+%% Biography
+%\bio{}
+%% Here goes the biography details.
+%\endbio
+%
+%\bio{pic1}
+%% Here goes the biography details.
+%\endbio
+\newpage
+\appendix
+% \input{appendix.tex}
+
+\end{document}
+

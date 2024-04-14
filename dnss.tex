@@ -1,0 +1,79 @@
+In this section, we introduce the model of Doubly-Nested Stack Systems (\DNSS).  
+\begin{definition}[Doubly-Nested Stack Systems] \label{def:eps}
+    A {\DNSS} is a tuple $\Dd = (\Gamma,\Gamma_\STK, \gamma_{\init}, \Delta)$, where $\Gamma$ is a finite stack alphabet with $\gamma_\init\in \Gamma$, and $\Delta \subseteq \{\POP\} \cup \Gamma \times \opset$ is the transition relation with 
+    $\opset=\{\opn(\gamma)\mid \opn \in \{\PUSH, \STP, \CTP, \RTF\}, \gamma \in \Gamma\setminus\Gamma_\STK \} \cup \{\STK(\gamma)\mid \gamma\in\Gamma_\STK\}$. Moreover, it is required that $\POP \in \Delta$. (Intuitively, the $\POP$ operation can be applied anytime.)
+	%\cup \Gamma \cup\{\back\}$
+\end{definition}
+
+%--------------------------------------------------------
+Intuitively, a {\DNSS} specifies the evolution of a stack of stacks. Inspired by the Android multitasking mechanism, the lower-level stacks are referred to as \emph{tasks} and the upper-level stack, possibly comprising multiple tasks, is referred to as the \emph{task stack}. More formally, a task $S$ is an element of $\Gamma^*$, i.e., a sequence of symbols from $\Gamma$, with the leftmost symbol representing the top of the task; A task stack $\rho$ is of the form $(S_1,\cdots, S_n)$, where each $S_i$ is a task and $S_1$ is the topmost task. When necessary we use $\emptybackstack$ to denote an empty task stack, i.e., when $n=0$.
+
+To precisely define the semantics of a {\DNSS}, we need some additional machinery. We assume that there is a finite \emph{name space} $\namespace$ such that each task $S$ is associated with a \emph{name} $\namefun(S)\in \namespace$. 
+%
+%Notice that the concrete definition will be given when a concrete system is instantiated. 
+We assume that the name $\namefun(S)$ is determined when the task $S$ is created (i.e., being pushed into the task stack as a new task). Therefore, the name function $\namefun$ can also be seen as a function from $\Gamma$ to $\namespace$, that is, it maps from the first symbol of the task (which is pushed into the task when it is created) to some name in $\namespace$. 
+%
+Throughout  this paper we will insist this variant of $\namefun$. 
+%\zhilin{add this explanation of $\namefun$.} 
+Notice that distinct tasks may share the same name. Concrete definitions of the name space $\namespace$ and the name function $\namefun$ vary and are largely domain-specific. For instance, in the {\DNSS} dedicated to the Android multitasking mechanism,  the name of a task is defined as a pair $(A, s)$, where $A$ is the first \emph{activity} of the task when it is launched (this is called \emph{real activity} of the task) and $s$ is the \emph{task affinity} of $A$; we defer the detailed explanations to Section~\ref{sec:asm}.  
+
+In \DNSS, a task stack $\rho=(S_1, \cdots, S_n)$ encompasses multiple tasks. When an operation $o \in \opset$ is to be executed, a distinguished feature of the {\DNSS} model---different from most of the other models based on pushdown systems---is that $\opset$ is not necessarily applied to the top task $S_1$, but may be applied to some task $S_i$ for $1<i\leq n$, depending on the names of all $S_i$'s given by the name function $\namefun$.\footnote{Readers might have already noticed that some operations in $\opset$, i.e., $\PUSH, \STP, \CTP, \RTF$, have two version with one being annotated with the @ symbol. The operation with @ is applied to the top task directly, while the one with @ needs to invoke the addressing mechanism.} To this end, we 
+need to define an \emph{addressing} mechanism, i.e., to prescribe to which task the operation $o$ should be applied. In \DNSS, there are two possibilities: either a task is located to which $\op$ is then applied, or no task can be selected in which case a new task must be created. 
+
+%given a sequence (stack) of stacks and $\gamma\in \Gamma$, which stack is to be operated? In our model,  
+We consider an addressing mechanism which bases the decision on the word $\namefun(S_1)\cdots \namefun(S_n) = \namefun(\gamma_1)\cdots \namefun(\gamma_n) \in \namespace^+$ (where for each $i \in [n]$, $\gamma_i$ is the first symbol pushed to the task $S_i$ when $S_i$ was created) and the stack symbol $\gamma$ contained in $\opn(\gamma) \in \opset$ or $\opn^\addr(\gamma) \in \opset$. Formally, we define $(\alpha_\gamma)_{\gamma\in \Gamma}$, where % for each $\gamma\in \Gamma$, there is an addressing 
+each function $\alpha_\gamma: \namespace^+\rightarrow \natnum\cup\{\bot\}$  is subject to the following two conditions, viz.  
+\begin{itemize} 
+	\item[(a)] $\alpha_\gamma(w)\in [|w|]\cup\{\bot\}$,  and 
+	\item[(b)] for each $w \in \namespace^+$, $\namefun(\gamma)$ occurs in  $w$ entails that $\alpha_\gamma(w) \neq \bot$. 
+\end{itemize}
+%\zhilin{add this condition to guarantee that the number of tasks is bounded when $\LTK$ is missing. }. 
+%In case that $\alpha_\gamma(w)$ returns the index of the lower-level stack in the upper-level stack that will be operated, or otherwise---in case of returning $\bot$, a new lower-level stack will be created. 
+As mentioned, concrete definitions of $(\alpha_\gamma)_{\gamma\in \Gamma}$ vary; for the Android multitasking mechanism, %Concretely, the addressing machinery, i.e., $\alpha_\gamma$ is 
+we shall employ an automata model (tentative: Cost Register Automata, CRA). 
+
+\subsection{Semantics}
+
+As usual, we define the semantics of {\DNSS} as a transition system over configurations.
+Configuration of {\DNSS} $\Dd$ are task stacks which are encoded as $\rho=(S_1,\cdots, S_n)$
+with $S_i = [\gamma_{i,1}, \cdots, \gamma_{i, m_i}]$ for each $i \in [n]$. We define $\topact(\rho):=\gamma_{1,1}$. The \emph{initial} configuration is $([\gamma_{\init}])$ which contains one task $[\gamma_\init]$ only. The \emph{height} of a configuration $\rho$ is defined as the maximum height of tasks in $\rho$.
+%As usual, the semantics of {\DNSS} is defined as 
+The transition relation is denoted by $\rightarrow_{\Dd}$, defined in the sequel.  %over the set of all configurations. Namely, 
+\begin{itemize}
+\item $\POP \in \Delta$ induces the transitions $\rho\rightarrow_\Dd \rho'$ such that one of the following two conditions holds,
+\begin{itemize}
+\item  $\rho = (S_1, S_2, \cdots, S_n)$ and $\rho' = (S'_1, S_2, \cdots, S_n)$, $S_1 = [\gamma_{1, 1}, \cdots, \gamma_{1, m_1}]$ with $m_1 \ge 2$, and $S_1' = [\gamma_{1, 2}, \cdots, \gamma_{1, m_1}]$, 
+%
+\item $\rho = (S_1, S_2, \cdots, S_n)$, $S_1 = [\gamma_{1,1}]$, and $\rho' = (S_2, \cdots, S_n)$.
+\end{itemize}
+Note that the $\POP$ operation does not depend on the top symbol, thus can be applied anytime.
+
+\item Each $(\gamma, o)\in \Delta$ induces transitions $\rho\rightarrow_\Dd \rho'$ with $\topact(\rho)=\gamma$. We now define the effect of the operation $o\in \opset$ on $\rho$, i.e., the resulting $\rho'$. 
+    Recall that $\opset=\{\opn(\gamma)\mid \opn \in \{\PUSH, \STP, \RTF, \CTP\}, \gamma \in \Gamma\setminus\Gamma_\STK \} \cup \{\STK(\gamma)\mid \gamma\in\Gamma_\STK\}$.
+\begin{itemize}
+	\item $\PUSH(\gamma)$. This operation is similar to the push operation in traditional pushdown systems, namely, $\gamma$ is simply pushed into the top task $S_1$ where no addressing mechanism is needed.	 
+  	\item $\STP(\gamma)$. This is a shorthand for ``\textbf{S}ingle \textbf{T}o\textbf{P}''. It is the same as $\PUSH(\gamma)$, except that if $\gamma$ is already the top of $S_1$ then $\gamma$ is \emph{not} pushed into $S_1$ (and thus $\rho':=\rho$). 
+%-------------------------------------------------------------------------------------------------------
+	\item $\RTF(\gamma)$. This is a shorthand for ``\textbf{R}eorder \textbf{T}o \textbf{F}ront". If $\gamma$ occurs in $S_1$ whereby $S_1=[\gamma_{1,1}, \cdots, \gamma_{1,m_1}]$ with $\gamma_{1,j} =\gamma$ for some $j \in [m_1]$  and $\gamma_{1, j'} \neq \gamma$ for all $j': 1 \le j' < j$. Then $\RTF(\gamma)$ escalates $\gamma_{1,j}$ to be the top of $S_1$, resulting in  
+	$\widetilde{S_1} = [\gamma_{1,j}, \gamma_{1,1}, \cdots, \gamma_{1,j-1}$, $\gamma_{1,j+1}, \cdots, \gamma_{1,m_1}]$.
+	Otherwise, $\gamma$ does not occur in $S_1$, then $\RTF(\gamma)$ pushes $\gamma$ into $S_1$, resulting in $\widetilde{S_1} = [\gamma, \gamma_{1,1}, \cdots, \gamma_{1,m_1}]$. In either case,  $\rho':=(\widetilde{S_1}, S_2, \cdots, S_n)$.
+%----------------------------------------------------------------------------------------
+	
+	\item $\CTP(\gamma)$. This is a shorthand for ``\textbf{C}lear \textbf{T}o\textbf{P}". Suppose $\gamma$ occurs in $S_1$ whereby $S_1=[\gamma_{1,1}, \cdots, \gamma_{1,m_1}]$ with $\gamma_{1,j} =\gamma$ for some $j \in [m_1]$ and $\gamma_{1,j'} \neq \gamma$ for all $j': 1 \le j' < j$. Then $\CTP(\gamma)$ removes all the symbols on top of $\gamma_j$ from $S_1$, resulting in $\widetilde{S_1} = [\gamma_{1,j}, \cdots, \gamma_{1,m_1}]$; %keep the other tasks of $\rho$ unchanged. 
+%
+Otherwise $\gamma$ does not occur in $S_1$, then $\CTP(\gamma)$ pushes $\gamma$ into $S_1$, resulting in $\widetilde{S_1} := [\gamma, S_1]$. In either case, $\rho':=(\widetilde{S_1}, S_2, \cdots, S_n)$.  
+%-------------------------------------------------------------------------------------
+\item $\STK(\gamma)$. This is a variant of the $\CTP$ operation with addressing. 
+	 If $\alpha_\gamma$ returns $i \in [n]$, then $\STK(\gamma)$ first escalates $S_i$ to be top task of the task stack, resulting in $\rho''=(S_i, S_1, \cdots, S_{i-1}, S_{i+1}, \cdots, S_n)$, and then applies the operation $\CTP(\gamma)$ to $\rho''$ to obtain $\rho'$. 	 
+	 Otherwise, $\alpha_\gamma$ returns $\bot$, then a new task $S'=[\gamma]$ is created and $\rho':=(S', S_1, \cdots, S_n)$.
+%-------------------------------------------------------------------------------------
+\end{itemize}
+We will use $\rightarrow_\Dd^*$ to denote the reflexive and transitive closure of $\rightarrow_\Dd$.
+
+\paragraph{Reachability problem} Given a $\DNSS$ $\Dd$ and a configuration $\rho = (S_1, \cdots, S_n)$, decide whether $\rho$ is reachable from the initial configuration in $\Dd$.
+\end{itemize}
+
+
+
+
+

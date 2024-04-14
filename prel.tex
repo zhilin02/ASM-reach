@@ -1,0 +1,387 @@
+%!TEX root = main.tex
+
+Let $\natnum$ be the set of natural numbers. For $k \in \natnum$, let $[k]=\{1,\cdots, k\}$. %$\Nn_+$ denotes the set of positive integers.  
+
+Let $S$ be a partially ordered set endowed with a partial order $\leq$. Recall that two elements $a,b\in S$ are said to be \emph{comparable} if $a\leq b$ or $b\leq a$; otherwise, they are \emph{incomparable}.
+%, denoted as $a \incomp b$.
+%\jl{\incomp is not used in this paper}
+Moreover, we use $a < b$ to denote that $a \leq b$ and $a \neq b$. Likewise, $a \geq b$ if $b \leq a$ and $a > b$ if $a \geq b$ and $a \neq b$.
+% they are called ; that is, $a\eqcirc b$ if neither $a\le b$ nor $b\le a$.
+%
+%An \emph{antichain} in $S$ is a subset $A\subseteq S$ in which every two different elements are incomparable. 
+An \emph{antichain} in $S$ is a sequence $a_1, a_2, \cdots$ of elements from $S$ where $a_i$ and $a_j$ are incomparable for every $ i < j$.
+%every pair of distinct elements are incomparable, i.e. 
+%$a_i \incomp a_j$ for $i \neq j$. 
+%\jl{\incomp is not used in this paper}
+%; that is, there is no order relation between any two different elements in $A$. 
+A \emph{descending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \geq a_2 \geq \cdots$. It is \emph{strictly descending} if $a_1 > a_2 > \cdots$. 
+%An \emph{ascending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \leq a_2 \leq \cdots$. It is \emph{strictly ascending} if $a_1 < a_2 < \cdots$. 
+A (strictly) \emph{ascending} chain can be defined accordingly.  
+%
+The partial order $\leq$ is said to satisfy %the \emph{ascending chain condition} (ACC) \tl{if not used, remove it?} if it contains \emph{no infinite} strictly ascending chains. Similarly, $S$ is said to 
+the \emph{descending chain condition} (DCC) if $(S, \leq)$ contains \emph{no infinite} strictly descending chains.
+%
+%A partially ordered set 
+The partial order $\leq$ is a \emph{well-partial-order} (abbreviated as wpo) on $S$ if it satisfies DCC and contains no infinite antichains. 
+%
+%\zhilin{I changed to well-partially-ordered since well-ordered normally means a total order.}
+%
+%A partially ordered set $S$ is said to be \emph{dually well-ordered} if it satisfies ACC and contains no infinite antichains. 
+%
+For instance, the standard ``less than or equal to'' relation $\leq$ is a well-partial-order on $\Nat$; it is not a well-partial-order on $\Int$, since $(\Int, \leq)$ contains a strictly descending chain $-1, -2, -3, \cdots$. 
+% since it contains neither infinite strictly descending chains nor infinite antichains. 
+%But it is not dually well-ordered as it contains an infinite strictly ascending chain $0<1<2<\cdots$. On the other hand, %$(-\Nat, \le)$ is 
+%the set of negative numbers is dually well-ordered, but not well-ordered. %, where $-\Nat$ is the set of non-positive integers.
+%A partial order $\leq$ on $S$ is called a \emph{well-order} if $\leq$ is a wpo and meanwhile a total order on $S$. 
+
+
+
+%An infinite sequence $a_1, a_2, \cdots$ of elements of $S$ is \emph{``good''} if there are $i < j$ such that $a_i \le a_j$. An infinite sequence is \emph{``bad''} if it is not good.
+%
+%\begin{lemma}[\cite{SS12}]\label{lem-wpo}
+%Let $(S, \leq)$ be a partially ordered set. Then the following three conditions are equivalent: 
+%\begin{itemize}
+%\item $\leq$ is a wpo on $S$,
+%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ is good,
+%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ contains an infinite increasing subsequence, namely, there are  $n_1 < n_2 < \cdots$ such that $a_{n_1} \le a_{n_2} \le \cdots$.
+%\end{itemize}
+%\end{lemma}
+
+
+An alphabet $\Gamma$ is a finite set of letters.  A \emph{string} over $\Gamma$ is a finite sequence of letters from $\Gamma$. In particular, $\varepsilon$ denotes %the empty sequence is called 
+the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (resp. nonempty) strings over $\Gamma$. A \emph{language} $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$.
+ 
+\subsection{Nondeterministic finite automata}
+%Fix a finite \emph{alphabet} $\Gamma$. Elements in $\Gamma^*$ are called \emph{strings}. Let $\varepsilon$ denote the empty string and  $\Gamma^+ = \Gamma^* \setminus \{\varepsilon\}$. A \emph{language} is a subset of $\Gamma^*$. Moreover, we also use $\Gamma_\varepsilon$ to denote $\Gamma \cup \{\varepsilon\}$.
+
+%We will use $a,b,\cdots$ to denote letters from $\Gamma$ and $u, v, w, \cdots$ to denote strings from $\Gamma^*$. For a string $u \in \Gamma^*$, let $|u|$ denote the \emph{length} of $u$ (in particular, $|\varepsilon|=0$). A \emph{position} of a nonempty string $u$ of length $n$ is a number $i \in [n]$ (Note that the first position is $1$, instead of  0). In addition, for $i \in [|u|]$, let $u[i]$ denote the $i$-th letter of $u$. For two strings $u$ and $v$, if there is a string $w$ such that $u = w v$, then $v$ is called a \emph{suffix} of $u$.
+
+%For two strings $u_1, u_2$, we use $u_1 \cdot u_2$ to denote the \emph{concatenation} of $u_1$ and $u_2$, that is, the string $v$ such that $|v|= |u_1| + |u_2|$ and for each $i \in [|u_1|]$, $v[i]= u_1[i]$ and for each $i \in |u_2|$, $v[|u_1|+i]=u_2[i]$. Let $u, v$ be two strings. If $v = u \cdot v'$ for some string $v'$, then $u$ is said to be a \emph{prefix} of $v$. In addition, if $u \neq v$, then $u$ is said to be a \emph{strict} prefix of $v$. If $u$ is a prefix of $v$, that is, $v = u \cdot v'$ for some string $v'$, then  we use $u^{-1} v$ to denote $v'$. In particular, $\varepsilon^{-1} v = v$.
+
+A \emph{nondeterministic finite automaton} (\NFA) $\Aut$ is a tuple $(Q, \Gamma, \delta, I, F)$, where $Q$ is a finite set of \emph{states}, $\Gamma$ is a finite alphabet, $I \subseteq Q$ is the set of \emph{initial} states, $F \subseteq Q$ is the set of \emph{final} states, and $\delta \subseteq Q \times \Gamma_\varepsilon \times Q$ is the \emph{transition relation}. Note that {\NFA}s defined here allow $\varepsilon$-transitions.
+%
+For a string $w = a_1 \dots a_n$, a \emph{run} of $\Aut$ on $w$ is a sequence $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ such that $q_0 \in I$,  $(q_{i-1}, b_i, q_i) \in \delta$ for each $i \in [m]$ and $b_1 \cdots b_m = w$ (note that $b_i$ may be $\varepsilon$ for some $i$). In this case, we normally write $q \xRightarrow[\Aut]{w} q_m$ 
+%to denote that there is a path from $q$ to $q'$ where the transitions are labeled by $b_1, \cdots, b_m$ with $b_1 \cdots b_m = w$. 
+%respectively such that $b_1 \dots b_m = a_1 \dots a_n$ in $\Aa$. 
+(where $\Aut$ is usually omitted %in $\xRightarrow[\Aa]{w}$ 
+for brevity).
+%
+A run $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ is \emph{accepting} if $q_m \in F$. A string $w$ is \emph{accepted} by $\Aut$ if there is an accepting run of $\Aut$ on $w$. 
+
+Let $\Lang(\Aut)$ denote the language defined by $\Aut$, namely, the set of strings accepted by $\Aut$. 
+%
+%For $w = a_1 \dots a_n$, we use $q \xRightarrow[\Aa]{w} q'$ to denote that there is a path from $q$ to $q'$ where the transitions are labeled by $b_1, \cdots, b_m$ with $b_1 \cdots b_m = w$. 
+%respectively such that $b_1 \dots b_m = a_1 \dots a_n$ in $\Aa$. Moreover, 
+%We usually omit $\Aut$ in $\xRightarrow[\Aa]{w}$ for brevity.
+%
+A language over $\Gamma$ is \emph{regular} if it can be defined by an \NFA.
+%
+%For an {\NFA} $\Aut = (Q, \Gamma, \delta, I, F)$, 
+%Furthermore, we define $\suffix(\Lang(\Aut))$ as the set of suffices of strings in $\Lang(\Aut)$.
+%
+%It is easy to observe that $\suffix(\Lang(\Aut))$ is regular and can be actually defined by an {\NFA}  $\suffix(\Aut)$, which can be constructed from $\Aut$ by iterating the following procedure until it stabilizes: %no more transitions can be added: 
+%select a transition $(q_0, a, q)$ %out of some $q_0 \in I$ 
+%and a transition $(q, a', q')$ %out of $q$, 
+%add the transition $(q_0, a', q')$.  
+
+%We use $\Ll(\cA)$ to denote the language defined by $A$, that is, the set of strings accepted by $A$. 
+%We will use $\cA, \cB, \cdots$ to denote \NFAs. 
+%An \NFA $\cA$ is \emph{deterministic} if for each $(q, \sigma) \in Q \times \Gamma$, there is at most one $q' \in Q$ such that $(q, a, q') \in \delta$. An \NFA $\cA$ is \emph{complete} if for each $(q, \sigma) \in Q \times \Gamma$, there is at least one $q' \in Q$ such that $(q, a, q') \in \delta$. We assume that all \NFA considered in this paper are complete.  An \NFA $\cA$ is \emph{unambiguous} if for each word $w$, there is \emph{at most one accepting} run of $\cA$ on $w$.
+%
+%For a string $w= a_1 \dots a_n$, we also use the notation $q_1 \xrightarrow[\cA]{w} q_{n+1}$ to denote the fact that there are $q_2,\dots, q_n \in Q$ such that for each $i \in [n]$, $(q_i, a_i, q_{i+1}) \in \delta$.  For an \NFA $\cA=(Q, \delta, q_0, F)$ and $q, q' \in Q$, we use $\cA(q,q')$ to denote the \NFA obtained from $\cA$ by changing the initial state to $q$ and the set of final states to $\{q'\}$. The \emph{size} of an \NFA $\cA=(Q, \delta, q_0, F)$, denoted by $|\cA|$, is defined as $|Q|$, the number of states. For convenience, we will also call an \NFA without initial and final states, that is, a pair $(Q, \delta)$, as a \emph{transition graph}. 
+
+\subsection{Pushdown systems}
+A \emph{pushdown system} ({\PDS}) $\Pp$ is a tuple $(P,\Gamma,\Delta)$, where $P$ is a finite set of control states, $\Gamma$ is a finite stack alphabet, and $\Delta\subseteq P\times\Gamma\times\Gamma^{\le 2}\times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\epsilon\}\cup\Gamma\cup\Gamma\times\Gamma$.
+Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A \emph{configuration} of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the \emph{content} of the stack (with the leftmost symbol being the top of the stack). Let $\conf_{\Pp}$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\conf_{\Pp}$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the \emph{reflexive and transitive closure} of $\xrightarrow{\Pp}$.
+
+A configuration $(p',w')$ is reachable from $(p,w)$ if $(p,w)\xRightarrow{\Pp}(p',w')$. For $C\subseteq\conf_{\Pp}$, let $\pre^*_\Pp(C)$ (resp. $\post^*_\Pp(C)$) denote the set of \emph{predecessors} (resp. \emph{successors}) of elements of $C$, that is, $\{(p',w')\mid \exists (p,w)\in C,(p',w')\xRightarrow{\Pp}(p,w)\}$ (resp. $\{(p',w')\mid \exists (p,w)\in C,(p,w)\xRightarrow{\Pp}(p',w')\}$).
+
+%As a standard machinery to solve the reachability of {\PDS}, a $\Pp$-\emph{nondeterministic-finite-automaton} ($\Pp$-{\NFA}) is an {\NFA} $\Aut = (P',\Gamma,\delta,I,F)$ such that $I\subseteq P\subseteq P'$. 
+%Let $(p,w)\in\conf_{\Pp}$, $(p,w)$ is accepted by $\Aut$ if $p\in I$ and $p\xRightarrow[\Aut]{w}p_f$ and $p_f\in F$. We use $\Aut(p)$ to denote the $\Pp$-{\NFA} obtained from $\Aut$ by replacing $I$ with $\{p\}$.
+
+As a standard machinery to solve reachability for PDS, a \emph{$\Pp$-nondeterministic-finite-automaton} ($\Pp$-NFA) is an NFA $\Aut=(P', \Gamma, \delta, I, F)$ such that $I \subseteq P \subseteq P'$ \cite{BEM97}.
+Evidently, $\Pp$-NFA are a special class of NFA. 
+Let $\Aut = (P', \Gamma, \delta, I, F)$ be a  $\Pp$-NFA and  $(p, w) \in \conf_\Pp$. Then $(p, w)$ is \emph{accepted} by $\Aut$ if $p \in I$ and there is an accepting run $p_0 p_1 \cdots p_n$ of $\Aut$ on $w$ with $p_0 = p$. Let $\conf_\Aut$ denote the set of configurations accepted by $\Aut$. Moreover, let $\Lang(\Aut)$ denote the set of words $w$ such that $(p, w) \in \conf_\Aut$ for some $p \in I$. 
+%For brevity, we usually write NFA instead of $\Pp$-NFA when $\Pp$ is clear from the context. 
+For an $\Pp$-NFA $\Aut = (P', \Gamma, \delta, I, F)$ and $p' \in P$, we use $\Aut(p')$ to denote the $\Pp$-NFA obtained from $\Aut$ by replacing $I$ with $\{p'\}$. A set of configurations $C \subseteq \conf_\Pp$ is \emph{regular} if there is a $\Pp$-NFA $\Aut$ recognizing $C$, that is, $\conf_\Aut = C$. %\zhilin{added some notation for MA}\FU{I added the definition of regular set.}
+
+\begin{theorem}[\cite{BEM97}]\label{thm-pds}
+	Given  a PDS $\Pp$ and a set of configurations accepted by a $\Pp$-NFA $\Aut$, we can compute, in polynomial time in $|\Pp|+|\Aut|$, two $\Pp$-NFAs $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\conf_\Aut)$ and $\post^*_\Pp(\conf_\Aut)$ respectively.
+\end{theorem}
+
+The $\Pp$-NFAs $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-pds} are constructed by applying the saturation procedures. Let us recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ in the sequel, since later on, we focus on the computation of $\post^*$.
+
+Let $\Aut'$ be the current $\Pp$-NFA. Then there are the following three saturation rules for computing $\post^*$. 
+
+\smallskip
+\fbox
+{
+\begin{minipage}{0.9\textwidth}
+\begin{enumerate}
+    %
+    \item If $(p, \gamma, \varepsilon, p') \in \Delta$ and $p \xRightarrow[\Aut']{\gamma} q$, then add a transition $(p', \varepsilon, q)$ to $\Aut'$. 
+%
+    \item If $(p, \gamma, \gamma', p') \in \Delta$ and $p \xRightarrow[\Aut']{\gamma} q$, then add a transition $(p', \gamma', q)$ to $\Aut'$. 
+%
+    \item If $(p, \gamma, \gamma' \gamma'', p') \in \Delta$ and $p \xRightarrow[\Aut']{\gamma } q$, then add two transitions $(p', \gamma', \langle p', \gamma'\rangle)$ and $(\langle p', \gamma' \rangle, \gamma'', q)$ to $\Aut'$.     
+\end{enumerate}
+\end{minipage}
+}
+
+\smallskip
+
+Therefore, for a PDS $\Pp=(P,\Gamma,\Delta)$ and a $\Pp$-NFA $\Aut = (P', \Gamma, \delta, I, F)$, the set of states in $\Aut^{\post^*}_\Pp$ is $P' \cup \{\langle p, \gamma \rangle \mid p \in P, \gamma \in \Gamma \}$.
+
+
+\subsection{Transductions}
+A transduction $\tau$ over an alphabet $\Gamma$ is a binary relation over $\Gamma^*$, i.e., a subset of $\Gamma^* \times \Gamma^*$. (Note that $\emptyset$ is considered as a transduction.)
+%In particular, $\emptyset \subseteq \Gamma^* \times \Gamma^*$ is the transduction that transduces no strings.
+We use $\tau_{\id}$ to denote the identity transduction, namely,  $\{(w,w) \mid w \in \Gamma^*\}$. 
+Moreover, we use $\tau_\varepsilon$ to denote the transduction $\{\varepsilon, \varepsilon\}$, namely the transduction comprising a single element $(\varepsilon, \varepsilon)$.
+For a transduction $\tau$ and a string $w$, we write $\tau(w):= \{w' \mid (w,w') \in \tau \}$.
+
+%\tl{why not just define l2l transducers as we only use them?}
+A \emph{nondeterministic finite transducer} (\NFT) $\Tran$ is a tuple $(Q, \Gamma, \delta, I, F)$, 
+where $Q, \Gamma, I, F$ are the same as \NFA, %is a finite set of states,
+%$q_0 \in Q$ is the initial state, $F \subseteq Q$ is a finite set of final states, 
+%$\Gamma$ and $\Gamma$ are the input and output alphabets respectively, 
+and %$\delta \subseteq Q \times \Gamma^* \times \Gamma^* \times Q$ 
+$\delta \subseteq Q \times \Gamma \times \Gamma \times Q$ is a finite set of transition rules.
+%
+A computation of $\Tran$ is a sequence of transitions
+%$
+%q_0 \xrightarrow[w'_1]{w_1} q_1  \xrightarrow[w'_2]{w_2} q_2 \cdots q_{n-1} \xrightarrow[w'_n]{w_n} q_n 
+%$
+$
+q_0 \xrightarrow[a'_1]{a_1} q_1  %\xrightarrow[a'_2]{a_2} q_2 
+\cdots q_{n-1} \xrightarrow[a'_n]{a_n} q_n 
+$
+such that $(q_{i-1}, a_i, a'_i, q_i) \in \delta$ for $i \in [n]$. For brevity, this is denoted by  $q_0 \xRightarrow[w']{w} q_n$ for $w= a_1 \cdots a_n$ and $w'= a'_1 \cdots a'_n$. % to denote the fact that there exists such a computation from $q_0$ to $q_n$.  
+Moreover, the transduction defined by $\Tran$, denoted by $\TLang(\Tran)$, is defined as $\{(w, w') \mid \mbox{there exist } q \in I, q' \in F \mbox{ such that } q \xRightarrow[w']{w} q'\}$. Let $\UTrans$ denote the set of transductions defined by \NFT. (Note that in this paper, we only consider so called letter-to-letter transducers as defined above; the resulting transduction must be length-preserving and regular.)
+%
+%A \emph{letter-to-letter} transducer (\LTLNFT) is an {\NFT} $\Tran = (Q, \Gamma, \delta, I, F)$ where $\delta \subseteq Q \times \Gamma \times \Gamma \times Q$. 
+%It transduces a string $w = a_1 \cdots a_n$ into a string $w' = b_1 \cdots b_n$
+%if there exists a state sequence $q_0 \cdots q_n$ such that for each $i \in [n]$, $(q_{i-1}, a_i, b_i, q_{i}) \in \delta$, and $q_n \in F$.
+%The language $L(T)$ of an L2LFST $T$ is the set of pair $(w, w')$ such that $T$ can transduce $w$ into $w'$.
+
+%A transduction is \emph{regular} if it can be defined by an \NFT. A regular transduction is \emph{length-preserving} if it can be defined by an \LTLNFT. In this paper, we focus on $\UTrans$, the set of \emph{regular and length-preserving} transductions. %Let us use  to denote the set of regular and length-preserving transductions.
+
+{\NFT}s define letter-to-letter transductions and can be seen as {\NFA}s over the alphabet $\Gamma \times \Gamma$. It follows that the inclusion problem of {\NFT}s is decidable.
+
+\begin{proposition}\label{prop-nft-inclusion}
+%The inclusion problem of {\NFT}s is decidable: 
+Given two {\NFT}s $\Tran_1$ and $\Tran_2$,  whether $\TLang(\Tran_1) \subseteq \TLang(\Tran_2)$ is decidable.
+\end{proposition} 
+
+%
+We define several operations on transductions relevant to this paper. 
+\begin{itemize}
+\item The \emph{union} of $\tau_1$ and $\tau_2$ is $\tau_1 \cup \tau_2:=\{(w, w') \mid (w, w') \in \tau_1 \mbox{ or } (w,w') \in \tau_2\}$.
+%
+%\item The \emph{converse} of $\tau$ is $\overline{\tau }:= \{(w, w') \mid (w', w) \in \tau\}$. 
+%
+\item %Given two transductions $\tau_1$ and $\tau_2$ over $\Gamma$, 
+The \emph{composition} of $\tau_1$ and $\tau_2$ both of which are over $\Gamma$ is $\tau_1 \circ \tau_2 := \{(w, w'') \mid \exists w' \in \Gamma^*.\ (w,w') \in \tau_1$ and $(w',w'') \in \tau_2\}$. For $\tau$ and $n \in \Nat$ with $n \ge 1$, we use $\tau^n$ to denote the $n$-fold composition of $\tau$. 
+%
+\item For  $\tau$ and  $w_1,w_2 \in \Gamma^*$ with $|w_1| = |w_2|$, the \emph{left quotient} of $\tau$ with respect to $(w_1, w_2)$, denoted by $\lceil w_1, w_2 \rfloor^{-1} \tau$, is  $\{(w,w') \mid (w_1w, w_2w') \in \tau\}$. In particular, $\lceil \varepsilon, \varepsilon\rfloor^{-1} \tau =\tau$. Note that  $\lceil w_1, w_2 \rfloor^{-1} \tau = \emptyset$ if no  $w, w'$ exist with $(w_1w, w_2 w') \in \tau$.
+%
+\end{itemize}
+
+\begin{proposition}
+    For   $\gamma,\gamma'\in\Gamma$ and transductions $\tau_1,\tau_2$,
+%    $$\lceil \gamma,\gamma'\rfloor^{-1}(\tau_1\circ\tau_2) = \bigcup_{\eta: \exists w, w'.(\gamma w,\eta w')\in\tau_1} (\lceil \gamma,\eta\rfloor^{-1}\tau_1)\circ(\lceil\eta,\gamma'\rfloor^{-1}\tau_2)  $$
+    $$\lceil \gamma,\gamma'\rfloor^{-1}(\tau_1\circ\tau_2) = \bigcup_{\gamma'' \in \Gamma} (\lceil \gamma,\gamma''\rfloor^{-1}\tau_1)\circ(\lceil\gamma'',\gamma'\rfloor^{-1}\tau_2). $$
+\end{proposition}
+
+\begin{definition}[Transduction closure]
+Let $\TranSet$ be a set of transductions. The \emph{closure of $\TranSet$ under composition, union, and left quotient}, denoted by $\langle\TranSet \rangle $, is defined as the least set of transductions satisfying the following three constraints,
+\begin{enumerate}
+    \item $\TranSet \subseteq \langle\TranSet \rangle $, $\emptyset \in \langle\TranSet \rangle $, $\tau_{id} \in \langle\TranSet \rangle $, and $\tau_{\varepsilon} \in \langle\TranSet \rangle $,
+%
+    \item if $\tau_1, \tau_2 \in \langle\TranSet \rangle $, then $\tau_1 \circ \tau_2 \in \langle\TranSet \rangle $ and $\tau_1 \cup \tau_2 \in \langle\TranSet \rangle $,
+%
+    \item if $\tau \in \langle\TranSet \rangle $, then $\lceil \gamma, \gamma' \rfloor^{-1} \tau \in \langle\TranSet \rangle $ for all $\gamma, \gamma' \in \Gamma$.
+\end{enumerate}
+\end{definition}
+
+\begin{example}
+Let $\Gamma = \{a, b, c\}$, $\TranSet = \{\tau_1, \tau_2\}$ where $\tau_1 = \{(aw, bw) \mid w \in \Gamma^*\}$ and $\tau_2 = \{(bw, cw) \mid w \in \Gamma^*\}$. Then 
+%the closure $\langle \TranSet \rangle$ can be obtained from $\TranSet$ by iteratively adding the new transductions resulted from the satisfaction of the three constraints, until no new transductions can be produced. It is not hard to verify that 
+$$\langle \TranSet \rangle = \{\tau_1, \tau_2, \emptyset, \tau_{id}, \tau_\varepsilon, \tau_3\} \cup  \{\tau_S \mid \emptyset \neq S \subseteq \{\tau_1, \tau_2, \tau_{id}, \tau_\varepsilon, \tau_3\} \},$$
+where $\tau_3 := \tau_1 \circ \tau_2 = \{(aw, cw) \mid w \in \Gamma^*\}$ and $\tau_S = \bigcup \limits_{\tau' \in S} \tau'$. 
+\end{example}
+
+Finally, for a transduction $\tau$, let us use $\overline{\tau}$ to denote the \emph{inversion} of $\tau$, that is, $\overline{\tau} = \{(w_2, w_1) \mid (w_1, w_2) \in \tau\}$. Moreover, for a set of transductions, say $\TranSet$, let $\overline{\TranSet}$ to denote the set of $\overline{\tau}$ for $\tau \in \TranSet$.  
+
+%\begin{itemize}
+%\item from the first constraint, we deduce that $\{\tau_1, \tau_2, \emptyset, \tau_{id}\} \subseteq \tau_{id}$, 
+%\item from the second constraint, we deduce that $\tau_3 \in \TranSet$, where $\tau_3 = \{(aw, cw) \mid w \in \Gamma^*\}$, and $\{\tau_1 \cup \tau_2, \tau_1 \cup \tau_{id}, \tau_2 \cup \tau_{id}\} \subseteq \TranSet$, 
+%
+%\item from the third constraint, we deduce that $(a, b)^{-1} \tau_1 = (b, c)^{-1} \tau_2 = \tau_{id} \in \TranSet$.
+%\end{itemize}
+%$\langle \TranSet \rangle$ can be computed by iteratively adding the new transductions resulted from the satisfaction of the three constraints, 
+%\begin{itemize}
+%\item $\TranSet_1 = \{\tau_1, \tau_2, \emptyset, \tau_{id}\}$,
+%\item $\TranSet_2 = \{\tau_1, \tau_2, \emptyset, \tau_{id}, \tau_3, \tau_1 \cup \tau_2, \tau_1 \cup \tau_{id}, \tau_2 \cup \tau_{id}\}$, 
+%\item $\TranSet_3 = \TranSet_2$.
+%\end{itemize}
+%$\TranSet_2 = \{\tau_1, \tau_2, \emptyset, \tau_{id}, \tau_3, \tau_1 \cup \tau_2, \tau_1 \cup \tau_{id}, \tau_2 \cup \tau_{id}, \tau_\}$
+%comprises the union of the transductions from $\{\tau_1, \tau_2, \emptyset, \tau_{id}, \tau_3\}$.
+
+%For a set of transductions $\TranSet$, we use $\overline{\TranSet}$ to denote $\{\overline{\tau} \mid \tau \in \TranSet\}$. It is easy to observe that $\overline{\langle\TranSet \rangle } = \langle\overline{\TranSet} \rangle$. 
+
+%We say $(\langle \Tt \rangle, \subseteq)$ is \emph{dual well-ordered}  if it satisfies ACC and has no infinite antichains with respect to $\subseteq$. 
+%In this paper, we reserve the following partial order relation $\preceq$ between transductions in $\UTrans$: For $\tau_1, \tau_2 \in \UTrans$, $\tau_1 \preceq \tau_2$ iff $\tau_2 \subseteq \tau_1$.
+%(Note that $\preceq$ is actually $\supseteq$, but we introduce it for readability.) 
+%
+%In this paper, we consider the the subset relation $\subseteq$ between transductions. 
+%Since %the converse operation preserves the $\preceq$ relation between transductions, that is, 
+%$\tau_1 \preceq \tau_2$  iff $\tau_2 \subseteq \tau_1$ iff $\overline{\tau_2} \subseteq \overline{\tau_1}$ iff $\overline{\tau_1} \preceq \overline{\tau_2}$, we have %deduce the following result.
+%\begin{proposition}
+%For every set of transductions $\TranSet \subseteq \UTrans$, 
+%    $(\langle \TranSet \rangle, \preceq)$ is well-ordered iff
+%    $(\langle \overline{\TranSet} \rangle, \preceq)$ is well-ordered.
+
+\subsection{Pushdown systems with transductions}
+
+Let us introduce an extension of pushdown systems, that is, pushdown systems with transductions \cite{UM13,Song18}. 
+
+\begin{definition}[\TrPDS] \label{def:trpds}
+    A \emph{pushdown system with transductions} (\TrPDS) is a tuple $\Pp = (P, \Gamma, \TranSet, \Delta)$, 
+    where $P$ is a finite set of $control\ states$, $\Gamma$ is a finite $stack\ alphabet$, $\TranSet$ is a finite set of letter-to-letter transductions, and $\Delta \subseteq P \times \Gamma \times \Gamma^{\le 2} \times \TranSet \times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\varepsilon\} \cup \Gamma \cup \Gamma \times \Gamma$. In other words, each transition in $\Delta$ is of one of the following forms, $(p, \gamma, \varepsilon, \tau, p')$, $(p, \gamma, \gamma',\tau, p')$, or $(p, \gamma, \gamma'_1 \gamma'_2, \tau, p')$ such that $\gamma, \gamma', \gamma'_1, \gamma'_2 \in \Gamma$ and $\tau \in \TranSet$. 
+   Moreover, it is required that the transduction closure $\langle \TranSet \rangle$ is finite.  
+\end{definition}
+For readability, we usually write a transition $(p, \gamma, w, \tau, p') \in \Delta$ as $p \xrightarrow{\gamma/w | \tau} p' \in \Delta$.
+
+%Let $\Pp = (P, \Gamma, \TranSet, \Delta)$ be  a {\WOTrPDS}. 
+A \emph{configuration} $c$ of $\Pp$ is a pair $(p, w)$, where $w = \gamma_1 \cdots \gamma_k \in \Gamma^*$ is the  stack content with $\gamma_1$ as the topmost symbol. We define a binary relation $\xrightarrow{\Pp}$ over the set of configurations as follows. Given two configurations $(p_1, w_1)$ and $(p_2, w_2)$, $(p_1, w_1) \xrightarrow{\Pp} (p_2, w_2)$ if $w_1 = \gamma w'_1$, and one of the following conditions holds,
+\begin{itemize}
+\item $p_1 \xrightarrow{\gamma/\varepsilon|\tau} p_2$ for some $\tau$ with  $w_2 \in \tau(w'_1)$, 
+%
+\item $p_1 \xrightarrow{\gamma/\gamma'|\tau} p_2$ for some $\gamma'$ and $\tau$ with $w_2 = \gamma' w'_2$ for some $w'_2 \in \tau(w'_1)$, 
+%
+\item $p_1 \xrightarrow{\gamma/\gamma' \gamma''|\tau} p_2$ for some $\gamma', \gamma''$ and $\tau$ with $w_2 = \gamma' \gamma'' w'_2$ for some $w'_2 \in \tau(w'_1)$.
+\end{itemize}
+Moreover, we use $\xRightarrow{\Pp}$ to denote the reflexive and transitive closure of $\xrightarrow{\Pp}$. We say that $(p_2, c_2)$ is \emph{reachable} from $(p_1, c_1)$ if $(p_1, c_1) \xRightarrow{\Pp} (p_2, c_2)$.
+
+%In this paper, we consider the \emph{regular reachability problem} of {\TrPDS}.
+%\begin{quote} 
+%	Given a {\TrPDS} $\Pp = (P, \Gamma, \TranSet, \Delta)$, control states $p_1, p_2 \in P$, regular languages $L_1, L_2$ over $\Gamma$, determine whether there exist %strings $w_1, w_2$ such that 
+%	$w_1 \in L_1$, $w_2 \in L_2$ such that $(p_1, w_1) \xRightarrow{\Pp} (p_2, w_2)$.
+%\end{quote}
+
+\begin{definition}[Finite automata with transductions, {\TrNFA}] %[Finite automata with finite ascending chians and antichains transductions]
+	Given a {\TrPDS} $\Pp=(P, \Gamma, \TranSet, \delta)$, a $\Pp$-nondeterministic-finite-automaton with transductions ($\Pp$-{\TrNFA}) is a tuple $\Aut =(P', \Gamma, \delta, I, 
+	F)$,
+	where $P'$ is a set of states such that $P \subseteq P'$, $I \subseteq P$ is a set of initial states, $F$ is a set of final states,  
+	%and the set of initial states is $P$, %is a finite set of states, $\Sigma$ is a finite alphabet, 
+	%$\TranSet$ is a finite set of transductions, %$I \subseteq Q$ (reps. $F \subseteq Q$) is a finite set of initial (reps. final) states, 
+	and $\delta \subseteq P' \times \Gamma_\varepsilon \times \langle \TranSet\rangle \times P'$ is a finite set of transition rules.
+\end{definition}
+Evidently, a $\Pp$-{\NFA} can be seen as a  $\Pp$-{\TrNFA} where only the identity transduction $\tau_{id}$ is used. 
+%
+For convenience, we write a transition $(q, a, \beta, q') \in \delta$ as $q \xrightarrow{a | \beta} q'$. 
+To define the semantics of $\Aut$, we extend the transition rules $q \xrightarrow{a | \beta} q' \in \delta$  to a relation $q \xRightarrow[\Aut]{w | \tau} q'$ for a string $w$,  
+%
+%The relation $q \xRightarrow{w | \tau} q'$ is  
+defined inductively as follows:
+\begin{itemize}
+	\item if $q \xrightarrow{a |\beta} q'$, then $q \xRightarrow[\Aut]{a | \beta} q'$, 
+	%
+	\item if $q \xRightarrow[\Aut]{w | \tau} q'$ and $q' \xrightarrow{b |\beta } q'' $, then $q \xRightarrow[\Aut]{w a | (\lceil a, b\rfloor^{-1}\tau) \circ \beta} q''$ for every $a \in \Gamma_\varepsilon$ such that $\lceil a, b\rfloor^{-1}\tau \neq \emptyset$.
+\end{itemize}
+Intuitively, $q \xRightarrow[\Aut]{w | \tau} q'$ means that in $\Aut$,  $q'$ is reached starting from $q$ after reading $w$. Moreover, the transduction $\tau$, which is  to be applied to the remaining suffix of the input string, is produced. If $\Aut$ is clear from the context, then we may omit $\Aut$ and write $q \xRightarrow{w | \tau} q'$.
+
+A configuration $(p, w)$ of $\Pp$ is accepted by $\Aut$ if $p \xRightarrow[\Aut]{w | \tau} q$ for some $q \in F$ and $\tau \in \langle \TranSet \rangle$ such that $(\varepsilon, \varepsilon) \in \tau$.
+%
+Let us use $\ConfSet_\Aut$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
+
+
+\begin{theorem}[\cite{Song18}]\label{thm-trpds}
+	Given  a {\TrPDS} $\Pp$ and a set of configurations accepted by a $\Pp$-{\TrNFA} $\Aut$, we can compute two $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\conf_\Aut)$ and $\post^*_\Pp(\conf_\Aut)$ respectively.
+\end{theorem}
+
+The $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-trpds} are constructed by applying the saturation procedures. Let us recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ in the sequel, since later on, we focus on the computation of $\post^*$.
+
+Let $\Aut'$ be the current $\Pp$-\TrNFA. Then there are the following three saturation rules for computing $\post^*$. 
+
+\smallskip
+\fbox
+{
+\begin{minipage}{0.9\textwidth}
+\begin{enumerate}
+    %
+    \item If $p \xrightarrow{\gamma/\varepsilon | \tau} p' \in \Delta$ and $p \xRightarrow[\Aut']{\gamma | \tau' } q$, then add a transition $p' \xrightarrow{\varepsilon | \tau \circ \tau'} q$ to $\Aut'$. 
+%
+    \item If $p \xrightarrow{\gamma/\gamma' | \tau} p' \in \Delta$ and $p \xRightarrow[\Aut']{\gamma | \tau' } q$, then add a transition $p' \xrightarrow{\gamma' | \tau \circ \tau'} q$ to $\Aut'$. 
+%
+    \item If $p \xrightarrow{\gamma/\gamma'_1 \gamma'_2 | \tau} p' \in \Delta$ and $p \xRightarrow[\Aut']{\gamma | \tau' } q$, then add two transitions $p' \xrightarrow{\gamma'_1 | \tau_{id}} \langle p', \gamma'_1\rangle$ and $\langle p', \gamma'_1\rangle \xrightarrow{\gamma'_2 | \overline{\tau} \circ \tau' } q$ to $\Aut'$.  
+\end{enumerate}
+\end{minipage}
+}
+
+\smallskip
+
+Therefore, for a {\TrPDS} $\Pp=(P,\Gamma,\Delta)$ and a $\Pp$-{\TrNFA} $\Aut = (P', \Gamma, \delta, I, F)$, the set of states in $\Aut^{\post^*}_\Pp$ is $P' \cup \{\langle p, \gamma \rangle \mid p \in P, \gamma \in \Gamma \}$.
+
+
+%\end{proposition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Downward well-structured transition systems}
+
+\begin{definition}[Downward-WSTS]
+A downward well-structured transition system (downward-WSTS) $\dwsts$ is a triple $(S, \rightarrow, \le)$ such that 1) $\le$ is a wpo\footnote{A more general notion than wpo, i.e. well-quasi-order, was used to define WSTS in \cite{FS01}. } over $S$, 2) $\rightarrow \subseteq S \times S$ is downward-compatible wrt $\le$, namely, for all $s \ge s'$ and $s \rightarrow t$, there is $t' \in S$ such that $s' \rightarrow^* t'$ and $t \ge t'$ (where $ \rightarrow^*$ denote the reflexive and transitive closure of $\rightarrow$).
+\end{definition}
+
+
+Let $\dwsts = (S, \rightarrow, \le)$ be a downward-WSTS. For $s \in S$, the set of successors of $s$, denoted by $\Succ(s)$, is defined as $\{s' \in S \mid s \rightarrow s'\}$.
+\begin{itemize}
+\item $\dwsts$ is called \emph{downward reflexive-compatible} if for all $s \ge s'$ and $s \rightarrow t$, either $t \ge s'$ or there is $t'$ such that $s' \rightarrow t'$ and $t \ge t'$.
+%
+\item $\dwsts$ admits \emph{effective} $\Succ$ if for every $s \in S$, $\Succ(s)$ is effectively computable from $s$.
+%
+\item $\dwsts$ admits \emph{decidable $\le$} if there is a procedure to decide $s \le t$ for all $s, t \in S$.
+%
+\end{itemize}
+
+The \emph{sub-covering} problem of $\dwsts$ is to decide, for given $s, t \in S$, whether %starting from $s$ it is possible to sub-cover $t$, that is, 
+there is $t' \in S$ such that $s \rightarrow^* t'$ and $t \ge t'$.
+
+\begin{theorem}[\cite{FS01}, Theorem 5.5]\label{thm-dwsts}
+The sub-covering problem is decidable for downward-WSTSs with 1) downward reflexive compatibility,  2) effective $\Succ$, and 3) decidable $\le$.
+\end{theorem}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\hide{
+%The $\Pp$-MA $\Aa^{post^*} = (Q'', \Gamma, \delta', I, F)$ is computed by the following procedure.
+%\begin{enumerate}
+%\item Let $Q''_0 := Q'$, $\delta'_0:=\delta$, and $i:=0$.
+%
+%\item Iterate the following procedure, until $Q''_{i} = Q''_{i-1}$ and $\delta'_{i} = \delta'_{i-1}$.
+%\begin{enumerate}
+%\item Let $Q''_{i+1}:=Q''_{i}$, $\delta'_{i+1}:=\delta'_{i}$.
+%%
+%\item For each $(q, \gamma, w, q') \in \Delta$,
+%\begin{itemize}
+%    \item if $w = \varepsilon$, then for each $(q, \gamma, q'') \in \delta'_{i}$ and $(q'', \gamma', q''') \in \delta'_{i}$, let $\delta'_{i+1}: = \delta'_{i+1}  \cup \{(q', \gamma', q''')\}$,
+%    %
+%    \item if $w= \gamma'$, then for each $(q, \gamma, q'') \in \delta'_i$, let  $\delta'_{i+1}: = \delta'_{i+1}  \cup \{(q', \gamma', q'')\}$,
+%    %
+%    \item if $w = \gamma' \gamma''$, then for each $(q, \gamma, q'') \in \delta'_i$, let $Q''_{i+1} := Q''_{i+1} \cup \{\langle q', \gamma' \rangle\}$ and $\delta'_{i+1}: = \delta'_{i+1} \cup \{(q', \gamma', \langle q',\gamma' \rangle )\} \cup \{( \langle q',\gamma' \rangle, \gamma'', q'')\}$.
+%\end{itemize}
+%\item Let $i:=i+1$.
+%\end{enumerate}
+%\item Let $Q'': =Q''_i$ and $\delta':=\delta'_i$.
+%\end{enumerate}
+%From the construction, we observe that in $\Aa^{post^*}$, $Q'' \subseteq Q' \cup (Q \times \Gamma)$. 
+%\tl{to see how important it will be}
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+

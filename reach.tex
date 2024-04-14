@@ -1,0 +1,407 @@
+For simplicity, we define a model 
+For simplicity, we assume that $\Mm$ contains $\standard$ and $\singletask$ activities only. To tackle the configuration reachability problem for $\STK$-dominating $\AMASS$, we consider three case, i.e., 
+intent-flag free, intent-flag only, and the complete case.
+% $(A,\STK(A'))\notin\Delta$, $\lmd(A_0)=\singletask$ and $\lmd(A_0)\neq\singletask$. 
+The first case is simplest because there is only one task.
+The second case is simpler than the last because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the last, more general case, the back stack may contain, apart from several tasks rooted at STK activities, one single task rooted at A0.
+Sections~\ref{sec:singletask}, ~\ref{sec:a0stk} and ~\ref{sec:a0nostk} will handle these three cases respectively.
+
+\begin{theorem}\label{thm-st-amass-reach}
+The reachability problem of $\STK$-dominating AMASS is decidable.
+\end{theorem}
+
+\subsection{Case Intent-flag free}\label{sec:intent-flag-free}
+Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS}, and use a set of {\NFA} tuples to represent the configurations of {\AMASS} $\Mm$.
+Let $\Theta_\Mm:=\{ \aname_1 \cdots \aname_k \in (\aft(\act))^+, k \le |\act|\}$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, we define $\conf_\theta = \{(S_1, \cdots, S_k) \mid \aft(S_i) =\aname_i, i\in[k],  ([A_0]) \rightarrow_\Mm^* (S_1, \cdots, S_k)\}$, and $\namefun_A(\theta)\in[k]\cup\{\bot\}$ for some $A\in\act$ to denote the index of $\aft(A)$ in the $\theta$. Moreover $\namefun_A(\theta) = i$ if $\aft(A) = \aname_i$ for some $i\in[k]$, $\namefun_A(\theta) = \bot$ otherwise. Since each task $S_i$ can be seen as a string from $\act^*$, $\conf_\theta$ can be seen as a $k$-ary string relation over $\act^*$. 
+
+\begin{definition}[Recognisable relations]
+A $k$-ary string relation $R \subseteq (\act^*)^k$ is \emph{recognisable}  if it is a finite union of products of regular languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a regular language. An {\NFA}-representation of $R$ is $\{(\Aa_{i,1},\cdots,\Aa_{i,k})\}_{i\in[n]}$, where each $\Aa_{i,j}$ is an {\NFA} satisfying that $\Ll(\Aa_{i,j}) = L_{i,j}$.
+\end{definition}
+
+\begin{theorem}\label{thm-recog}
+    For each $\theta \in \Theta_\Mm$, the {\NFA}-representation of $\conf_\theta$ for $\theta \in \Theta_\Mm$ can be effectively computed.
+\end{theorem} 
+% We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aa_i\neq\emptyset$ for each $i\in[k]$ with $\Ll(\Aa_i) = \Ll_i$.
+
+Utilising the {\NFA}-representations of $\conf_\theta$ for $\theta \in \Theta_\Mm$ in Theorem~\ref{thm-recog}, the reachability problem can be solved as follows: Given a configuration $\rho = (S_1, \cdots, S_k)$, let $\theta = \aname_1 \cdots \aname_k$, where $\aname_j=\namefun(S_j)$ for each $j \in [k]$, and an {\NFA}-representation of $\conf_\theta$ be $(\Aa_{i,1},\cdots,\Aa_{i,k})_{i \in [n]}$, then we check whether there exists $i \in [n]$ such that  for all $j \in [k]$, 
+$\Ll(\Aa_{i,j})\cap S_i\neq\emptyset$.
+
+The rest of this section is devoted to the proof of Theorem~\ref{thm-recog}.
+
+
+
+We start with a simpler case, i.e., $\lmd(A_0)=\STK$, recall that, in this case, each task is rooted at an $STK$-activity. 
+Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS} $\Pp$, and each 
+In this case, we could simulate the behaviors of a single task by a {\PDS}
+
+\subsection{Case $(A,\STK(A'))\notin\Delta$}\label{sec:singletask}
+\input{wpotrpds.tex}
+\subsection{Case $\lmd(A_0)=\STK$}\label{sec:a0stk}
+In this case, there are more than one tasks in $\Mm$, our approach to tackle this case is to simulate $\Mm$ by the set of tuples of {\WOTrNFA}s ({\WOTrNFA}-representation), i.e., $(\Aut_1,\cdots,\Aut_k)$.  [Note that. Here we use the {\WOTrNFA} $\Aut = (Q,\Gamma,\delta,I,F)$ instead of the $\Pp_{\Mm}$-{\WOTrNFA} $\Aut'=(Q,\Gamma,\delta,F)$ with $I\subseteq Q$, then $\ConfSet(\Aut) = \{w\mid (p,w)\in\ConfSet(\Aut'),p\in I\}$.] For a configuration $\rho = (S_1,\cdots,S_k)$ of $\Mm$, we have $S_i\in\ConfSet(\Aut_i)$ for each $i\in[k]$, recall that, in this case, each task $S_i$ is rooted at an $\STK$-activity which sits on the bottom of $S_i$. Suppose $\tact(S_1) = A$. When a transition $(A,\STK(B))$ is fired, according to the semantics of $\Mm$, the $B$-task of $\rho$, say $S_i$, is switched to the top of $\rho$ and changed into $[B]$ (i.e., all the activities in the $B$-task, except $B$ itself, are popped). To simulate this in $\Mm$, we add a tuple $(\Aut_i',\Aut_1',\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k})$, where $\ConfSet(\Aut_i')=[B]$ and $\ConfSet(\Aut_1') = \ConfSet(\Aut_1)\cap A\act^*$. To obtain $\Aut_1'$, we set the initial states with $\{p_0^A\}$ and add the transitions $(p_0^A,A,\tau,p)$ for each $p_0\xRightarrow[\Aut_1]{A\mid\tau}p$. 
+
+% From Section~\ref{sec:singletask}, we know that we can construct a {\WOTrPDS} to solve the reachability problem of a single task, according to the Proposition~\ref{prop-stk}, if $\lmd(A_0) = \STK$, we know that the bottom activity of each task is a {\STK} activity, which means 
+% we assume that there is a configuration $\rho = (S_1,\cdots,S_k)$ with $S_1 = [A]$ for some $A\in\act_{\STK}$, then we have $\rho' = (S_1',\cdots,S_k)$ with $S_1'\in\ConfSet(\Aut_{A}^{\post^*})$, $\rho\xRightarrow[]{\Mm}\rho'$.
+
+Let $\Theta_\Mm:=\{ \aname_1 \cdots \aname_k \in (\aft(\act))^+, k \le |\act|\}$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, we define $\conf_\theta = \{(S_1, \cdots, S_k) \mid \aft(S_i) =\aname_i, i\in[k],  ([A_0]) \rightarrow_\Mm^* (S_1, \cdots, S_k)\}$, and $\namefun_A(\theta)\in[k]\cup\{\bot\}$ for some $A\in\act$ to denote the index of $\aft(A)$ in the $\theta$. Moreover $\namefun_A(\theta) = i$ if $\aft(A) = \aname_i$ for some $i\in[k]$, $\namefun_A(\theta) = \bot$ otherwise. Since each task $S_i$ can be seen as a string from $\act^*$, $\conf_\theta$ can be seen as a $k$-ary string relation over $\act^*$. 
+
+\begin{definition}[{\WOTrNFA}-representation]
+% A $k$-ary string relation $R \subseteq (\act^*)^k$ is \emph{recognisable}  if it is a finite union of products of regular languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a regular language. 
+    A $k$-ary string relation $R \subseteq (\act^*)^k$ has a {\WOTrNFA}-representation, if it is a finite union of products of {\WOTrNFA}'s languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a {\WOTrNFA}'s language.
+    A {\WOTrNFA}-representation of $R$ is $\{(\Aut_{i,1},\cdots,\Aut_{i,k})\}$, where each $\Aut_{i,j}$ is a {\WOTrNFA} satisfying that $\ConfSet(\Aut_{i,j})= L_{i,j}$.
+\end{definition}
+%
+
+%The main idea of the decision procedure for the reachability problem is to show the following result.
+\begin{theorem}\label{thm-recog}
+    For each $\theta \in \Theta_\Mm$, the {\WOTrNFA}-representation of $\conf_\theta$ for $\theta \in \Theta_\Mm$ can be effectively computed.
+\end{theorem} 
+% We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aa_i\neq\emptyset$ for each $i\in[k]$ with $\Ll(\Aa_i) = \Ll_i$.
+
+Utilising the {\WOTrNFA}-representations of $\conf_\theta$ for $\theta \in \Theta_\Mm$ in Theorem~\ref{thm-recog}, the reachability problem can be solved as follows: Given a configuration $\rho = (S_1, \cdots, S_k)$, let $\theta = \aname_1 \cdots \aname_k$, where $\aname_j=\namefun(S_j)$ for each $j \in [k]$, and an {\WOTrNFA}-representation of $\conf_\theta$ be $(\Aut_{i,1},\cdots,\Aut_{i,k})_{i \in [n]}$, then we check whether there exists $i \in [n]$ such that  for all $j \in [k]$, 
+$\ConfSet(\Aut_{i,j})\cap S_i\neq\emptyset$.
+% $S_j$ is accepted by $\Aut_{i,j }$. 
+
+
+The rest of this section is devoted to the proof of Theorem~\ref{thm-recog}. 
+
+
+We are going to present a procedure to compute the {\WOTrNFA}-representations of $\conf_\theta$ for $\theta \in \Theta_\Mm$. 
+Specifically, the procedure computes a set of tuples $(\aname_1 \cdots \aname_k, (\Aut_1, \cdots, \Aut_k))$, denoted by $\AutReach$, such that for each $\theta =  \aname_1 \cdots \aname_k$, the {\WOTrNFA}-tuples $(\Aut_1, \cdots, \Aut_k)$ with $(\theta, (\Aut_1, \cdots, \Aut_k)) \in \AutReach$ constitute an {\WOTrNFA}-representation of $\conf_\theta$. 
+
+All these {\WOTrNFA}s in $\AutReach$ satisfy that their states are from $Q = P_{\Mm} \cup \{p_f\} \cup \{p_0^{A}, \langle p_0, A\rangle\mid  A \in \act\}$, and their initial states are from $I\subseteq \{p_0^{A}\mid  A \in \act\}$, with $p_f$ being the only final state.
+    % where $Q_f = \{p_f\}$, with $p_0$ being the only initial state and $Q_f$ being the final states.
+%
+%, that is, for each transition $(q, \gamma, q')$ in $\Aa_1$, $(p_0, \gamma, q')$ is a transition in $\Aa_1$. 
+
+For each $A\in\act$, we let $\AutB_{A} = (\Pp_{\Mm}\cup\{p_f\}, \act, \{(p_0, A, \tau_{\id}, p_f)\}, \{p_f\})$ being a $\Pp_{\Mm}$-{\WOTrNFA}, and compute $\AutB_{A}^{\post^*}$ from the procedure in Section~\ref{sec:singletask} we let $\AutB_{A}^{\post^*}=(Q,\act,\delta_A,F)$, then we define the {\WOTrNFA} $\Aut_{A}^{B} = (Q,\act,\delta_{A}',\{p_0^B\},F)$, where $\delta_A'$ is obtained from $\delta_A$ by adding the transitions $(p_0^{B'},B',\tau,p)$ for each $p_0\xRightarrow[\AutB_{A}^{\post^*}]{B'\mid\tau}p$. [Note that, $\ConfSet(\Aut_A^B) = \ConfSet(\AutB_A^{\post^*}(p_0))\cap B\act^*$.]
+
+Initially, the procedure lets $\AutReach := \{(\aft(A_0),(\Aut_{A_0}^B))\mid B\in\act,\ConfSet(\Aut_{A_0}^B)\neq\emptyset\}$, 
+% where $\Lambda = [\gamma_{\init}]$ if $\gamma_{\init}\in\Gamma_{\STK}$, $\Lambda = []$ otherwise. 
+Then it adds the tuples to $\AutReach$ according to the following saturation rules.
+
+\smallskip
+\fbox
+{
+\begin{minipage}{0.9\textwidth}
+\begin{enumerate}
+    % \item If $A \xrightarrow{\startactivity(\phi)} A' \in\Delta$ and $\lmd(A')=\STK$, $\alpha_{A'}(\theta) = \bot$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+    \item If $(A,\STK(A')) \in\Delta$, $\namefun_{A'}(\theta) = \bot$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\aft(A')\theta, (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_k))$ to $\AutReach$,
+        \textbf{[launch an $A'$-task]}
+        % then adds the tuple $(\aft(A')\theta, (\Aut_{A'}^{B},\Aut_1,\cdots,\Aut_k))$ to $\AutReach$ for each $B\in\act$ with $\ConfSet(\Aut_{A'}^B)\neq\emptyset$,
+        % \begin{itemize}
+            % \item $\Aut_{A'} = (Q, \act, \{(p_0, A', \tau_{\id}, p_f)\}$, $\{p_0\},\{p_f\})$,
+            % \item $\Aut_1'$ is obtained from $\Aut_1$ by adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1]{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+        % \end{itemize}
+    % \item If $(A,\STK(A')) \in\Delta$, $\alpha_{A'}(\theta) = 1$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        % then adds the tuple $(\theta, (\Aut_{A'}^{B},\cdots,\Aut_k))$ to $\AutReach$ for each $B\in\act$ with $\ConfSet(\Aut_{A'}^B)\neq\emptyset$,
+
+    % \item If $A \xrightarrow{\startactivity(\phi)} A' \in\Delta$ and $\lmd(A')=\STK$, $\alpha_{A'}(\theta) = i \neq\bot$ and $i\neq 1$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+    \item If $(A,\STK(A')) \in\Delta$, $\namefun_{A'}(\theta) = i \neq\bot$ and $i\neq 1$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\theta', (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k}))$ to $\AutReach$, where $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$,
+        \textbf{[escalate the $A'$-task to be the top and pop the $A'$-task until $A'$]}
+        % then adds the tuple $(\theta', (\Aut_{A'}^{B},\Aut_1,\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k}))$ to $\AutReach$ for each $B\in\act$, where $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$ with $\ConfSet(\Aut_{A'}^B)\neq\emptyset$,
+        % \begin{itemize}
+            % \item $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$,
+            % \item $\Aut_{A'} = (Q, \act, \{(p_0, A', \tau_{\id}, p_f)\}$, $\{p_0\},\{p_f\})$,
+            % \item $\Aut_1'$ is obtained from $\Aut_1$ by adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1]{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+        % \end{itemize}
+
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ and $k>1$, then adds the tuple $(\aname_2\dots\aname_k, (\Aut_2,\cdots,\Aut_k))$ to $\AutReach$,
+        \textbf{[pop the top task]}
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ such that $\Aut_1 = \Aut_A^B$ for some $A\in\act_{\STK},B\in\act$, then adds the tuple $(\theta, (\Aut_A^{B'},\cdots,\Aut_k))$ to $\AutReach$ for each $B'\in\act$ with $\ConfSet(\Aut_A^{B'})\neq\emptyset$.
+        \textbf{[simulate the behaviors of the operations in the top task]}
+    % \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach$ and $k>1$ such that $\Aut_2 = \Aut_A^B$ for some $A\in\act_{\STK}, B\in\act$, then adds the tuple $(\aname_2\dots\aname_k, (\Aut_A^{B'},\cdots,\Aut_k))$ to $\AutReach$ for each $B'\in\act$ with $\ConfSet(\Aut_{A}^B')\neq\emptyset$,
+\end{enumerate}
+\end{minipage}
+}
+
+\begin{proposition}\label{prop:sat0}
+    For each $(\theta,(\Aut_1,\cdots,\Aut_k))\in\AutReach$, then 
+    \begin{enumerate}
+        \item for each $i\in[k]$, $\Aut_i = \Aut_A^B$ for some $A\in\act_{\STK},B\in\act$, and for each $S_i\in\ConfSet(\Aut_i)$, we have $\bact(S_i) = A$,
+        \item let $\Aut_1 = \Aut_A^B$ for some $A\in\act_{\STK},B\in\act$, then $(\theta,(\Aut_A^{B'},\cdots,\Aut_k))\in\AutReach$ for each $B'\in\act$ with $\ConfSet(\Aut_A^{B'})\neq\emptyset$, moreover $\bigcup\limits_{B'\in\act}(\Aut_A^{B'}) = \ConfSet(\Aut_{A}^{\post^*}(p_0))$.
+    \end{enumerate}
+    % and let $p_0\xRightarrow[\Aut_1]{A\mid\tau_{\id}}p_f$, then $\Aut_1 = \Aut_{A}^{\post^*}$.
+\end{proposition}
+
+\smallskip
+\begin{lemma}\label{lem:a0nostk}
+    Let $\AutReach$ be the set computed by the aforementioned saturation procedure. Then for each $\theta=\aname_1\dots\aname_k\in\Theta_{\Mm}$, we have
+    $$\conf_{\theta}\subseteq\bigcup \limits_{(\theta, (\Aut_1, \dots, \Aut_k)) \in \AutReach} \ConfSet(\Aut_1) \times \dots \times \ConfSet(\Aut_k).$$
+\end{lemma}
+
+\begin{proof}
+Let us use $\rightarrow_{\Mm}^n$ to denote the $n$-fold composition of $\rightarrow_\Mm$. Then for $\theta = \aname_1 \dots \aname_k \in \Theta_\Mm$, we prove by an induction on $n$ that for each $\rho = (S_1, \dots, S_k) \in \conf_\theta$ such that  $([A_0]) \rightarrow^n_\Mm \rho$, there is  $(\theta, (\Aut_1, \dots, \Aut_k)) \in \AutReach$ such that $\rho \in  \ConfSet(\Aut_1) \times \dots \times \ConfSet(\Aut_k)$.
+
+\noindent \emph{Induction base $n = 0$}. Then $\rho = ([A_0])$ and $\theta = \aft(A_0)$, then $(\theta, \Aut_{A_0}^{A_0}) \in \AutReach$, and $\rho \in \ConfSet(\Aut_{A_0}^{A_0})$.
+
+\smallskip
+
+\noindent \emph{Induction step $n > 0$}. Then there is $\rho' = (S'_1, \dots, S'_l)$ such that $([A_0]) \rightarrow^{n-1}_\Mm \rho' \rightarrow_\Mm \rho$.
+
+By induction hypothesis, we know that there is $(\theta', (\Aut'_1, \dots, \Aut'_l)) \in \AutReach$ such that $ \rho' \in \ConfSet(\Aut'_1) \times \dots \times \ConfSet(\Aut'_l)$.
+
+Moreover, $\rho$ is obtained from $\rho'$  by a transition of $\Mm$. We distinguish between the following cases.
+
+\smallskip
+\paragraph{Case $\rho$ is obtained from $\rho'$ by a transition $(A,\STK(A'))$ such that $\namefun_{\theta'}(A')=\bot$}: 
+
+Then $k=l+1$, $S_1=[A']$, $S_1'=[A]\cdot S_1''$ for some $S_1''$, and $(S_2,\dots,S_k)=(S_1',\dots,S_l')$.
+From the first saturation rule, we know that $(\Aut_{A'}^{A'},\Aut_1',\cdots,\Aut_l')\in\AutReach$, 
+% where $\Aut_1''$ is obtained from $\Aut_1'$ by adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1']{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+% Therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_{A'}^{\post^*}\times\ConfSet(\Aut_1'')\times\cdots\times\ConfSet(\Aut_l'))$.
+therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_l')$.
+\paragraph{Case $\rho$ is obtained from $\rho'$ by a transition $(A,\STK(A'))$ such that $\namefun_{\theta'}(A')=1$}: 
+
+Then $k = l$, $S_1=[A']$ and $S_1'=[A]\cdot S_1''$ for some $S_1''$, and $(S_2,\dots,S_k)=(S_2',\dots,S_l')$.
+From the Procedure~\ref{prop:sat0}, we know that $(\Aut_{A'}^{A'},\Aut_2',\cdots,\Aut_l')\in\AutReach$, 
+therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_2')\times\cdots\times\ConfSet(\Aut_l')$.
+% According to Proposition~\ref{prop:sat0}, we know that $[A']\in\ConfSet(\Aut_1')$.
+% Therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_l')$.
+\paragraph{Case $\rho$ is obtained from $\rho'$ by a transition $(A,\STK(A'))$ such that $\namefun_{\theta'}(A')=i\neq\bot$ and $i\neq 1$}: 
+
+Then $k = l$, $S_1 = [A']$, $S'_1 = [A] \cdot S''_1$  for some $S''_1$, and $(S_2, \dots, S_k) = (S'_1, \dots, S'_{i-1}, S'_{i+1}, \dots, S'_l)$. From the second saturation rule, we know that $(\Aut_{A'}^{A'},\Aut_{1}',\cdots,\Aut_{i-1}',\Aut_{i+1}',\cdots,\Aut_{l}')\in\AutReach$,
+        % \begin{itemize}
+            % \item $\Aut_{A'} = (Q, \act, \{(p_0, A', \tau_{\id}, p_f)\}$, $\{p_0\},\{p_f\})$,
+            % \item $\Aut_1''$ is obtained from $\Aut_1'$ by adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1']{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+        % \end{itemize}
+        Hence $S_1=[A']\in\Aut_{A'}^{A'}$, then $(S_1,\cdots,S_k)\in\ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_{l}')$.
+\paragraph{Case $\rho$ is obtained from $\rho'$ by a transition $\POP()$ such that $|S_1'|=1$}: 
+
+Then $k = l - 1$, and $(S_1,\dots,S_k)=(S_2',\dots,S_l')$.
+From the third saturation rule, we know that $(\Aut_2',\cdots,\Aut_l')\in\AutReach$, 
+% where $\Aut_2'$ is obtained from $\Aut_2'$ by replacing the initial states with $\{p_0\}$. Since $S_2'\in\ConfSet(\Aut_2')$, 
+% we have $S_1=S_2'\in\ConfSet(\Aut_2')$.
+therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_2')\times\cdots\times\ConfSet(\Aut_l')$.
+% \noindent \emph{Case $\rho$ is obtained from $\rho'$ by a transition $\POP()$ such that $|S_1'|>1$}: 
+\paragraph{Other cases}: 
+
+In these cases, $k = l$, $(p_0,S_1')\xRightarrow[]{\Pp_{\Mm}}(p_0,S_1)$ with $\tact(S_1) = B$, $\tact(S_1') = B'$ and $\bact(S_1)=\bact(S_1')=A$ for some $A\in\act_{\STK},B,B'\in\act$, and $(S_2,\cdots,S_k) = (S_2',\cdots,S_l')$.
+
+Since $S_1'\in\ConfSet(\Aut_1')$, according to the Proposition~\ref{prop:sat0}, we let $\Aut_1'=\Aut_A^{B'}$, then from the fourth saturation rule, we have $(\theta,(\Aut_A^{B},\Aut_2',\cdots,\Aut_l'))\in\AutReach$, and $\ConfSet(\Aut_A^B)\subseteq\ConfSet(\AutB_A^{\post^*}(p_0))$,
+moreover recall that $\bact(S_1') = A$, then we have $\rho'\rightarrow_{\Mm}^*([A],S_2',\cdots,S_l')$ \textbf{[by popping the activities above $A$]}, hence we have $([A],S_2',\cdots,S_l')\rightarrow_{\Mm}^*\rho = (S_1,S_2',\cdots,S_l')$ \textbf{[by $\post^*$]}.
+
+% moreover $\bigcup\limits_{B'\in\act}(\Aut_A^{B'}) = \ConfSet(\Aut_{A}^{\post^*}(p_0))$. 
+% Hence $\ConfSet(\Aut_1')\subseteq\ConfSet(\Aut_{A}^{\post^*}(p_0))$.  Therefore we have $(p_0,[A]\xRightarrow[]{\Pp_{\Mm}}(p_0,S_1'))$, then $(p_0,[A])\xRightarrow[]{\Pp_{\Mm}}(p_0,S_1)$, hence there exists some $B'\in\act$, $S_1\in\ConfSet(\Aut_A^{B'})$. Therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_A^{B'})\times\cdots\times\ConfSet(\Aut_l')$.
+
+
+% Then $k = l$, $S_1'=[A]\cdot S_1$ for some $A\in\act$, and $(S_2,\dots,S_k)=(S_2',\dots,S_l')$.
+% According to Proposition~\ref{prop:sat0}, since $S_1'=[A]\cdot S_1\in\ConfSet(\Aut_1')$, we know that $S_1\in\ConfSet(\Aut_1')$.
+% Therefore $(S_1,\dots,S_k)\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_l')$.
+
+
+\end{proof}
+
+\begin{lemma}
+    Let $\AutReach$ be the set computed by the aforementioned saturation procedure. Then for each $\theta = \aname_1 \dots \aname_k \in \Theta_\Mm$, we have 
+    $$\bigcup \limits_{(\theta, (\Aut_1, \dots, \Aut_k)) \in \AutReach} \ConfSet(\Aut_1) \times \dots \times \ConfSet(\Aut_k) \subseteq \conf_\theta.$$
+
+\end{lemma}
+
+\begin{proof}
+    Let $\AutReach_n$ be the set computed by the aforementioned saturation procedure after the $n$-th tuple $(\theta,(\Aut_1,\dots,\Aut_k))$ is added, we prove by an induction on $n$ that for each $\rho = (S_1,\dots,S_k)\in\ConfSet(\Aut_1) \times \dots \times \ConfSet(\Aut_k)$, then $([A_0])\rightarrow_{\Mm}^*\rho$.
+
+    \noindent \emph{Induction base $n = 0$}. Then the $n$-th tuple is $(\aft(A_0),(\Aut_{A_0}^{A}))$ for each $A\in\act$, according to the Procedure~\ref{prop:sat0}, we have $\bigcup\limits_{A\in\act}(\Aut_{A_0}^{A}) = \ConfSet(\Aut_{A_0}^{\post^*}(p_0))$, hence for each $S\in\ConfSet(\Aut_{A_0}^A)$, we have $([A_0])\rightarrow_{\Mm}^*(S)$.
+    % and $([A_0]) \in \ConfSet(\Aut_{A_0}^{\post^*})$, $([A_0])\rightarrow_{\Mm}([A_0])$.
+
+\smallskip
+
+\noindent \emph{Induction step $n > 0$}. Then the $n$-th tuple $(\theta,(\Aut_1,\dots,\Aut_k))$ is added which obtained from $(\theta',(\Aut_1',\dots,\Aut_l'))\in\AutReach_{n-1}$.
+We distinguish between the following cases.
+
+\paragraph{Case $(\theta,(\Aut_1,\dots,\Aut_k))$ is obtained from $(\theta',(\Aut_1',\dots,\Aut_l'))$ by the first saturation rule} :
+
+Then $k = l+1$, $\Aut_1 = \Aut_{A'}^{A'}$, $(\Aut_2,\cdots,\Aut_k) = (\Aut_1',\cdots,\Aut_l')$, 
+% where $\Aut_1''$ is obtained from $\Aut_1'$ by 
+% adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1']{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+then for each $\rho=(S_1,S_2,\cdots,S_k)\in\ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_2)\times\cdots\times\ConfSet(\Aut_k)$,
+since $S_1=[A']$, then we have $\rho' = (S_2,\cdots,S_k)\rightarrow_{\Mm}\rho$ \textbf{[by the transition $(A,\STK(A'))$]}, where $(S_2,\cdots,S_k)\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_l')$.  By induction hypothesis, we have $([A_0])\rightarrow_{\Mm}^* \rho'$. Therefore $([A_0])\rightarrow_{\Mm}^*\rho$.
+% \begin{itemize}
+    % \item if $S_1=[A']$, we have $\rho' = (S_2,\cdots,S_k)\rightarrow_{\Mm}\rho$, where $(S_2,\cdots,S_k)\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_l')$.  By induction hypothesis, we have $([A_0])\rightarrow_{\Mm}^* \rho'$. Therefore $([A_0])\rightarrow_{\Mm}^*\rho$.
+    % \item if $S_1\neq[A']$, $\rho$ could be reached from $([A'],S_2,\cdots,S_k)$.
+% \end{itemize}
+\paragraph{Case $(\theta,(\Aut_1,\dots,\Aut_k))$ is obtained from $(\theta',(\Aut_1',\dots,\Aut_l'))$ by the second saturation rule} :
+
+Then $k = l$, $\Aut_1=\Aut_{A'}^{A'}$, and $(\Aut_2,\cdots,\Aut_k) = (\Aut_1',\cdots,\Aut_{i-1}',\Aut_{i+1}',\cdots,\Aut_l')$.
+% where $\Aut_1''$ is obtained from $\Aut_1'$ by adding the transitions $(p_0^{A},A,\tau,q)$ for each $p_0\xRightarrow[\Aut_1']{A | \tau} q$, and replacing the initial states with $\{p_0^{A}\}$.
+Then for each $\rho=(S_1,S_2,\cdots,S_k)\in\ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_2)\times\cdots\ConfSet(\Aut_k) = \ConfSet(\Aut_{A'}^{A'})\times\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_l')$, 
+since $S_1=[A']$, then we have $\rho' = (S_1',\cdots,S_l')\rightarrow_{\Mm}\rho$, \textbf{[by the transition $(A,\STK(A'))$]} where $(S_2,\cdots,S_k) = (S_1',\cdots,S_{i-1}',S_{i+1}',S_l')$, since $(S_2,\cdots,S_k)\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_l')$, hence $\rho'\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_i')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_l')$.
+Then we apply the induction hypothesis on $\rho'$, we have $[A_0]\rightarrow_{\Mm}^*\rho'$, hence we have $[A_0]\rightarrow_{\Mm}^*\rho$.
+% \begin{itemize}
+    % \item if $S_1=[A']$, we have $\rho' = (S_1',\cdots,S_l')\rightarrow_{\Mm}\rho$, where 
+        % $(S_2,\cdots,S_k) = (S_1',\cdots,S_{i-1}',S_{i+1}',S_l')$,
+        % since $(S_2,\cdots,S_k)\in\ConfSet(\Aut_1'')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_l')$,
+        % hence $\rho'\in\ConfSet(\Aut_1')\times\cdots\times\ConfSet(\Aut_{i-1}')\times\ConfSet(\Aut_i')\times\ConfSet(\Aut_{i+1}')\times\cdots\times\ConfSet(\Aut_l')$.
+    % \item if $S_1=[A']$, we have $\rho' = (S_2,\cdots,S_{i-1},S_1',S_{i+1},\cdots,S_k)\rightarrow_{\Mm}\rho$, where \\
+        % $(S_2,\cdots,S_{i-1},S_1',S_{i+1},\cdots,S_k)\in\ConfSet(\AutB_1'')\times\cdots\times\ConfSet(\AutB_{i-1}')\times\ConfSet(\AutB_i')\times\ConfSet(\AutB_{i+1}')\times\cdots\times\ConfSet(\AutB_l')$.  
+        % By induction hypothesis, we have $([A_0])\rightarrow_{\Mm} \rho'$. Therefore $([A_0])\rightarrow_{\Mm}\rho$.
+    % \item if $S_1\neq[A']$, $\rho$ could be reached from $([A'],S_2,\cdots,S_k)$.
+% \end{itemize}
+\paragraph{Case $(\theta,(\Aut_1,\dots,\Aut_k))$ is obtained from $(\theta',(\Aut_1',\dots,\Aut_l'))$ by the third saturation rule} :
+
+Then $k = l - 1$, $(\Aut_1,\cdots,\Aut_k) = (\Aut_2',\cdots,\Aut_l')$.
+% where $\Aut_2''$ is obtained from $\Aut_2'$ by replacing the initial states with $\{p_0\}$.
+Then for each $\rho=(S_1,\cdots,S_k)\in\ConfSet(\Aut_2')\times\cdots\times\ConfSet(\Aut_l')$, we have $\rho'=(S,S_1,\cdots,S_k)$, where $S\in\ConfSet(\Aut_1')$, such that $\rho'\rightarrow_{\Mm}^*\rho$ \textbf{[by popping empty $\aname_1$-task]}. By induction hypothesis, we have $([A_0])\rightarrow_{\Mm}^* \rho'$. Therefore $([A_0])\rightarrow_{\Mm}^*\rho$.
+% Since $\ConfSet(\Aut_{2}'') = \ConfSet(\Aut_2'^{\post^*})$, then for each $\rho=(S_1,\cdots,S_k)\in\ConfSet(\Aut_2'')\times\cdots\times\ConfSet(\Aut_l')$, we have $([A_0])\rightarrow_{\Mm}\rho$.
+\paragraph{Case $(\theta,(\Aut_1,\dots,\Aut_k))$ is obtained from $(\theta',(\Aut_1',\dots,\Aut_l'))$ by the fourth saturation rule} :
+
+Then $k=l$, $(\Aut_2,\cdots,\Aut_k) = (\Aut_2',\cdots,\Aut_l')$, $\Aut_1' = \Aut_A^{B'}$ and $\Aut_1 = \Aut_A^{B}$ for some $A\in\act_{\STK},B,B'\in\act$.
+Then for each $\rho=(S_1,S_2,\cdots,S_k)\in\ConfSet(\Aut_A^B)\times\ConfSet(\Aut_2')\times\cdots\times\ConfSet(\Aut_l')$, recall that $\bact(S_1) = A$, then we have $\rho'' = ([A],S_2,\cdots,S_k)\rightarrow_{\Mm}^*\rho$ \textbf{[by $\post^*$]}.
+We let $\rho'=(S_1',S_2,\cdots,S_k)\in\ConfSet(\Aut_A^B)\times\ConfSet(\Aut_2')\times\cdots\times\ConfSet(\Aut_l')$, by the induction hypothesis, we know that $([A_0])\rightarrow_{\Mm}^*\rho'$, moreover since $\bact(S_1') = A$, then we have $\rho'\rightarrow_{\Mm}^*\rho''$ \textbf{[by popping the activities above $A$]}.Therefore $([A_0])\rightarrow_{\Mm}^*\rho$.
+\end{proof}
+
+
+\subsection{Case $\lmd(A_0)\neq\STK$}\label{sec:a0nostk}
+
+We then turn to the more general case $\lmd(A_0)\neq\STK$ which is significantly more involved. We assume that $\lmd(A_0')=\STK$ and $\aft(A_0') = \aft(A_0)$. Then an $A_0'$-task can only surface when the original $A_0$-task is popped empty. If this happens, no $A_0$-task will be recreated again, and thus, we can simulate the $\AMASS$ by computing $\AutReach$ from the saturation procedure in Section~\ref{sec:a0stk} directly and we are done. The challenging case is that we have both $A_0$-task and non-$A_0'$-tasks. 
+The main technical difficulty is that the order of the $A_0$-task and the non-$A_0$-tasks may be switched for arbitrarily many times and the bottom activity of $A_0$-task is \emph{not} an $\STK$ activity (when $A_0$-task is switched to the top by starting $A_0'$, $A_0$ task will be poped until $A_0'$ rather than the bottom activity $A_0$), hence we need to modify the {\WOTrNFA} for $A_0$-task arbitrarily many times, which leading to that there may be infinite {\WOTrNFA}s for $A_0$-task.
+
+\paragraph{Intuition of construction.} Our idea is 1) to compute $\AutReach_{A_0}$ to represent the configurations, whose the top task is $A_0$-task, reached from the initial configuration first, 2) to compute $\AutReach_{\mathcircled{A_0}}$ from $\AutReach_{A_0}$ to represent the configurations whose the top task is \emph{not} $A_0$-task and $A_0$-task is in these configurations, 3) to compute $\AutReach_{\mhcancel{A_0}}$ to represent the configurations which $A_0$-task is \emph{not} in these configurations.
+% the configurations whose the top task is $A_0$-task first, and then we compute the rest configurations (whose the top task is \emph{not} $A_0$-task).
+The crux of the former case is to construct a \emph{finite abstraction} for the non-$A_0$-tasks and incorporate it into the control states, so we can reduce the configuration reachability of $\Mm$ into that of a {\WOTrPDS} $\Pp_{\abs}$. Observe that a run of $\Mm$ can be seen as a sequence of task switching. In particular, an $A_0;\mhcancel{A_0};A_0$ \emph{switching} denotes a path in $\rightarrow_{\Mm}$ where the $A_0$-task is on the top in the \emph{first} and \emph{last} configuration, and in all the \emph{intermediate} configurations, the $A_0$-task is \emph{not} the top task. The main idea of the reduction is to simulate the $A_0;\mhcancel{A_0};A_0$ switching by a "macro"-transition of $\Pp_{\abs}$. Note that the $A_0$-task regains the top task in the last configuration either by starting the activity $A_0'$ or by emptying the tasks above $A_0$-task. Suppose that, for an $A_0;\mhcancel{A_0};A_0$ switching, in the first (resp. last) configuration and $\alpha$ (resp. $\beta$) is the finite abstraction of the non-$A_0$-tasks. Then for the "macro"-transition of $\Pp_{\abs}$, the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Pp_{\abs}$ is updated accordingly:
+\begin{itemize}
+    \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by starting the activity $A_0'$  (in this case, the switching is called an \emph{active} switching), then $A_0'$ will be pushed into the stack of  $\Pp_{\abs}$ if the stack does not contain $A_0'$, and all the symbols above $A_0'$ will be popped otherwise,
+%
+    \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by popping empty all the tasks on top of the $A_0$-task (in this case, the switching is called a \emph{passive} switching), then the stack of $\Pp_{\abs}$ stays unchanged.
+        
+\end{itemize}
+Roughly speaking, we define the abstraction of the non-$A_0$-tasks whose contents are encoded by words $w_1,\cdots,w_k\in\act_{\standard}^*(\act_{\STK}\setminus\{A_0'\})$, denoted by $\alpha(w_1,\cdots,w_k)$, as the set of all contents $w_1',\cdots,w_k'\in\act_{\standard}^*(\act_{\STK}\setminus\{A_0'\})$ such that $w_i'$ has the same top (resp. bottom) activity with $w_i$ for each $i\in[k]$. [Note that here $k\le |\act_{\STK}-1|$.]
+More precisely, $\alpha(w_1,\cdots,w_k)$ is defined as $(\theta,(\Aut_1,\cdots,\Aut_k))$ with $\theta = \aname_1\dots\aname_k$ such that for each $i\in[k]$, let $w_i = A_iw_i'B_i$, $\aname_i = \aft(B_i)$, and $\Aut_i = \Aut_{B_i}^{A_i}$. [Note that $(\theta,(\Aut_1,\cdots,\Aut_k))$ is a {\WOTrNFA}-representation.]
+Let $\abs_{\mhcancel{A_0,A_0'}} = \AutReach_{\mhcancel{A_0,A_0'}}$ denote the set of abstractions of $\{w_1,\cdots,w_k\mid k\le|\act_{\STK}-1|,\forall i\in[k], w_i\in\act_{\standard}^*(\act_{\STK}\setminus\{A_0'\})\}$, which $\AutReach_{\mhcancel{A_0,A_0'}}$ is similar with $\AutReach$ except that the tuple $(\theta,(\Aut_1,\cdots,\Aut_k))$ in $\AutReach_{\mhcancel{A_0,A_0'}}$ represents the configurations of non-$A_0$-tasks.
+Initially we let $\AutReach_{\mhcancel{A_0,A_0'}}=\{(\aft(A),\Aut_{A}^{B})\mid A\in\act_{\STK}\setminus\{A_0'\},B\in\act,\ConfSet(\Aut_{A}^B)\neq\emptyset\}$,
+    and it adds the tuples to $\AutReach_{\mhcancel{A_0,A_0'}}$ according to the following saturation rules.
+
+\smallskip
+\fbox
+{
+\begin{minipage}{0.9\textwidth}
+\begin{enumerate}
+    \item If $(A,\STK(A')) \in\Delta$ and $A'\neq A_0'$, $\namefun_{A'}(\theta) = \bot$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mhcancel{A_0,A_0'}}$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\aft(A')\theta, (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_k))$ to $\AutReach_{\mhcancel{A_0,A_0'}}$,
+    \item If $(A,\STK(A')) \in\Delta$, and $A'\neq A_0'$, $\namefun_{A'}(\theta) = i \neq\bot$ and $i\neq 1$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mhcancel{A_0,A_0'}}$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\theta', (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k}))$ to $\AutReach_{\mhcancel{A_0,A_0'}}$, where $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$,
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mhcancel{A_0,A_0'}}$ and $k>1$, then adds the tuple $(\aname_2\dots\aname_k, (\Aut_2,\cdots,\Aut_k))$ to $\AutReach_{\mhcancel{A_0,A_0'}}$,
+    \item If $(\theta, (\Aut_1)) \in \AutReach_{\mhcancel{A_0,A_0'}}$, then adds the $\emptyset$ to $\AutReach_{\mhcancel{A_0,A_0'}}$,
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mhcancel{A_0,A_0'}}$ such that $\Aut_1 = \Aut_A^B$ for some $A\in\act_{\STK},B\in\act$, then adds the tuple $(\theta, (\Aut_A^{B'},\cdots,\Aut_k))$ to $\AutReach_{\mhcancel{A_0,A_0'}}$ for each $B'\in\act$ with $\ConfSet(\Aut_A^{B'})\neq\emptyset$.
+\end{enumerate}
+\end{minipage}
+}
+
+We define a binary relation $\xrightarrow{\Lambda}$ over the set of {\WOTrNFA}-representations in $\AutReach_{\mhcancel{A_0,A_0'}}$ where $\Lambda\subseteq\act_{\STK}\setminus\{A_0'\}$, we write $\alpha\xrightarrow{\{A'\}}\alpha'$ if $\alpha'$ is added into $\AutReach_{\mhcancel{A_0,A_0'}}$ from $\alpha$ by the first and second rules (by the transition $(A,\STK(A'))$), $\alpha\xrightarrow{\emptyset}\alpha'$ otherwise.
+We then extend the relation to $\xRightarrow{\Lambda}$ for an activity set $\Lambda$, defined inductively as follows:
+\begin{itemize}
+    \item if $\alpha\xrightarrow{\Lambda}\alpha'$, then $\alpha\xRightarrow{\Lambda}\alpha'$,
+    \item if $\alpha\xRightarrow{\Lambda}\alpha'$ and $\alpha'\xrightarrow{\Lambda'}\alpha''$, then $\alpha\xRightarrow{\Lambda\cup\Lambda'}\alpha''$,
+\end{itemize}
+Intuitively, for each $A\in\Lambda$, $A$-task is switched to the top in this path. Moreover, for $\alpha = (\theta,(\Aut_1,\cdots,\Aut_k))$ and $\beta = (\theta',(\Aut_1',\cdots,\Aut_l'))$, then we define $\alpha\cdot\beta = (\theta\theta', (\Aut_1,\cdots,\Aut_k,\Aut_1',\cdots,\Aut_l'))$.
+
+To facilitate the construction of the PDS $\Pp_{\abs}$, we also need to record how the abstraction ``evolves". For each $(A, \alpha) \in (\act_{\standard}\cup\{A_0'\}) \times \abs_{\mhcancel{A_0,A_0'}}$, 
+we compute $\reach(A, \alpha)$ consisting the union of 
+\begin{itemize}
+    \item the set of pairs $(\beta,A_0')$ such that $\beta$ is reached from $\alpha$ by an active $A_0; \mhcancel{A_0}; A_0$ switching, in which $A$ is the top activity of the $A_0$-task in the first configuration, 
+    and $\alpha$ (resp. $\beta$) is the abstraction of the non-$A_0$-tasks in the first (resp. last) configuration.
+    \item the set of pairs $(\beta,\bot)$ such that $\beta$ is reached from $\alpha$ by an passive $A_0; \mhcancel{A_0}; A_0$ switching, in which $A$ is the top activity of the $A_0$-task in the first configuration,
+    and $\alpha$ (resp. $\beta$) is the abstraction of the non-$A_0$-tasks in the first (resp. last) configuration.
+\end{itemize}
+
+To compute $\reach(A,\alpha)$, we need an additional notation $\rmv(B,\alpha)$ for an abstraction $\alpha$ and $B\in\act_{\STK}\setminus\{A_0'\}$, which intuitively specifies how to obtain the new abstraction from the abstraction $\alpha$ when a $B$ activity is started. More precisely, we let $\alpha = (\theta, (\Aut_1,\cdots, \Aut_k))$ with $\theta = \aname_1\dots\aname_k$, and define $\rmv(B,\alpha)$ as follows:
+\begin{itemize}
+    \item if $\namefun_B(\theta) = \bot$, then $\rmv(B,\alpha) = \alpha$,
+    \item if $\namefun_B(\theta) = 1$, then $\rmv(B,\alpha) = (\aname_2\dots\aname_k,(\Aut_2,\cdots,\Aut_k))$ if $k>1$, $\rmv(B,\alpha) = \emptyset$ otherwise,
+    \item if $\namefun_B(\theta) = i\neq \bot$ and $i\neq 1$, then $\rmv(B,\alpha) = (\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k,(\Aut_1,\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k}))$,
+\end{itemize}
+For $\Lambda = \{B_1,\cdots,B_r\}$, we define $\rmv(\Lambda,\alpha) = \rmv(B_1,(\cdots,\rmv(B_r,\alpha)))$.
+% Roughly speaking, for a configuration $\rho = (S_0,S_1,\cdots,S_k)$, where $\bact(S_0) = A_0$ and $\tact(S_0) = A$, and the abstraction $\alpha = (\theta,(\Aut_1,\cdots,\Aut_k))$, then when $(A,\STK(B))$ is fired, the current configuration is $([B],S_0,S_1',\cdots,S_l')$.
+% an abstraction $\alpha = (\theta,(\Aut_1,\cdots,\Aut_k))$, when 
+
+
+\begin{definition} \label{def:reach}
+	$\reach(A, \alpha)$ comprises
+%
+ \begin{itemize}
+     \item the pairs $(\beta'\cdot\rmv(\Lambda\cup\{B\},\alpha), A_0')$ such that there exist $B\in\act_{\STK}\setminus\{A_0'\}$ and $\Lambda\subseteq\act_{\STK}\setminus\{A_0'\}$ satisfying that $(A,\STK(B))\in\Delta$, and $\alpha'\xRightarrow{\Lambda}\beta'$ with $\alpha' = (\aft(B),(\Aut_B^B))$, $\beta'\neq\emptyset$ and $(\tact(\beta'),\STK(A_0'))\in\Delta$,
+%
+\item the pairs $(\rmv(\Lambda\cup\{B\},\alpha), \bot)$ such that there exist $B\in\act_{\STK}\setminus\{A_0'\}$ and $\Lambda\subseteq\act_{\STK}\setminus\{A_0'\}$ satisfying that $(A,\STK(B))\in\Delta$, and $\alpha'\xRightarrow{\Lambda}\emptyset$ with $\alpha'=(\aft(B),(\Aut_B^B))$.
+     
+ \end{itemize}
+\end{definition}
+\paragraph{Construction of $\Pp_{\abs}$.} 
+We first construct a {\WOTrPDS} $\Pp_{A_0} = (P_{A_0},\Gamma_{A_0},\TranSet_{A_0},\Delta_{A_0})$ to simulate the $A_0$-task of $\Mm$ while the non-$A_0$-tasks are \emph{not} started. Here $P_{A_0} = (P_{\Mm}\times\{0,1\})\cup(P_{\Mm}\times\{1\}\times\{\pop\})$, $\Gamma_{A_0}=\act_{\standard}\cup\{A_0'\}$, and $\Delta_{A_0}$ is defined as follows:
+\begin{itemize}
+    \item for each $b\in\{0,1\}$ and $(A,\PUSH(B))\in\Delta$, we have $((p_0,b),A,BA,\tau_{\id},(p_0,b))\in\Delta_{A_0}$, \textbf{[push a standard activity]}
+    \item for each $b\in\{0,1\}$ and $(A,\STP(B))\in\Delta$ such that $A\neq B$, we have $((p_0,b),A,BA,\tau_{\id},(p_0,b))\in\Delta_{A_0}$, \textbf{[push a standard activity]}
+    \item for each $b\in\{0,1\}$ and $(A, \CTP(B)) \in \Delta$ such that $A \neq B$ and $A\neq A_0'$, we have
+        \begin{itemize}
+            \item $((p_0,b), A, BA, \tau_{\not B}, (p_0,b)) \in \Delta_{A_0}$, \textbf{[push a standard activity]}
+            \item $((p_0,b), A, \varepsilon, \tau_{B}, (\langle B,\CTP\rangle,b)) \in \Delta_{A_0}$, $((\langle B, \CTP\rangle,b), B, B, \tau_{id}, (p_0,b))  \in \Delta_{A_0}$, 
+        and for each $A' \in \Gamma_{A_0} \setminus \{B,A_0'\}$, we have $((\langle B, \CTP\rangle,b), A', \varepsilon, \tau_{\id}, (\langle B, \CTP\rangle,b)) \in \Delta_{A_0}$, \textbf{[pop until $B$]}
+    \item $((\langle B,\CTP\rangle,1),A_0',\epsilon,(\langle B,\CTP\rangle,0))\in\Delta_{A_0}$, \textbf{[pop $A_0'$]}
+        \end{itemize}
+    \item for each $(A_0', \CTP(B)) \in \Delta$, we have 
+        \begin{itemize}
+            \item $((p_0,1), A_0', BA_0', \tau_{\not B}, (p_0,1)) \in \Delta_{A_0}$, \textbf{[push a standard activity]}
+            \item $((p_0,1), A_0', \varepsilon, \tau_{B}, (\langle B,\CTP\rangle,0)) \in \Delta_{A_0}$, 
+        $((\langle B, \CTP\rangle,0), B, B, \tau_{id}, (p_0,0))  \in \Delta_{A_0}$, and for each $A' \in \Gamma_{A_0} \setminus \{B,A_0'\}$, $((\langle B, \CTP\rangle,0), A', \varepsilon, \tau_{\id}, (\langle B, \CTP\rangle,0)) \in \Delta_{A_0}$, \textbf{[pop until $B$]}
+        \end{itemize}
+    \item for each $b\in\{0,1\}$ and $(A, \RTF(B)) \in \Delta$ such that $A \neq B$, we have 
+        \begin{itemize}
+            \item $((p_0,b), A, BA, \tau_{\not B}, (p_0,b)) \in \Delta_{A_0}$ \textbf{[push a standard activity]}
+            \item $((p_0,b), A, BA, \tau_{B, \dag}, (p_0,b)) \in \Delta_{A_0}$ \textbf{[escalate $B$ to be the top]}
+        \end{itemize}
+    \item for each transition $(A,\STK(A_0'))\in\Delta$ such that $A\neq A_0'$, we have 
+        \begin{itemize}
+            \item $((p_0,0),A,A_2A,\tau_{\id},(p_0,1))\in\Delta_{A_0}$ \textbf{[push $A_0'$]}
+            \item $((p_0,1),A,\epsilon,(p_0,1,\pop))\in\Delta_{A_0}$, $((p_0,1,\pop),A_0',A_0',\tau_{\id},(p_0,1))$, and for each $A\in\Gamma_{A_0}\setminus\{A_0'\}$, we have $((p_0,1,\pop),A,\epsilon,\tau_{\id},(p_0,1,\pop))\in\Delta_{A_0}$, \textbf{[pop until $A_0'$]}
+        \end{itemize}
+    \item for each $A\in\Gamma_{A_0}$, 
+        \begin{itemize}
+            \item if $A=A_0'$, then we have $((p_0,1),A,\epsilon,\tau_{\id},(p_0,0))$, \textbf{[pop $A_0'$]}
+            \item otherwise, for each $b\in\{0,1\}$, we have $((p_0,b),A,\epsilon,\tau_{\id},(p_0,b))\in\Delta_{A_0}$. \textbf{[pop a standard activity]}
+        \end{itemize}
+\end{itemize}
+We then define the {\WOTrPDS} $\Pp_{\abs} = (P_{\abs},\Gamma_{A_0},\Delta_{\abs})$, where $P_{\abs} = \abs_{\mhcancel{A_0,A_0'}}\times P_{A_0}$, and $\Delta_{\abs}$ comprises the following transitions,
+\begin{itemize}
+    \item for each $(p,\gamma,w,p')\in\Delta_{A_0}$ and $\alpha\in\abs_{\mhcancel{A_0,A_0'}}$, we have $((\alpha,p),\gamma,w,(\alpha,p'))\in\Delta_{\abs}$, \textbf{[behavior of the $A_0$-task]}
+    \item for each $(A,\alpha)\in(\act_{\standard}\cup\{A_0'\})\times\abs_{A_0,A_0'}$ and $(\beta,A_0')\in\reach(A,\alpha)$, 
+        \begin{itemize}
+            \item if $A\neq A_0'$, then we have \\
+                $((\alpha,(p_0,0)),A,A_0'A,\tau_{\id},(\beta,(p_0,1)))\in\Delta_{\abs}$ and $((\alpha,(p_0,1)),A,\epsilon,\tau_{\id},(\beta,(p_0,1,\pop)))\in\Delta_{\abs}$,
+            \item if $A=A_0'$, then we have $((\alpha,(p_0,1)),A_0',A_0',\tau_{\id},(\beta,(p_0,1)))\in\Delta_{\abs}$,
+        \end{itemize}
+                \textbf{[swith to the non-$A_0$-tasks and swith back to the $A_0$-task later by launching $A_0'$]}
+    \item for each $(A,\alpha)\in(\act_{\standard}\cup\{A_0'\})\times\abs_{A_0,A_0'}$, $(\beta,\bot)\in\reach(A,\alpha)$ and $b\in\{0,1\}$, we have \\
+        $((\alpha,(p_0,b)),A,A,\tau_{\id},(\beta,(p_0,b)))\in\Delta_{\abs}$,\\
+            \textbf{[swith to the non-$A_0$-tasks and swith back to the $A_0$-task later when the non-$A_0$-tasks above $A_0$-task become empty]}
+\end{itemize}
+
+\paragraph{Computing} $\AutReach_{A_0}$, $\AutReach_{\mathcircled{A_0}}$ and $\AutReach_{\mhcancel{A_0}}$.
+We let the $\Pp_{\abs}$-{\WOTrNFA} $\AutB_{A_0} = (P_{\abs}, \act, \{((\emptyset,(p_0,0)), A_0, \tau_{\id}, p_f)\}, \{p_f\})$, then we compute $\AutB_{A_0}^{\post^*}$ from the procedure in Section~\ref{sec:singletask} and let $\AutB_{A_0}^{\post^*} = (P_{\abs},\act,\delta,F)$. Then we define the {\WOTrNFA} $\Aut_{A_0}^{\alpha,A} = (P_{\abs},\act,\delta',\{p_0^{\alpha,A}\},F)$, where $\delta'$ is obtained from $\delta$ by adding the transitions $(p_0^{\alpha,A},A,\tau,p)$ for each $(\alpha,(p_0,b))\xRightarrow[\AutB_{A_0}^{\post^*}]{A,\tau}p$ and $b\in\{0,1\}$.
+% We first compute the {\WOTrNFA} $\Aut_{\abs} = \Aut_{A_0}^{\post_{\Pp_{\abs}}^*}$, where $\Aut_{A_0} = (P_{\Mm}, \act, \{((\emptyset,(p_0,0)), A_0, \tau_{\id}, p_f)\}$, $\{(\emptyset,(p_0,0))\},\{p_f\})$. [Note that, here we modify $\Aut_{\abs}$ by adding the transitions $(p_0,\epsilon,\tau_{\id},p)$ for each $p\in P_{\abs}$ and adding $p_0$ into the control states].
+
+Then we let $\AutReach_{A_0}$ comprise the following {\WOTrNFA}-representations, for each $\alpha\in\abs_{\mhcancel{A_0,A_0'}}$,
+\begin{itemize}
+    \item if $\alpha = \emptyset$, then we have $(\aft(A_0),(\Aut_{A_0}^{\emptyset,A}))\in\AutReach_{A_0}$,
+        for each $A\in\act$ with $\ConfSet(\Aut_{A_0}^{\emptyset,A})\neq\emptyset$,
+    \item if $\alpha = (\theta,(\Aut_1,\cdots,\Aut_k))$, then we have $(\aft(A_0)\theta,(\Aut_{A_0}^{\alpha,A},\Aut_1,\cdots,\Aut_k))\in\AutReach_{A_0}$,
+        for each $A\in\act$ with $\ConfSet(\Aut_{A_0}^{\alpha,A})\neq\emptyset$,
+\end{itemize}
+Then we could obtain $\AutReach_{\mathcircled{A_0}}$ by adding the tuples according the following saturation rules.
+
+\smallskip
+\fbox
+{
+\begin{minipage}{0.9\textwidth}
+\begin{enumerate}
+    \item If $(A,\STK(A')) \in\Delta$, $A'\neq A_0'$, and $\namefun{A'}(\theta) = \bot$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mathcircled{A_0}}\cup\AutReach_{A_0}$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\aft(A')\theta, (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_k))$ to $\AutReach_{\mathcircled{A_0}}$,
+    \item If $(A,\STK(A')) \in\Delta$, $A'\neq A_0'$, and $\namefun_{A'}(\theta) = i \neq\bot$ and $i\neq 1$, moreover $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mathcircled{A_0}}\cup\AutReach_{A_0}$ such that $A\act^*\cap\ConfSet(\Aut_1)\neq \emptyset$, 
+        then adds the tuple $(\theta', (\Aut_{A'}^{A'},\Aut_1,\cdots,\Aut_{i-1},\Aut_{i+1},\cdots,\Aut_{k}))$ to $\AutReach_{\mathcircled{A_0}}$, where $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$,
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mathcircled{A_0}}\cup\AutReach_{A_0}$ and $k>1$ such that $\aname_1 \neq \aft(A_0)$, then adds the tuple $(\aname_2\dots\aname_k, (\Aut_2,\cdots,\Aut_k))$ to $\AutReach_{\mathcircled{A_0}}$,
+    \item If $(\theta, (\Aut_1,\cdots,\Aut_k)) \in \AutReach_{\mathcircled{A_0}}\cup\AutReach_{A_0}$ such that $\aname_1\neq\aft(A_0)$ and $\Aut_1 = \Aut_A^B$ for some $A\in\act_{\STK},B\in\act$, then adds the tuple $(\theta, (\Aut_A^{B'},\cdots,\Aut_k))$ to $\AutReach_{\mathcircled{A_0}}$ for each $B'\in\act$ with $\ConfSet(\Aut_A^{B'})\neq\emptyset$.
+\end{enumerate}
+\end{minipage}
+}
+
+Finally we let $\AutReach_{\mhcancel{A_0}} := \{(\theta,(\Aut_1,\cdots,\Aut_k))\mid(\aft(A_0)\theta,(\Aut,\Aut_1,\cdots\Aut_k))\in\AutReach_{A_0}\}$. Then we could obtain $\AutReach_{\mhcancel{A_0}}$ by adding the tuples according the saturation rules in Section~\ref{sec:a0stk}.
+

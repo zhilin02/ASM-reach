@@ -1,0 +1,396 @@
+
+%For $k \in \natnum$, let $[k]=\{1,\cdots, k\}$. For a function $f:X\rightarrow Y$, let $\dom(f)$ and $\range(f)$ denote the domain ($X$) and range ($Y$) of $f$ respectively.
+
+% Let $\flagset=\{\ntkflag, \ctpflag, \stpflag, \ctkflag, \mtkflag, \rtfflag, \tohflag\}$ denote the set of intent flags, $\bool(\flagset)$ denote the set of formulae $\phi = \bigwedge \limits_{F \in \flagset} \theta_F$, where $\theta_F = F$ or $\neg F$. For convenience, we use $\bot$ to denote $ \bigwedge \limits_{F \in \flagset} \neg F$.
+
+% Let $\flagset=\{\ctpflag, \stpflag, \rtfflag\}$ denote the set of intent flags, $\bool(\flagset)$ denote the set of formulae $\phi = \bigwedge \limits_{F \in \flagset} \theta_F$, where $\theta_F = F$ or $\neg F$. For convenience, we use $\bot$ to denote $ \bigwedge \limits_{F \in \flagset} \neg F$.
+
+% \begin{definition}[Android MultitAsking Stack System, \AMASS] \label{def:afsm}
+
+    % An {\AMASS} is a tuple $\Mm = (\act, A_0, \lmd, \aft, \Delta)$, where 
+% \begin{itemize}
+% \item $\act$ is a finite set of activities, and $A_0 \in \act$ is the main activity.
+% \item $\lmd : \act \rightarrow \{\standard,\singletop,\singletask,\singleinstance\}$ is the launch-mode function,
+
+% \item $\aft : \act \rightarrow [m]$ is the task-affinity function, where $[m] = |\act|$
+% \item $\Delta \subseteq \{\back\} \cup (\act \cup \{\triangleright\}) \times \instr$ is finite set of transition rules. Here $\instr = \{\startactivity(A, \phi) \mid  A \in \act, \phi \in \bool(\flagset)\}$. Moreover, it is required that $\back\in\Delta$. (Intuitively, the $\back$ can be applied anytime.)
+% \end{itemize}
+
+% \end{definition}
+
+%\FU{We assume that activities are only closed by back, rather than API functions like finish and dismiss. We have to check whether these API functions can close inner activities of the top task or activities in other tasks. From \cite{YZWWYR15}, it seems that only the top activity and the second top activity can be popped. If this is true, we can argue that this can be simulated by our model.}\zhilin{I am not sure whether you mean that when a back button is pressed, the event handling function OnBackPressed can be overridden, where you can even push an activity into the stack. In this paper, we assume that OnBackPressed is not overridden.}\FU{I mean that if there is button ``Close activity a", the event handle of the button closes the activity ``a", while ``a" is in the inner of a task.}
+%
+% For convenience, we write a transition rule $(A, \startactivity(B, \phi))\in \Delta$ as $A \xrightarrow{\startactivity(\phi)} B$, and $(A, \startactivity(B, \bot))\in \Delta$ as $A \xrightarrow{\startactivity} B$.
+%we usually write a transition $(q, A, \alpha, q') \in \Delta$ as $q \xrightarrow{A, \alpha} q'$, and $(q, \emptybackstack, \alpha, q') \in \Delta$ as $q \xrightarrow{\emptybackstack, \alpha} q'$. Intuitively, $\emptybackstack$ denotes an empty back stack, $\noaction$ denotes there is no change over the back stack, $\back$ denotes the pop action, and $\startactivity(A)$ denotes the activity $A$ being started. We assume that, if the back stack is empty, the Android stack system terminates (i.e., no further continuation is possible) unless it is in the initial state $q_0$,
+%
+% We use $\act_{\star}$ to denote $\{B \in \act \mid \lmd(B) = \star\}$ for $\star\in\{{\sf STD}, {\sf STP}, {\sf STK}, {\sf SIT}\}$. %, where $\widehat{\star}$ denotes the upper case of $\star$ . % similarly, we use the notation $\act_{\sf stp}$, $\act_{\sf stk}$, and $\act_{\sf sit}$.
+%\tl{seriously, do we really want to write in such a cryptic way?!}
+
+
+Recall that the evolution of the back stack is dependent on three attributes: launch modes, task affinities and intent flags. The launch modes of the caller and callee activities, the intent flags set could affect the evolution, thus there are $4\times 4\times 2^3=128$ possible combinations.
+However we conclude that there are only $6$ operations on back stack out of $128$ combinations, hence ASM could be simplified to the following Android multitasking stack system ($\AMASS$).
+\begin{definition}[Android MultitAsking SysTems, \AMASS] \label{def:amass}
+    An $\AMASS$ is a tuple $\Mm = (\act,A_0,\lmd,\aft,\Delta)$, where
+\begin{itemize}
+\item $\act$ is a finite set of activities, and $A_0 \in \act$ is the main activity.
+\item $\lmd : \act \rightarrow \{\standard,\singletop,\singletask,\singleinstance\}$ is the launch-mode function,
+%
+\item $\aft : \act \rightarrow [m]$ is the task-affinity function, where $[m] = |\act|$
+\item $\Delta \subseteq \{\POP\} \cup \act \times \opset$ is the transition relation with 
+    $\opset=\{\opn(A)\mid \opn \in \{\PUSH, \STP, \CTP, \RTF\}, A \in \act_{\STD}\cup\act_{\STP}\}\cup\{\STK(A)\mid A\in\act_{\STK}\}\cup\{\SIT(A)\mid A\in\act_{\SIT}\}$. 
+    Moreover, it is required that $\POP \in \Delta$. (Intuitively, the $\POP$ operation can be applied anytime.) We use $\act_{\star}$ to denote $\{B\in\act\mid \lmd(B)= \star\}$ for $\star\in\{\STD,\STP,\STK,\SIT\}$.
+\end{itemize}
+\end{definition}
+
+\smallskip
+\noindent \subsection*{Semantics.}
+Let $ \Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an {\AMASS}.
+A \emph{task} of $\Mm$ is encoded as a word $S= [A_1, \cdots, A_n] \in \act^+$ which denotes the content of the stack, with $A_1$ (resp. $A_n$) as  the top (resp. bottom) symbol, denoted by $\tact(S)$ (resp. $\bact(S)$). We define the \emph{affinity of a task} $S$, denoted by $\aft(S)$, to be $\aft(\ract(S))$. For $S_1 \in \act^*$ and $S_2 \in \act^*$, we use $S_1 \cdot S_2$ to denote the concatenation of $S_1$ and $S_2$, and $\epsilon$ is used to denote the empty word in $\act^*$. 
+A \emph{configuration} of $\Mm$ is $\rho=(S_1, \cdots, S_n)$
+with $S_i = [A_{i,1}, \cdots, A_{i, m_i}]$ for each $i \in [n]$.
+The initial configuration is $([A_0])$ which contains one task $[A_0]$ only. 
+% The transition relation is denoted by $\rightarrow_{\Mm}$, defined in Appendix~\ref{appendix:semantics}.
+The transition relation is denoted by $\xrightarrow{\Mm}$, defined as follows.  %over the set of all configurations. Namely, 
+Let $\rho = (S_1, \cdots, S_n)$ and $S_1 = [A_1,\cdots,A_m]$ be the current configuration. 
+\begin{itemize}
+    \item $\POP \in \Delta$ induces the transition $\rho \xrightarrow{\Mm} \rho'$, where $\rho'=([A_2,\dots,A_n],S_2,\cdots,S_n)$.
+Note that %the $\POP$ operation 
+it does not depend on the top symbol of $\rho$, thus can be applied at every configuration.
+
+\item Each $(A, o)\in \Delta$ induces transitions $\rho \xrightarrow{\Mm} \rho'$ with $A_1 = A$. We now define the effect of the operation $o\in \opset$ on $\rho$, i.e., the resulting $\rho'$. 
+Recall that $\opset=\{\opn(B)\mid \opn \in \{\PUSH, \CTP, \RTF, \STP, \STK,\SIT\}, B \in Act \} $.
+\begin{itemize}
+    \item $\PUSH(B)$. This operation is similar to the push operation in traditional pushdown systems, namely, $B$ is simply pushed into the task, i.e., $\rho' = ([B, A_1,\dots, A_m],S_2,\cdots,S_n)$.
+%-------------------------------------------------------------------------------------------------------
+	
+	\item $\CTP(B)$. This is a shorthand for ``\textbf{C}lear \textbf{T}o\textbf{P}". Suppose $B$ occurs in the top task $S_1$ whereby $S_1=[A_{1}, \cdots, A_{m}]$ with $A_{j} =B$ for some $j \in [m]$ and $A_{j'} \neq B$ for all $j': 1 \le j' < j$. Then $\CTP(B)$ removes all the symbols on top of $A_j$ from $S_1$, resulting in $\rho' = ([A_{j}, \cdots, A_{m}],S_2,\cdots,S_n)$. (In particular, if $A_1 = B$, then $\rho' = \rho$.)  If $B$ does not occur in $S_1$, then $\CTP(B)$ pushes $B$ into $S_1$, resulting in $\rho' := ([B, A_1,\dots, A_m],S_2,\cdots,S_n)$. 
+%-------------------------------------------------------------------------------------------------------
+	
+	\item $\RTF(B)$. This is a shorthand for ``\textbf{R}eorder \textbf{T}o \textbf{F}ront". If $B$ occurs in $S_1$ whereby $S_1=[A_{1}, \cdots, A_{m}]$ with $A_{j} =B$ for some $j \in [m]$  and $A_{j'} \neq B$ for all $j': 1 \le j' < j$. Then $\RTF(B)$ escalates $A_{j}$ to be the top of $S_1$, resulting in  
+	$\rho' = ([A_{j}, A_{1}, \cdots, A_{j-1}$, $A_{j+1}, \cdots, A_{m}],S_2,\cdots,S_n)$. (In particular, if $A_1 = B$, then $\rho' = \rho$.)
+        If $B$ does not occur in $S_1$, then $\RTF(B)$ pushes $B$ into $S_1$, resulting in $\rho' := ([B, A_1,\dots, A_m],S_2,\cdots,S_n)$. 
+%----------------------------------------------------------------------------------------
+
+  	\item $\STP(B)$. This is a shorthand for ``\textbf{S}ingle \textbf{T}o\textbf{P}''. It is the same as $\PUSH(B)$, except that $B$ will \emph{not} be pushed into $S_1$ (and thus $\rho':=\rho$) if $B$ is already the top of $S_1$. 
+  	\item $\STK(B)$. This is a shorthand for ``\textbf{S}ingle \textbf{T}as\textbf{K}''. It is required $\lmd(B)=\STK$.
+        \begin{itemize}
+            \item If a task with the task affinity $\aft(B)$ occurs in $\rho$ whereby $\rho=[S_1,\cdots,S_n]$ with $\aft(S_i) = \aft(B)$ for some $i\in[n]$. Then $\STK(B)$ escalates $S_i$ to be the top of $\rho$ first, if $B$ occurs in $S_i$ whereby $S_i = [A_{i,1},\cdots,A_{i,m_i}]$ with $A_{i,j} = B$ for some $j\in[m_i]$ then $\STK(B)$ removes all the symbols on top of $A_{i,j}$ from $S_i$, resulting in $\rho'=([A_{i,j},\cdots,A_{i,m_i}],S_1,\cdots,S_{i-1},S_{i+1},\cdots,S_{n})$, if $B$ does not occur in $S_i$, then $\STK(B)$ pushes $B$ into $S_i$, resulting in $\rho'=([B,A_{i,1},\cdots,A_{i,m_i}],S_1,\cdots,S_{i-1},S_{i+1},\cdots,S_n)$.
+            \item If there is no task with the task affinity $\aft(B)$ occurs in $\rho$, then $\STK(B)$ creates a task $[B]$ into $\rho$, resulting in $\rho' = ([B],S_1,\cdots,S_n)$.
+        \end{itemize}
+    \item $\SIT(B)$. This is a shorthand for ``\textbf{S}ingle \textbf{I}ns\textbf{T}ance''. It is required $\lmd(B)=\SIT$. If a task with the task affinity $\aft(B)$ occurs in $\rho$ whereby $\rho=[S_1,\cdots,S_n]$ with $\aft(S_i) = \aft(B)$ for some $i\in[n]$. Then $\SIT(B)$ escalates $S_i$ to be the top of $\rho$, resulting in $\rho'=(S_i,S_1,\cdots,S_{i-1},S_{i+1},\cdots,S_n)$. If there is no task with the task affinity $\aft(B)$ occurs in $\rho$, then $\SIT(B)$ creates a task $[B]$ into $\rho$, resulting in $\rho' = ([B],S_1,\cdots,S_n)$.
+
+\end{itemize}
+\end{itemize}
+We use $\rightarrow_\Mm^*$ to denote the reflexive and transitive closure of $\rightarrow_\Mm$.
+
+%\jinlong{see in the Appendix}.
+
+\paragraph{Reachability problem} Given a $\AMASS$ $\Mm$ and a 
+configuration $\rho = (S_1, \cdots, S_n)$, decide whether $\rho$ is reachable from the initial configuration in $\Mm$.
+% $k$-ary regular languages $(\Ll_1,\cdots,\Ll_k)$ where $\Ll_i\subseteq\act^*$ for each $i\in[k]$,
+% decide whether there exists a configuration $\rho = (S_1,\cdots,S_k)\in(\Ll1,\cdots,\Ll_k)$ is reachable from the initial configuration in $\Mm$.
+
+
+\begin{definition}[STK-dominating \AMASS] \label{def:stk-amass}
+    An $\AMASS$ is said to be $\STK$-dominating if the following two constraints are satisfied:
+    \begin{enumerate}
+        \item the task affinities of the $\STK$ activities are mutually distinct,
+        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A\in\act_{\singleinstance}$, it holds that $B\in\act_{\singleinstance}\cup\act_{\singletask}$.
+    \end{enumerate}
+\end{definition}
+
+\begin{proposition}\label{prop-stk}
+    Let $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ be a $\STK$-dominating $\AMASS$. Then each configuration $\rho$ that is reached from the initial configuration $[A_0]$ in $\Mm$ satisfies the following constraints:
+    \begin{enumerate}
+        \item for each $\STK$ activity $A\in\act$ with $\aft(A)\neq\aft(A_0)$, $A$ can only occur at the bottom of some task in $\rho$, 
+        \item $\rho$ contains at most one $\standard/\singletop$-task, which, when it exists, has the same affinity as $A_0$.
+    \end{enumerate}
+\end{proposition}
+
+
+
+%=========================================================================%
+
+\hide{
+\begin{enumerate}
+\item For each $A \in \act_{\singletask}$ or $A \in \act_{\singleinstance}$, $A$ occurs in at most one task. Moreover, if $A$ occurs in a task, then $A$ occurs at most once in that task. \textbf{\em [At most one instance for each $\singletask$/$\singleinstance$-activity]}
+%
+\item For each $i \in [n]$ and $j \in [m_i-1]$ such that $A_{i, j} \in \act_{\singletop}$,  $A_{i, j} \neq A_{i, j+1}$. \textbf{\em [Non-stuttering for $\singletop$-activities]}
+%
+\item For each $i \in [n]$ and $j \in [m_i]$ such that $A_{i, j} \in \act_{\singletask}$,  $\aft(A_{i, j}) = \aft(S_i)$. \textbf{\em [Affinities of $\singletask$-activities agree to the host task]}
+%
+\item For each $i \in [n]$ and $j \in [m_i]$ such that $A_{i, j} \in \act_{\singleinstance}$,   $m_i = 1$. \textbf{\em [$\singleinstance$-activities monopolize a task]}
+%
+\item For $i\neq j \in [n]$ such that $\ract(S_i) \not \in \act_{\singleinstance}$ and $\ract(S_j) \not \in \act_{\singleinstance}$,  $\aft(S_i) \neq \aft(S_j)$. \textbf{\em [Affinities of tasks are mutually distinct, except for those  rooted at $\singleinstance$-activities]}
+\end{enumerate}
+\end{definition}
+%
+By Definition~\ref{def-ass-conf}(5), each back stack $\rho$ contains at most $|\act_{\singleinstance}|+|\range(\aft)|$ %\FU{Actually, it is
+(more precisely, $|\act_{\singleinstance}|+|\{\aft(A)\mid A\in\act\setminus\act_{\singleinstance}\}|$) tasks. Moreover, by Definition~\ref{def-ass-conf}(1-5), all the root activities in a configuration are pairwise distinct, which allows to refer to a task whose root activity is $A$ as \emph{the} $A$-task.
+
+Let $\conf_\Aa$ denote the set of configurations of $\Aa$. The \emph{initial} configuration of $\Aa$ is $(q_0, \varepsilon)$. To formalize the semantics of $\Aa$ concisely, we introduce the following shorthand stack operations and one auxiliary function. Here $\rho=(S_1,\cdots, S_n)$ is a non-empty back stack.
+\[
+\begin{array}{rclrclrcl}
+\hline
+    {\sf Noaction}(\rho ) & \equiv & \rho & ~~~~~~~~~~~~ ~~~~~~~~     {\sf Push}(\rho,B) & \equiv & (([B] \cdot S_1),S_2, \cdots, S_n)   \\\smallskip
+   %
+    {\sf NewTask}(B)&  \equiv & ([B]) & {\sf NewTask}(\rho,B ) & \equiv &([B],S_1,\cdots, S_n) \\  \smallskip
+    %
+    {\sf Pop}(\rho ) & \equiv & \multicolumn{4}{l}{ \left\{ \begin{array}{ll}
+                                                     \varepsilon, ~~~~~~~~~ ~~~~~~~~&\mbox{if}~n=1~\mbox{and}~S_1=[A]; \\
+                                                     (S_2,\cdots, S_n), ~~~~~~~~~ ~~~~~~~~&\mbox{if}~n >1~\mbox{and}~S_1=[A]; \\
+                                                     (S_1',S_2,\cdots, S_n), & \mbox{if}~S_1=[A] \cdot S_1'~\mbox{with}~S_1' \in \act^+;
+                                                          \end{array} \right.} \\\smallskip
+   %
+    {\sf PopUntil}(\rho,B) & \equiv & \multicolumn{4}{l}{ (S_1'',S_2,\cdots, S_n),~\mbox{where}~} \\
+    & & \multicolumn{4}{l}{\hspace{1cm}S_1=S'_1 \cdot S''_1~\mbox{with}~S'_1 \in (\act \setminus \{B\})^*~\mbox{and}~\tact(S''_1)=B;}\\ \smallskip
+
+%    {\left\{ \begin{array}{ll}
+%                                                    \rho, & ~~\mbox{if}~\tact(S_1)=B; \\
+%                                                     ([B] \cdot S_1',S_2,\cdots, S_n), &~~ \mbox{if}~;\\
+%                                                     (S_1'',S_2,\cdots, S_n), &~~ \mbox{if}~S_1=S'_1 \cdot S''_1 ~\mbox{with}~S'_1 \in (\act \setminus \{B\})^+\tact(S''_1)=B;\\
+%                                                          \end{array} \right.} \\\smallskip
+   %
+   {\sf Move2Top}(\rho, i) & \equiv &\multicolumn{4}{l}{(S_i,S_1,\cdots, S_{i-1},S_{i+1},\cdots, S_n)}\\
+   \multicolumn{6}{l}
+   { {\sf GetNonSITTaskByAft}(\rho, k) \equiv  \left\{ \begin{array}{ll}
+   	S_i, & \mbox{if}~\aft(S_i)=k~\mbox{and}~\lmd(\bact(S_i)) \neq \singleinstance; \\
+   	{\sf Undef}, & \mbox{otherwise}.
+   	\end{array} \right.  }\\
+ 	\hline
+ \end{array}
+\]
+   %
+%\[   {\sf GetNonSITTaskByAft}(\rho, k) \equiv  \left\{ \begin{array}{ll}
+%                                                     S_i, & \mbox{if}~\aft(S_i)=k~\mbox{and}~\lmd(\bact(S_i)) \neq \singleinstance; \\
+%                                                     {\sf Undef}, & \mbox{otherwise}.
+%                                                          \end{array} \right.
+%\]
+%
+Intuitively, ${\sf GetNonSITTaskByAft}(\rho, k)$ returns a non-$\singleinstance$ task whose affinity is $k$ if it exists, otherwise returns {\sf Undef}.
+
+
+In the sequel, we define the transition relation $(q, \rho) \xrightarrow{\Aa} (q', \rho')$ on $\conf_\Aa$ to formalize the semantics of $\Aa$. %,  according to the transitions of $\Aa$.
+We start with the transitions out of the initial state $q_0$ and those with $\noaction$ or $\back$ action.
+\begin{itemize}
+\item For each transition $q_0 \xrightarrow{\emptybackstack, \startactivity(A_0)}  q$, $(q_0, \varepsilon) \xrightarrow{\Aa} (q, {\sf NewTask}(A_0 ))$. %[push]
+%
+\item For each transition $q\xrightarrow{A, \noaction} q'$ and $(q, \rho)  \in \conf_\Aa$ such that $\tact^2(\rho)=A$, $(q, \rho) \xrightarrow{\Aa} (q', {\sf Noaction}(\rho) )$. %[no action]
+%
+\item For each transition $q \xrightarrow{A, \back} q'$ and $(q, \rho)  \in \conf_\Aa$ such that $\tact^2(\rho)=A$,   $(q, \rho) \xrightarrow{\Aa} (q',  {\sf Pop}(\rho ))$.
+\end{itemize}
+
+The most interesting case is, however, the transitions of the form $q \xrightarrow{A, \startactivity(B)}q'$. We shall make case distinctions based on the launch mode of $B$.
+For each transition $q \xrightarrow{A, \startactivity(B)}q'$ and $(q, \rho) \in \conf_\Aa$ such that $\tact^2(\rho) = A$, $(q, \rho) \xrightarrow{\Aa} (q', \rho')$ if one of the following cases holds. Assume $\rho=(S_1,\cdots, S_n)$.
+
+\smallskip
+
+\noindent \fbox{\textsc{Case} $\lmd(B) =\standard$}
+	\begin{itemize}
+		\item $\lmd(A) \neq \singleinstance$, then $\rho'= {\sf Push}(\rho,B)$;
+		%
+		\item $\lmd(A) = \singleinstance$ \footlabel{fn1}{By Definition~\ref{def-ass-conf}(4), $S_1=[A]$.}, then
+    		\begin{itemize}
+    			\item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))=S_i$ \footlabel{fn2}{If $i$ exists, it must be unique  by Definition~\ref{def-ass-conf}(5).
+                      Moreover, $i>1$, as $\lmd(A) = \singleinstance$.}, then  $\rho'={\sf Push}({\sf Move2Top}(\rho, i),B),$
+    			\item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, then $\rho'= {\sf NewTask}(\rho,B )$;
+    		\end{itemize}
+	\end{itemize}
+
+\noindent  \fbox{\textsc{Case} $\lmd(B) =\singletop$}
+	\begin{itemize}
+		\item  $\lmd(A) \neq \singleinstance$ and $A \neq B$, then $\rho' = {\sf Push}(\rho,B)$;
+		%
+		\item  $\lmd(A) \neq \singleinstance$ and $A = B$, then $\rho' =  {\sf Noaction}(\rho)$;
+		%
+		\item $\lmd(A) = \singleinstance$ \footref{fn1},
+              \begin{itemize}
+                 \item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))=S_i$ \footref{fn2}, then
+        		 \begin{itemize}
+        			\item if $\tact(S_i) \neq B$, $\rho'={\sf Push}({\sf Move2Top}(\rho, i),B)$,
+        			\item if $\tact(S_i) = B$, $\rho' = {\sf Move2Top}(\rho, i)$;
+        		 \end{itemize}       		
+        		\item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, then  $\rho'= {\sf NewTask}(\rho,B )$;
+              \end{itemize}
+	 \end{itemize}
+	%
+	%[Summary: if the top of the back stack is not SIT, then decide push or skip depending on the top activitity. ]
+%===============================================================
+	
+\noindent  \fbox{\textsc{Case} $\lmd(B) =\singleinstance$}
+	\begin{itemize}
+		%
+		\item $A=B$ \footref{fn1}, then $\rho' = {\sf Noaction}(\rho )$;
+		%
+		\item  $A \neq B$ and $S_i = [B]$ for some $i\in [n]$ \footlabel{fn3}{If $i$ exists, it must be unique  by Definition~\ref{def-ass-conf}(1). Moreover, $i>1$, as $A\neq B$.}, then $\rho' = {\sf Move2Top}(\rho, i)$;
+		%
+		\item  $A \neq B$ and $S_i \neq [B]$ for each $i \in [n]$, then $\rho'= {\sf NewTask}(\rho,B )$;
+	\end{itemize}
+
+%[if B is already there, then nothing will change; otherwise ]
+	
+%==============================================================
+	
+\noindent \fbox{\textsc{Case} $\lmd(B) =\singletask$}
+%		\tl{I am just confused: suppose that $S=(A)$ and $A$ is an SIT activity, and we do have $\aft(B) = \aft(A)$. do we still push? no, because it violates def 2(4)}
+%\zhilin{Indeed, the original semantics in this case is incorrect. I changed the semantics below. Please check.}
+%\tl{thx, but the case I mentioned is still not covered, or I am just stupid? it is $\lmd(A)=\singleinstance$ and $\aft(S)=\aft(B)$}
+	\begin{itemize}
+		\item  $\lmd(A) \neq \singleinstance$ and $\aft(B) = \aft(S_1)$,  then
+        	   \begin{itemize}
+        		\item if $B$ does \emph{not} occur in $S_1$ \footlabel{fn4}{$B$ does \emph{not} occur in $\rho$ at all by Definition~\ref{def-ass-conf}(3-5).},  then $\rho'= {\sf Push}(\rho,B)$;
+        %
+        		\item if $B$ occurs in $S_1$ \footlabel{fn5}{Note that $B$ occurs at most once in $S_1$ by Definition~\ref{def-ass-conf}(1).}, then $\rho'={\sf PopUntil}(\rho,B)$;
+              \end{itemize}	
+		%
+ %       \item $\lmd(A) \neq \singleinstance$ and $\aft(B) \neq \aft(S_1)$,   then
+%        	    \begin{itemize}
+%        		\item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))=S_i$ \footlabel{fn6}{If $i$ exists, it must be unique  by
+%                      Definition~\ref{def-ass-conf}(5). Moreover, $i>1$, as $\aft(B) \neq \aft(S_1)$.},
+%
+%                    \begin{itemize}
+%                    	\item if $B$ does \emph{not} occur in $S_i$ \footref{fn4}, then  $\rho'={\sf Push}({\sf Move2Top}(\rho, i),B)$;
+%%
+%                    	\item if $B$ occurs in $S_i$ \footlabel{fn7}{Note that $B$ occurs at most once in $S_i$ by Definition~\ref{def-ass-conf}(1).}, then $\rho'={\sf PopUntil}({\sf Move2Top}(\rho, i),B)$,
+%                    \end{itemize}
+%        %
+%                \item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, then  $\rho'= {\sf NewTask}(\rho,B )$;
+%        	\end{itemize}
+%      	
+%		
+%		\item  $\lmd(A) = \singleinstance$ \footref{fn1}, then
+%	       \begin{itemize}
+%		      \item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))=S_i$ \footlabel{fn8}{If $i$ exists, it must be unique  by
+%                      Definition~\ref{def-ass-conf}(5). Moreover, $i>1$, as $\lmd(A) = \singleinstance$.}, then
+%        		\begin{itemize}
+%            		\item if $B$ does \emph{not} occur in $S_i$ \footref{fn4}, then $\rho'={\sf Push}({\sf Move2Top}(\rho, i),B)$;
+%                                %
+%        	       \item if $B$ occurs in $S_i$ \footref{fn7}, then $\rho'={\sf PopUntil}({\sf Move2Top}(\rho, i),B)$;
+%        		\end{itemize}
+%              \item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, then $\rho'= {\sf NewTask}(\rho,B )$;
+%           \end{itemize}
+           
+              \item $\lmd(A) \neq \singleinstance\Longrightarrow\aft(B) \neq \aft(S_1)$,   then
+        	    \begin{itemize}
+        		\item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))=S_i$ \footlabel{fn6}{If $i$ exists, it must be unique  by
+                      Definition~\ref{def-ass-conf}(5). Moreover, $i>1$, as $\lmd(A) \neq \singleinstance\Longrightarrow\aft(B) \neq \aft(S_1)$.},
+
+                    \begin{itemize}
+                    	\item if $B$ does \emph{not} occur in $S_i$ \footref{fn4}, then  $\rho'={\sf Push}({\sf Move2Top}(\rho, i),B)$;
+%
+                    	\item if $B$ occurs in $S_i$ \footlabel{fn7}{Note that $B$ occurs at most once in $S_i$ by Definition~\ref{def-ass-conf}(1).}, then $\rho'={\sf PopUntil}({\sf Move2Top}(\rho, i),B)$,
+                    \end{itemize}
+        %
+                \item if ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, then  $\rho'= {\sf NewTask}(\rho,B )$;
+        	\end{itemize}     
+\end{itemize}
+%
+This concludes the definition of the transition definition of $\xrightarrow{\Aa}$. As usual, we use $\xRightarrow{\Aa}$ to denote the reflexive and transitive closure of $\xrightarrow{\Aa}$.
+
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+	\vspace{-12mm}
+\centering
+		\includegraphics[scale=0.8]{figures/ASS-example.pdf}
+		\caption{ASM corresponding to the ActivitiesLaunchDemo app}
+		\label{fig-ass-exmp}
+	\vspace{-12mm}
+\end{wrapfigure}
+\begin{example} \label{exmp-ass}
+The ASM for the ActivitiesLaunchDemo app in Example~\ref{exmp-demo-app} is $\Aa = (Q, \actsig, q_0, \Delta)$,
+%
+ where  $Q = \{q_0, q_1\}$, $\actsig=(\act,\lmd, \aft, A_g)$ with
+\begin{itemize}
+\item $\act=\{A_g, A_b, A_y, A_r\}$, corresponding to the green, blue, yellow and red activity respectively in the ActivitiesLaunchDemo app,
+\item $\lmd(A_g) = \standard$, $\lmd(A_b) = \singletop$, $\lmd(A_y) = \singletask$, $\lmd(A_r) = \singleinstance$,
+\item $\aft(A_g) = \aft(A_b) = \aft(A_r) = 1$, $\aft(A_y) = 2$,
+\end{itemize}
+and $\Delta$ comprises the transitions illustrated in Fig.~\ref{fig-ass-exmp}.
+%and the transitions
+%comprises the transitions $q_0 \xrightarrow{\bot, \startactivity(A_0)} q_1$, $q_1 \xrightarrow{A_0, \startactivity(A_1)} q_1$,  $q_1 \xrightarrow{A_1, \startactivity(A_0)} q_1$, $q_1 \xrightarrow{A_1, \startactivity(A_1)} q_1$, $q_1 \xrightarrow{A_0, \startactivity(A_2)} q_2$, $q_2 \xrightarrow{A_2, \startactivity(A_0)} q_2$, $q_2 \xrightarrow{A_0, \startactivity(A_0)} q_2$, $q_2 \xrightarrow{A_0, \startactivity(A_3)} q_2$,  $q_2 \xrightarrow{A_3, \startactivity(A_0)} q_2$, $q_2 \xrightarrow{A_0, \startactivity(A_2)} q_3$,
+% $q \xrightarrow{A_i, \back} q$ for each $q \in Q$ and $i \in \{0, 1, 2,3\}$.
+%
+%
+%\vspace{-4mm}
+%\begin{figure}[!htbp]
+%\centering
+%\includegraphics[scale=0.8]{figures/ass-example.pdf}
+%\caption{ASS corresponding to the ActivitiesLaunchDemo app}
+%\label{fig-ass-exmp}
+%\end{figure}
+%\vspace{-5mm}
+%
+%
+Below is a path in the graph $\xrightarrow{\Aa}$ corresponding to the sequence of user actions clicking the green, blue, blue, yellow, red, blue button (cf. Example~\ref{exmp-demo-app}),
+%
+%{\small
+%\[
+%\begin{array}{l}
+%\smallskip
+%(q_0, \varepsilon) \xrightarrow{\emptybackstack, \startactivity(A_g)} (q_1, (\myvec{A_g}))
+%\xrightarrow{A_g, \startactivity(A_b)} \left(q_1, \left(\myvec{A_b \\ A_g} \right) \right)   \xrightarrow{A_b,  \startactivity(A_b)}  \\
+%\smallskip
+%\left(q_1, \left(\myvec{A_b \\ A_g}\right)\right)  \xrightarrow{A_b, \startactivity(A_y)}  \left(q_1, \left( \myvec{A_y}, \myvec{ A_b \\ A_g }\right)\right) \xrightarrow{A_y, \startactivity(A_r)}  \\ \left(q_1, \left(\myvec{A_r}, \myvec{A_y}, \myvec{A_b \\ A_g}\right)\right)  \xrightarrow{A_r, \startactivity(A_g)} \left(q_1, \left(\myvec{A_g \\ A_b \\ A_g}, \myvec{A_r}, \myvec{A_y} \right)\right).
+%\end{array}
+%\]
+%
+\[
+\begin{array}{l}
+\smallskip
+(q_0, \varepsilon) \xrightarrow{\emptybackstack, \startactivity(A_g)} (q_1, (\myvec{A_g}))
+\xrightarrow{A_g, \startactivity(A_b)} (q_1, ([A_b,A_g] ))   \xrightarrow{A_b,  \startactivity(A_b)}  \\
+\smallskip
+(q_1, ([A_b,A_g]))  \xrightarrow{A_b, \startactivity(A_y)}  (q_1, ( [A_y], [A_b, A_g])) \xrightarrow{A_y, \startactivity(A_r)}  \\
+ (q_1, ([A_r], [A_y], [A_b, A_g]))  \xrightarrow{A_r, \startactivity(A_g)} (q_1, ([A_g,A_b,A_g], [A_r], [A_y])).
+\end{array}
+\]
+%Let us explain the last two transitions above. When the transition $q_2 \xrightarrow{A_3, \startactivity(A_0)} q_2$ is executed, the $A_0$-task, that is, $\myvec{A_0 \\ A_1 \\ A_0}$, is moved to the top of the back stack, moreover, $A_0$ is pushed into the $A_0$-task. On the other hand, when the transition $q_2 \xrightarrow{A_0, \startactivity(A_2)} q_3$ is executed, the $A_2$-task is moved to the top of the back stack, moreover, the $A_2$-task is popped until $A_2$ becomes the top symbol.
+\end{example}
+
+%
+Proposition~\ref{prop:sem} reassures that $\xrightarrow{\Aa}$ is indeed a relation on $\conf_\Aa$ as per Definition~\ref{def-ass-conf}.
+
+\begin{proposition} \label{prop:sem}
+Let $\Aa$ be an ASM. For each $(q, \rho) \in \conf_\Aa$ and  $(q, \rho) \xrightarrow{\Aa} (q', \rho')$,
+$(q', \rho') \in \conf_\Aa$, namely, $(q', \rho')$  satisfies the five constraints in Definition~\ref{def-ass-conf}.
+\end{proposition}
+
+
+%
+%\begin{remark}
+%In android, the evolution of the back stack could also be affected by the \emph{intent flags} of the starting activities. ASS does not address intent flags explicitly. However, it can be easily adapted to simulate the effects of most intent flags, e.g. $\sf FLAG\_ACTIVITY\_NEW\_TASK$, $\sf FLAG\_ACTIVITY\_CLEAR\_TOP$, etc., since they are similar to those of launch modes. We also remark that ASS focuses on two attributes of activities, namely the launch mode and the task affinity; more complicated attributes, e.g.,  allowTaskReparenting, is left as the future work.
+%\end{remark}
+
+\begin{remark}
+A single app can clearly be modeled by an ASM. However, ASM can also be used to model multiple apps which may share tasks/activities. (In this case, these multiple apps can be composed into a single app, where a new main activity is added.)  This is especially useful when analysing, for instance, task hijacking \cite{RZXWL15}.
+%(In this case, the main activity of ASM should be understood as the main activity of the first app in the system.)
+We sometimes do not specify the main activity explicit for convenience. The translation from app source code to ASM is not trivial, but follows standard routines. In particular, in ASM, the symbols stored into the back stack are just names of activities. Android apps typically need to, similar to function calls of programs, store additional local state information. %related to an activity, together with the activity name, is stored
+%into the back stack. %For simplicity, we choose to define the model in the way that the symbols in the back stack are just the activity names and ignore the local state information related to activities.
+This can be dealt with by introducing an extend activity alphabet such that each symbol is of the form
+%all the results in this paper can be extended to a (slightly) more general model in which symbols of the form
+$A(\vec{b})$, where $A \in \act$ and $\vec{b}$ represents local information.
+%$b_1,\cdots, b_k \in \{0,1\}$, can be stored into the back stack. Later on, if necessary, especially when talking about
+When we present examples, we also adopt this general syntax. %allow these more general symbols stored in the back stack.
+%Moreover, for technical
+%convenience, in some places, we also consider ASM where the main activity $A_0$
+%is not specified.
+\end{remark}
+
+
+%\tl{add the experiment}\zhilin{write a draft below, please polish}
+
+\paragraph{Model validation.}
+We validate the ASM model by designing ``diagnosis'' Android apps with extensive experiments. For each case in  the semantics of ASM, we design an  app  which contains activities with the corresponding launch modes and task affinities. To simulate the transition rules of the ASM, each activity contains some buttons, which, when clicked, will launch other activities. For instance, in the case of $\lmd(B) = \standard$, $\lmd(A) = \singleinstance$,  ${\sf GetNonSITTaskByAft}(\rho, \aft(B))={\sf Undef}$, the app contains two activities $A$ and $B$ of launch modes $\singleinstance$ and $\standard$ respectively, where $A$ is the main activity. When the app is launched, an instance of $A$ is started.  $A$ contains a button, which, when clicked, starts an instance of $B$. We carry out the experiment by clicking the button, monitoring the content of the back stack, and checking whether the content of the back stack conforms to the definition of the semantics. Specifically, we check that there are exactly two tasks in the back stack, one task comprising a single instance of $A$ and another task comprising a single instance of $B$, with the latter task on the top. Our experiments are done in a Redmi-4A mobile phone with Android version 6.0.1.
+The details of the experiments can be found at \url{https://sites.google.com/site/assconformancetesting/}.
+
+%\begin{remark}
+%	Note that the back stack is a stack of stacks, readers who are familiar with higher-order pushdown systems may wonder whether it can be simulated by an order-2 pushdown systems. Unfortunately, this is \emph{not} the case. The reason is that the \emph{order} between tasks in a back stack may be dynamically changed, which is \emph{not} supported by %goes beyond the capability of
+%	order-2 pushdown systems. Indeed, as we will see later, the state reachability problem of ASS is undecidable in general, which is not the case for high-order pushdown systems.
+%\end{remark}
+
+%
+%The ASS model defined above is useful in different ways: The model can be used to generate the test cases for Android apps. The model can also be used as a basis for the static analysis of Android apps. The model can even be used to help the developers to  understand precisely how the Android back stack works.
+
+%\tl{here, i think we should briefly show how to use this model for android apps}\zhilin{write a sentence above. please check.}
+
+}

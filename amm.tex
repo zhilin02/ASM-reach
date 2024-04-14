@@ -1,0 +1,22 @@
+
+%\zhilin{The introduction to Android system below is copied from https://developer.android.com/}
+In Android, an application, usually referred to as an \emph{app}, is regarded as a collection of \emph{activities}. An activity is a type of app components, an instance of which provides a graphical user interface on screen and  serves the entry point for interacting with the user\cite{Androiddoc}. An app typically has many activities for different user interactions (e.g., dialling phone numbers, reading contact lists, etc). A distinguished activity is the \emph{main} activity, which is started when the app is launched.
+%\tl{I donot know where, but better mention the main activity}
+%\zhilin{add main activity here, please check.}
+%\tl{I have the slight concern that in the model, there is only one main activity, so the main activity should not defined on the level of apps? it belongs to the system??...}
+%\FU{I think it is defined in the manifest file.}
+%As ,  an  activity  represents a single screen with a user interface.
+%
+%For example, an email app might have one activity that shows a list of new messages, another activity to compose an email, and another activity for reading emails. Although the activities work together to form a cohesive user experience in the email app, each one is independent of the others. As such, a different app can start any one of these activities if the email app allows it. For example, a camera app can start the activity in the email app that composes new mail to allow the user to share a picture.
+ %
+A \emph{task} is a collection of activities that users interact with when performing a certain job.
+The activities in a task are arranged in a stack %---the \emph{back stack}---\tl{this is not quite precise?!}
+in the order in which each activity is opened. For example, an email app might have one activity to show a list of latest messages. When the user selects a message, a new activity opens to view that message. This new activity is pushed to the stack. If the user presses the ``Back'' button, an activity is finished and is popped off the stack. [In practice, the onBackPressed() method can be overloaded and triggered when the ``Back'' button is clicked. Here we assume---as a model abstraction---that the onBackPressed() method is not overloaded.]
+Furthermore, multiple tasks may run concurrently in the Android platform and the \emph{back stack} stores all the tasks as a stack as well. In other words, it has a nested structure being a stack of stacks (tasks).
+%
+%In other words, there may exist multiple tasks in the back stack, and they are organized as a stack as well.
+We remark that %the back stack evolves in a way that the role of apps is diminished, in the  sense that
+in android, activities from different apps can stay in the same task, and activities from the same app can enter different tasks.
+
+Typically, the evolution of the back stack is dependent mainly on three basic attributes: \emph{launch modes},\emph{task affinities} and \emph{intent flags}. All the activities of an app, as well as their attributes, including the launch modes and task affinities, are defined in the \emph{manifest file} of the app. Differently, intent flags are set by caller activities to declare how to activate target activities by calling startActivity() or startActivityForResult() with the intent flags as its arguments. The launch mode of an activity decides the corresponding operation of the back stack when the activity is launched. There are four basic launch modes in Android: ``standard'', ``singleTop'', ``singleTask'' and ``singleInstance''. The task affinity of an activity indicates to which task the activity prefers to belong. By default, all the activities from the same app have the same affinity (i.e., all activities in the same app prefer to be in the same task). However, one can modify the default affinity of the activity. Activities defined in different apps can share a task affinity, or activities defined in the same app can be assigned with different task affinities. Below we will use a simple app to demonstrate the evolution of the back stack.
+
