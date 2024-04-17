@@ -1,6 +1,43 @@
 %!TEX root = main.tex
+Recall that $\STK$-dominating $\AMASS$ is the combination of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$ which consider launch modes and intent flags, hence we will combine the techniques in Section~\ref{sec:reach-lmamass} and Section~\ref{sec:reach-ifamass} to solve the configuration reachability problem of $\STK$-dominating $\AMASS$
+% We have demonstrated how to simulate a single task of $\STK$-dominating $\IFAMASS$ by {\WOTrPDS}. Therefore, we solve the configuration reachability problem of $\Mm$ 
+in a manner akin to addressing $\STK$-dominating $\LMAMASS$ by adapting the {NFA} tuple to the {\WOTrNFA} tuple. 
+
+In this section, we also consider two subcases i.e. $\lmd(A_0) = \STK$ and $\lmd(A_0) \neq \STK$. The former case is similar to that in Section~\ref{sec:reach-lmamass}, but the latter case is more comlicated than that in Section~\ref{sec:reach-lmamass}. Recall that we use {\NFA}s $\Aut_{A_0\rightsquigarrow C}$,$\Aut_{A_0\stackrel{C}\rightsquigarrow A_0'}$ and $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$ to represent the different case of $A_0$-task. Moreover, we have $\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B}) = B\act^*A_0'C\act^*\cap\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'})^{\post^*}_{\Pp_{A_0}}(p_1))$, hence we have a proposition that, for each $BwA_0'Cw'\in\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow B}))$, then $A_0'Cw'\in\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$. Therefore when we use $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$ to represent the $A_0$-task, once $A_0'$ is started, then we could use $\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}$ to represent the $A_0$-task. However, if we adapt {\NFA} to {\WOTrNFA}, the proposition does not hold, since the transductions may change the content under $A_0'$. We will use the following example to illustrate why the proposition does not hold.
+\begin{example}
+    Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\STK$-dominating $\AMASS$,
+where $\act = \{A_0, A_0', B, C\}$, the functions $\lmd$ and $\aft$ are defined in Table~\ref{tab-attribute-nostk}. Moreover, $\Delta = \{\tau_1,\tau_2,\tau_3,\tau_4,\tau_5\}$, where $\tau_1 = A_0\xrightarrow{\startactivity(\bot)}B$, $\tau_2 = B\xrightarrow{\startactivity(\bot)}C$, $\tau_3 = C\xrightarrow{\startactivity(\bot)}A_1$, $\tau_4 = A_1\xrightarrow{\startactivity(\bot)}A_0'$, $\tau_5 = A_0'\xrightarrow{\startactivity(\rtfflag)}B$. From the construction of $\Aut_{A_0\stackrel{C}\rightsquigarrow A_0'}$ and $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$, we know that $\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow A_0'}) = \{A_0'CBA_0\}$, $B A_0'C\dag A_0 \in \Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B})$ and $A_0'C\dag A_0 \in \Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow A_0'})$. Therefore the proposition does not hold.
+\begin{table}[htbp]
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	Activity & $\lmd$ & $\aft$\\
+	\hline
+	$A_0$ & $\STD$ & 0\\
+	\hline
+	$A_0'$ & $\STK$ & 0 \\
+	\hline
+	$A_1$ & $\STK$ & 1 \\
+	\hline
+	$B$ & $\STD$ & 0 \\
+	\hline
+	$C$ & $\STD$ & 0 \\
+	\hline
+	\end{tabular}
+	\caption{Attributes of activities}
+	\label{tab-attribute-nostk}
+	\end{center}
+\end{table}
+    
+\end{example}
+
+From the example, we notice that the content of $A_0$-task is relevant to the non-$A_0$-tasks, hence we tackle the subcase $\lmd(A_0)\neq \STK$ by constructing a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then computing the configurations which $A_0$-task is the top task by computing the $\post^*$ of the {\WOTrPDS}, finally computing all configurations reached from the initial configuration.
+
+% Intuitively, we assume that the current content of $A_0$-task is $A_0'CBA_0$, then when we start $B$ from $A_0'$ with the intent flag $\rtfflag$, then the content is $BA_0'C\dag A_0$. Moreover, we have $A_0'CBA_0\in\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$ and $BA_0'C\dag A_0 \in \Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$, hence the proposition does not hold.
+
+
+
 Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$.
-We have demonstrated how to simulate a single task of $\STK$-dominating $\IFAMASS$ by {\WOTrPDS}. Therefore, we solve the configuration reachability problem of $\Mm$ in a manner akin to addressing $\STK$-dominating $\LMAMASS$ by adapting the {NFA} tuple to the {\WOTrNFA} tuple.
 \hide{
 Furthermore, to solve the configuration reachability problem of $\Mm$, we slightly adapt the defining of configuration and define the dummy configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$, where $(S_i,\aname_i)$ is a dummy task, where for each $i\in[n]$, $S_i\in\dag^*(\act\dag^*)^+\triangleleft$ denotes the content of the stack and $\aname_i$ is the task affinity of the task.
 Let $\confs_{\mhcancel{\dag,\triangleleft}}$ denotes the set of dummy configurations of $\Mm$.
@@ -186,17 +223,18 @@ The proof of Lemma~\ref{lem:amass-recog} is similar to the proof of Lemma~\ref{l
 \subsection{The case $\lmd(A_0) \neq \STK$}\label{sec:amass-nostk}
 
 
-Recall that we construct a {\PDS} $\Pp'_{A_0}$ to simulate the $A_0$-task and compute $\AutReach$ to solve the configuration reachability problem of $\STK$-dominating $\LMAMASS$ when $\lmd(A_0)\neq\STK$. 
+% Recall that we construct a {\PDS} $\Pp'_{A_0}$ to simulate the $A_0$-task and compute $\AutReach$ to solve the configuration reachability problem of $\STK$-dominating $\LMAMASS$ when $\lmd(A_0)\neq\STK$. 
 % and in the procedure to compute $\AutReach$, we need to modify the $\Pp'_{A_0}$-{\NFA} $\Aut$ via $\STK(\Aut)$ and $\topact_{A}(\Aut)$. 
-To solve the configuration reachability problem of $\STK$-dominating $\AMASS$ , we also could construct such a {\WOTrPDS} $\Qq'_{A_0}$ to simulate the $A_0$-task, however, the main technical difficulty is that 
-the order of the $A_0$-task and the non-$A_0$-tasks may be switched for arbitrarily many times, hence we need to modify the {\WOTrNFA} for $A_0$-task arbitrarily many times, which leading to that there may be infinite {\WOTrNFA}s for $A_0$-task.
+% To solve the configuration reachability problem of $\STK$-dominating $\AMASS$ , we also could construct such a {\WOTrPDS} $\Qq'_{A_0}$ to simulate the $A_0$-task, however, the main technical difficulty is that 
+% the order of the $A_0$-task and the non-$A_0$-tasks may be switched for arbitrarily many times, hence we need to modify the {\WOTrNFA} for $A_0$-task arbitrarily many times, which leading to that there may be infinite {\WOTrNFA}s for $A_0$-task.
 
-\paragraph{Intuition of construction} 
-Our idea is to construct a \emph{finite abstraction} for the non-$A_0$-tasks and incorporate it into the control states of the {\WOTrPDS} $\Qq'_{A_0}$ resulting in $\Qq_{\abs}$, so we can reduce the configuration reachability of $\Mm$ into that of a {\WOTrPDS} $\Qq_{\abs}$.
+% \paragraph{Intuition of construction} 
+Our main idea is to construct a {\WOTrPDS} $\Qq_{\abs}$ to simulate the $A_0$-task, where the control states in $\Qq_{\abs}$ include the abstraction of the non-$A_0$-tasks.
+% so we can reduce the configuration reachability problem of $\Mm$ into that of a {\WOTrPDS} $\Qq_{\abs}$.
 % Our idea is 1) to compute $\AutReach_{A_0}$ to represent the configurations, whose the top task is $A_0$-task, reached from the initial configuration first, 2) to compute $\AutReach_{\mathcircled{A_0}}$ from $\AutReach_{A_0}$ to represent the configurations whose the top task is \emph{not} $A_0$-task and $A_0$-task is in these configurations, 3) to compute $\AutReach_{\mhcancel{A_0}}$ to represent the configurations which $A_0$-task is \emph{not} in these configurations.
 % the configurations whose the top task is $A_0$-task first, and then we compute the rest configurations (whose the top task is \emph{not} $A_0$-task).
 % The crux of computing $\AutReach_{A_0}$ is to construct a \emph{finite abstraction} for the non-$A_0$-tasks and incorporate it into the control states, so we can reduce the configuration reachability of $\Mm$ into that of a {\WOTrPDS} $\Qq_{\abs}$. 
-Observe that a run of $\Mm$ can be seen as a sequence of task switching. In particular, an $A_0;\mhcancel{A_0};A_0$ \emph{switching} denotes a path in $\xrightarrow[\Mm]{}$ where the $A_0$-task is on the top in the \emph{first} and \emph{last} configuration, and in all the \emph{intermediate} configurations, the $A_0$-task is \emph{not} the top task. The main idea of the reduction is to simulate the $A_0;\mhcancel{A_0};A_0$ switching by a "macro"-transition of $\Qq_{\abs}$. Note that the $A_0$-task regains the top task in the last configuration either by starting the activity $A_0'$ or by emptying the tasks above $A_0$-task. Suppose that, for an $A_0;\mhcancel{A_0};A_0$ switching, in the first (resp. last) configuration and $\alpha$ (resp. $\beta$) is the finite abstraction of the non-$A_0$-tasks. Then for the "macro"-transition of $\Qq_{\abs}$, the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Qq_{\abs}$ is updated accordingly:
+Observe that a run of $\Mm$ can be seen as a sequence of task switching. In particular, an $A_0;\mhcancel{A_0};A_0$ \emph{switching} denotes a path in $\xrightarrow[\Mm]{}$ where the $A_0$-task is on the top in the \emph{first} and \emph{last} configuration, and in all the \emph{intermediate} configurations, the $A_0$-task is \emph{not} the top task. The main idea of the construction is to simulate the $A_0;\mhcancel{A_0};A_0$ switching by a "macro"-transition of $\Qq_{\abs}$. Note that the $A_0$-task regains the top task in the last configuration either by starting the activity $A_0'$ or by emptying the tasks above $A_0$-task. Suppose that, for an $A_0;\mhcancel{A_0};A_0$ switching, in the first (resp. last) configuration and $\alpha$ (resp. $\beta$) is the finite abstraction of the non-$A_0$-tasks. Then for the "macro"-transition of $\Qq_{\abs}$, the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Qq_{\abs}$ is updated accordingly:
 
 \begin{itemize}
     \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by starting the activity $A_0'$, say $A\xrightarrow{\startactivity(\phi)}A_0'$, (in this case, the switching is called an \emph{active} switching), then
