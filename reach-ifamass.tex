@@ -422,7 +422,7 @@ The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where
 \item $\TranSet_\Mm = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act\} \cup \{\tau_{B} \mid B \in \act\}  \cup \{\tau_{\not B} \mid B \in \act\}$, where $\tau_B$ is the transduction that checks that $B$ occurs in the input string but keeps the input string unchanged, and 
 \item $\Delta_{\Mm}$ is defined as follows:
         \begin{itemize}
-            \item for each $A \in \act$, $(p_0, A, \varepsilon, \tau_{\id}, p_0) \in \Delta_{\Mm}$, (Recall that $\POP$ can be applied anytime in $\Mm$.)
+            \item for each $A \in \act$, $(p_0, A, \varepsilon, \tau_{\id}, p_0) \in \Delta_{\Mm}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
 			\item for each transition $A\xrightarrow{\startactivity(\phi)}B$, 
 			\begin{itemize}
 				\item if $\phi\models\stpflag$ and $A\neq B$, or $\phi=\bot$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$, 
