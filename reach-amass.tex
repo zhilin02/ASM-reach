@@ -1,7 +1,23 @@
 %!TEX root = main.tex
+
+Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent flags, thus can be seen as an integration of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$. 
+
+A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}-\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
+Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \singletask$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
+To resolve this problem, we propose a new idea by \emph{focusing on the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. 
+
+Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
+
+In the sequel, we first consider the simpler case $\lmd(A_0) = \singletask$, then consider the case $\lmd(A_0) \neq \singletask$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{
 Recall that $\STK$-dominating $\AMASS$ is the combination of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$ which consider both launch modes and intent flags, hence we will combine the techniques in Section~\ref{sec:reach-lmamass} and Section~\ref{sec:reach-ifamass} to solve the configuration reachability problem of $\STK$-dominating $\AMASS$
 % We have demonstrated how to simulate a single task of $\STK$-dominating $\IFAMASS$ by {\WOTrPDS}. Therefore, we solve the configuration reachability problem of $\Mm$ 
 in a manner akin to addressing $\STK$-dominating $\LMAMASS$ by adapting the {NFA} tuple to the {\WOTrNFA} tuple. 
+
 
 In this section, we also consider two subcases i.e. $\lmd(A_0) = \STK$ and $\lmd(A_0) \neq \STK$. The former case is similar to that in Section~\ref{sec:reach-lmamass}, but the latter case is more comlicated than that in Section~\ref{sec:reach-lmamass}. Recall that we could use {\NFA}s $\Aut_{A_0\rightsquigarrow B}$,$\Aut_{A_0\stackrel{B}\rightsquigarrow A_0'}$ and $\Aut_{A_0\stackrel{B}\rightsquigarrow B}$ to represent the different case of $A_0$-task. From the construction, we have $\Lang(\Aut_{A_0\stackrel{B}\rightsquigarrow B}) = B\act^*A_0'B\act^*\cap\Lang((\Aut_{A_0 \stackrel{B}\rightsquigarrow A_0'})^{\post^*}_{\Pp_{A_0}}(p_1))$. Moreover, we have a proposition that, for each $BwA_0'Bw'\in\Lang((\Aut_{A_0 \stackrel{B}\rightsquigarrow B}))$, then $A_0'Bw'\in\Lang((\Aut_{A_0 \stackrel{B}\rightsquigarrow A_0'}))$. Therefore when we use $\Aut_{A_0\stackrel{B}\rightsquigarrow B}$ to represent the $A_0$-task, once $A_0'$ is started, then we could use $\Aut_{A_0 \stackrel{B}\rightsquigarrow A_0'}$ to represent the $A_0$-task to simulate the behavior of clearing the activities above $A_0'$ in the $A_0$-task. However, if we adapt {\NFA} to {\WOTrNFA}, the proposition does not hold, since the transductions may change the content under $A_0'$. We will use the following example to illustrate why the proposition does not hold.
 \begin{example}
@@ -61,8 +77,10 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 	\label{tab-attribute-nostk}
 	\end{center}
 \end{table}
-    
 \end{example}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % the difficulty is to simulate $\tau_7 = A_2\xrightarrow{\startactivity(\bot)} A_0'$. To tackle this, we could apply the transition rule $(p_1, B, \epsilon, \tau_{\id}, p_{\pop})$ to modify the {\WOTrNFA} $\Aut$ of $A_0$-task, which is corresponding to $B\xrightarrow{\startactivity(\bot)}A_0'$. 
 % Although it could help us to recognize $\rho_7$, but it is hard to prove that the procedure will terminate. Since each time we start an $\STK$-activity which is not $A_0'$ from some activity $A$ in the $A_0$-task, we need to delete some transitions in $\Aut$ to maintain the top activity is $A$, and once we start $A_0'$ to escalate the $A_0$-task to be the top, we need to add somes transitions in $\Aut$ to simulate the behavior of pushing $A_0'$ or poping until $A_0'$. Consequently, it is hard to prove the modification of $\Aut$ will terminate.
@@ -76,97 +94,55 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 % From the example, we notice that 
 % However, if we do not delete the transitions from $\Aut$, it may recognize some unreachable configurations from the initial configuration. Since the content of $A_0$-task is relevant to the non-$A_0$-tasks. 
 
-Our idea is to construct a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then it could recognize different contents of $A_0$-task according to the contents of non-$A_0$-tasks.
-Then we compute the configurations which $A_0$-task is the top task by computing the $\post^*$ of the {\WOTrPDS}, finally compute all configurations reached from the initial configuration.
 
-% Intuitively, we assume that the current content of $A_0$-task is $A_0'CBA_0$, then when we start $B$ from $A_0'$ with the intent flag $\rtfflag$, then the content is $BA_0'C\dag A_0$. Moreover, we have $A_0'CBA_0\in\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$ and $BA_0'C\dag A_0 \in \Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$, hence the proposition does not hold.
-
-
-
-Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$.
-\hide{
-Furthermore, to solve the configuration reachability problem of $\Mm$, we slightly adapt the defining of configuration and define the dummy configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$, where $(S_i,\aname_i)$ is a dummy task, where for each $i\in[n]$, $S_i\in\dag^*(\act\dag^*)^+\triangleleft$ denotes the content of the stack and $\aname_i$ is the task affinity of the task.
-Let $\confs_{\mhcancel{\dag,\triangleleft}}$ denotes the set of dummy configurations of $\Mm$.
-% A task of $\Mm$ is encoded as a pair $(S,\aname)$, where $S = [A_1,\cdots,A_n] \in\dag^*(\act\dag^*)^+\triangleleft$ denotes the content of the stack, $\triangleleft$ is a special symbol to denote the bottom of the stack, $\aname$ is the task affinity of the task. A configuration of $\Mm$ is $\rho = ((S_1,\aname_1), \cdots, (S_n,\aname_n))$.
-
-We shall define the transition relation $\rho \xhookrightarrow[\Mm]{\tau}\rho'$ where $\tau\in\Delta$ is a transition rule, $\rho\in\confs_{\mhcancel{\dag,\triangleleft}}$ and $\rho'\in\confs_{\mhcancel{\dag,\triangleleft}}$ is obtained by applying $\tau$ on $\rho$. Let $\xhookrightarrow[\Mm]{}^*$ denote the reflexive and transitive closure of $\xhookrightarrow[\Mm]{}$.
-
-Then for a configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ where for each $i\in[n]$, $S_i = [A_{i,1},\cdots,A_{i,k_i}]$, then
-\begin{itemize}
-    \item if $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$ then $(([A_0],\aft(A_0)))\xhookrightarrow[\Mm]{}^* ((S_1',\aname_1),\cdots,(S_n',\aname_n))$ where for each $i\in[n]$, $S_i' = [A_{i,1},\dag^{j_{i,1}},A_{i,k_i},\dag^{j_{i,k_i}},\triangleleft]$, for some $j_{i,1},\cdots,j_{i,k_i}\in \Nn$.
-\end{itemize}
-}
-
-% and a dummy configuration $\rho' = ((S_1',\aname_1),\cdots,(S_n',\aname_n))$, \\
-% \begin{center}
-% $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$ iff $(([A_0],\aft(A_0)))\xhookrightarrow[\Mm]{}^*\rho'$
-% \end{center}
-
-
-Let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag,\triangleleft\}$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\AutB_1,\cdots,\AutB_k))$.
-
-The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as {\WOTrNFA}-representations defined in the sequel. 
-% Our approach to tackle this case is to simulate the behaviors of a single task by a {\WOTrPDS}, and use a set of {\WOTrNFA} tuples to represent the configurations of {\AMASS} $\Mm$. Similarly, we define the \emph{\WOTrNFA-representation} as follows:
-
-Let $\AutB$ be an {\WOTrNFA} over the alphabet $\act\cup\{\dag, \triangleleft\}$, we define 
-$$\Lang_{\mhcancel{\dag, \triangleleft}}(\AutB) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB)\}.$$
-Then let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag, \triangleleft\}$, 
-and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then we define $\confs_{\mhcancel{\dag,\triangleleft}}((\theta, (\AutB_1,\cdots,\AutB_k)))$, \emph{the set of configurations accepted by $(\theta, (\AutB_1,\cdots,\AutB_k))$}, is defined as as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that $(S_1, \cdots, S_k) \in \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_1)\times\cdots\times\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_k)$, and for each $i \in [k]$, $\aname_i=\aname_i'$.
-
-\begin{definition}[{\WOTrNFA}-representation]
-    Given a $k$-ary string relation $R\subseteq\act^k = \bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$, where $\AutB_{i,j}$ is a {\WOTrNFA} defining $L_{i,j}$, that is, $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = L_{i,j}$.
-    % where $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB_{i,j})\}$.
-\end{definition}
-
-\hide{
-\begin{definition}[{\WOTrNFA}-representation]
-    Given a $k$-ary string relation $R\subseteq((\act\cup\{\dag,\triangleleft\})^*)^k = \bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$, where $\AutB_{i,j}$ is a {\WOTrNFA} defining $L_{i,j}$, that is, $\Lang(\AutB_{i,j}) = L_{i,j}$.
-\end{definition}
-
-Let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag,\triangleleft\}$.
-We define $\Rel((\AutB_1,\cdots,\AutB_k))$ as $(S_1,\cdots,S_k)$ such that for each $i\in[k]$, $S_i\in\Lang(\AutB_i)$. Moreover, let $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. 
-Then $\confs_{\mhcancel{\dag,\triangleleft}}((\theta,(\AutB_1,\cdots,\AutB_k)))$, the set of dummy configurations accepted by $(\theta, (\AutB_1, \cdots,\AutB_k))$, is defined as the set of dummy configuration $\rho = ((S_1,\aname_1'),\cdots,(S_k,\aname_k'))$ where $(S_1',\cdots,S_k')\in\Rel((\AutB_1,\cdots,\AutB_k))$, and for each $i\in[k]$, $\aname_i = \aname_i'$.
-
-    %Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS}, and use a set of {\NFA} tuples to represent the configurations of {\AMASS} $\Mm$.
-    %Theorem~\ref{thm:iff-recog} shows the reachability problem of $\STK$-dominating $\LMAMASS$ is decidable, and we prove Theorem~\ref{thm:iff-recog} by Lemma~\ref{lem:iff-forward} and Lemma~\ref{lem:iff-backward}.
-    
-    Let $\Theta_\Mm = \left \{ \aname_1 \cdots \aname_k \in (\aft(\act))^+ \mid k \le |\act_{\singleinstance}| + |\aft(\act)| \right\}$. Intuitively, $\Theta_\Mm$ denotes the set of affinity sequences  in the configurations of $\Mm$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, we define 
-    %
-    $$
-    \begin{array}{l}
-    \WLang(\Mm, \theta) = \\
-    \ \ \left\{(S_1, \cdots, S_k) \in (\dag^*(\act\dag^*)^+\triangleleft)^k\ \big{\vert}\  (([A_0], \aft(A_0))) \xhookrightarrow[\Mm]{}^* ((S_1, \aname_1), \cdots, (S_k, \aname_k)) \right\}.
-    \end{array}
-    $$ 
-    % %
-    % Since each task $S_i$ can be seen as a string from $\act^+$, $\WLang(\Mm, \theta)$ can be seen as a $k$-ary string relation over $\act^+$. 
-}
-    
-    
-    \begin{lemma}\label{lem:amass-recog}
-        For each $\theta \in \Theta_\Mm$, the {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$ can be effectively computed.
-    \end{lemma} 
-    % We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aut_i\neq\emptyset$ for each $i\in[k]$ with $\Lang(\Aut_i) = \Lang_i$.
-    
-    According to Lemma~\ref{lem:amass-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$, say $(\AutB_{\theta, i,1},\cdots,\AutB_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
-    Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$ where $q_f\notin Q$, finally setting $F$ as $\{q_f\}$ and $Q$ as $Q\cup\{q_f\}$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
-    % Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$, finally replacing $F$ with $\{q_f\}$ for each $j \in [k]$,  then report ``yes'', otherwise, report ``no''.
-    
-    % The rest of this section is devoted to the proof of Theorem~\ref{thm:iff-recog}.
-    The rest of this section is devoted to the proof of Lemma~\ref{lem:amass-recog}. We shall distinguish whether $\lmd(A_0) = \STK$ or not. 
-    % The former case is simpler because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the latter, the more general case, the back stack may contain, apart from the tasks rooted at $\STK$ activities, one single task rooted at $A_0$. 
-    We shall consider the two cases in Section~\ref{sec:amass-stk} and Section~\ref{sec:amass-nostk} respectively.
-    
-    %Let us introduce a notation. 
-    
-    
 \subsection{The case $\lmd(A_0) = \STK$}\label{sec:amass-stk}
 
-In this case, we prove Lemma~\ref{lem:amass-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
+In this case, we compute a finite set of {\WOTrNFA} tuples to represent the set of reachable configurations.
+For this purpose, for each $A \in \act_\singletask$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
 
-Before presenting the rules, let us introduce several notations. 
+The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$ where 
+\begin{itemize}
+\item $P_{A} = \{p_0\}\cup\{ p_{B}\mid B \in  \act_\standard \cup \act_\singletop \cup \{A\}\}$,
+\item $\Gamma_{A} = \act_\standard \cup \act_\singletop \cup \{A, \dag\}$, 
+\item $\TranSet_A = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act_\standard \cup \act_\singletop \} \cup \{\tau_{B} \mid B \in \act_\standard \cup \act_\singletop\}  \cup \{\tau_{\not B} \mid B \in \act_\standard \cup \act_\singletop\}$, 
+%where $\tau_B$ (resp. $\tau_{\not B}$) is the transduction that checks that $B$ occurs (resp. does not occur) in the input string but keeps the input string unchanged, and 
+\item $\Delta_{A}$ is defined as follows:
+        \begin{itemize}
+            \item for each $B \in \Gamma_{A} \setminus \{\dag\}$, $(p_0, B, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
+	    %
+	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task, to construct $\Delta_A$,  specifically, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ such that $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and if $\phi \models \ntkflag$, then $C = A$, 
+	    %therefore, we distinguish the following two cases: either $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, or $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$, 
+	    (Recall that according to the definition of $\singletask$-dominating $\AMASS$, for a transition $B \xrightarrow{\startactivity(\phi)} C$, if $B \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $C \in \act_\singletask \cup \act_\singleinstance$.)
+	    %	    	
+		%	\item for each transition $B \xrightarrow{\startactivity(\phi)} C$ such that if $B \neq A$ and $\phi \models \ntkflag$, then $C = A$, 
+			\begin{itemize}
+				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, then 
+				%
+				\begin{itemize}
+				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
+				\begin{itemize}
+					\item $(p_0, C, CB, \tau_{\not C}, p_0) \in \Delta_{A}$, 
+					\item $(p_0, B, \varepsilon, \tau_{C}, p_C) \in \Delta_{A}$, $(p_C, C, C, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{C\}$, $(p_C, \gamma, \varepsilon, \tau_{\id}, p_C) \in \Delta_{A}$, 
+				\end{itemize}
+%
+				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  
+                we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
+                and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
+%
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ and $B \neq C$, or $\phi=\bot$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
+				%
+				\end{itemize}
+				
+				\item if $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$.
+				%
+            %
+            \end{itemize}
+        \end{itemize}
+\end{itemize}
 
-Let $A\in\act_\STK\cup\act_\SIT$. We define a {\WOTrPDS} $\Qq_{A} = (P, \Gamma_{A}, \TranSet_{A},\Delta_{A} )$, where
+\zhilin{stopped here}
+
+Let $A\in\act_\STK$. We define a {\WOTrPDS} $\Pp_{A} = (P, \Gamma_{A}, \TranSet_{A},\Delta_{A} )$, where
 % to simulate the behaviors of the $A'$-task of $\Mm$ for each $A'\in\act_{\STK}$, where
 \begin{itemize}
 \item $P = \{p_0, p_{\pop}, p_{\ctkflag}\}\cup\{p_{A'}\mid A'\in\Gamma_A\}$,
@@ -206,6 +182,76 @@ Let $A\in\act_\STK\cup\act_\SIT$. We define a {\WOTrPDS} $\Qq_{A} = (P, \Gamma_{
 Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarrow{\startactivity(\bot)} A'' \in \Delta$ satisfying the following condition are ignored: $\lmd(A') = \singleinstance$, or $\lmd(A'') = \singleinstance$, or $\lmd(A'') = \singletask$ and $A'' \neq A$. 
 Moreover, if $\lmd(A) = \singleinstance$, according to the definition of $\STK$-dominating $\AMASS$ and $\Qq_A$, we know that $\Delta_A = \{(p_0,A,\epsilon,\tau_\id, p_0)\}$.
 \end{itemize}
+
+
+\begin{definition}[{\WOTrNFA}-representations]
+    Given a $k$-ary string relation $R \subseteq (\act^*)^k$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$ such that for every $i \in [n]$ and $j \in [k]$,  $\AutB_{i,j}$ is a {\WOTrNFA} over the alphabet $\act$, moreover, $R = \bigcup \limits_{i \in [n]} \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, 1}) \times \cdots \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, k})$.
+    % where $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB_{i,j})\}$.
+\end{definition}
+
+
+Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$.
+
+\hide{
+Furthermore, to solve the configuration reachability problem of $\Mm$, we slightly adapt the defining of configuration and define the dummy configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$, where $(S_i,\aname_i)$ is a dummy task, where for each $i\in[n]$, $S_i\in\dag^*(\act\dag^*)^+\triangleleft$ denotes the content of the stack and $\aname_i$ is the task affinity of the task.
+Let $\confs_{\mhcancel{\dag,\triangleleft}}$ denotes the set of dummy configurations of $\Mm$.
+% A task of $\Mm$ is encoded as a pair $(S,\aname)$, where $S = [A_1,\cdots,A_n] \in\dag^*(\act\dag^*)^+\triangleleft$ denotes the content of the stack, $\triangleleft$ is a special symbol to denote the bottom of the stack, $\aname$ is the task affinity of the task. A configuration of $\Mm$ is $\rho = ((S_1,\aname_1), \cdots, (S_n,\aname_n))$.
+
+We shall define the transition relation $\rho \xhookrightarrow[\Mm]{\tau}\rho'$ where $\tau\in\Delta$ is a transition rule, $\rho\in\confs_{\mhcancel{\dag,\triangleleft}}$ and $\rho'\in\confs_{\mhcancel{\dag,\triangleleft}}$ is obtained by applying $\tau$ on $\rho$. Let $\xhookrightarrow[\Mm]{}^*$ denote the reflexive and transitive closure of $\xhookrightarrow[\Mm]{}$.
+
+Then for a configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ where for each $i\in[n]$, $S_i = [A_{i,1},\cdots,A_{i,k_i}]$, then
+\begin{itemize}
+    \item if $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$ then $(([A_0],\aft(A_0)))\xhookrightarrow[\Mm]{}^* ((S_1',\aname_1),\cdots,(S_n',\aname_n))$ where for each $i\in[n]$, $S_i' = [A_{i,1},\dag^{j_{i,1}},A_{i,k_i},\dag^{j_{i,k_i}},\triangleleft]$, for some $j_{i,1},\cdots,j_{i,k_i}\in \Nn$.
+\end{itemize}
+}
+
+% and a dummy configuration $\rho' = ((S_1',\aname_1),\cdots,(S_n',\aname_n))$, \\
+% \begin{center}
+% $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$ iff $(([A_0],\aft(A_0)))\xhookrightarrow[\Mm]{}^*\rho'$
+% \end{center}
+
+
+
+
+Let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag,\triangleleft\}$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\AutB_1,\cdots,\AutB_k))$.
+
+The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as {\WOTrNFA}-representations defined in the sequel. 
+% Our approach to tackle this case is to simulate the behaviors of a single task by a {\WOTrPDS}, and use a set of {\WOTrNFA} tuples to represent the configurations of {\AMASS} $\Mm$. Similarly, we define the \emph{\WOTrNFA-representation} as follows:
+
+Let $\AutB$ be an {\WOTrNFA} over the alphabet $\act\cup\{\dag, \triangleleft\}$, we define 
+$$\Lang_{\mhcancel{\dag, \triangleleft}}(\AutB) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB)\}.$$
+Then let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag, \triangleleft\}$, 
+and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then we define $\confs_{\mhcancel{\dag,\triangleleft}}((\theta, (\AutB_1,\cdots,\AutB_k)))$, \emph{the set of configurations accepted by $(\theta, (\AutB_1,\cdots,\AutB_k))$}, is defined as as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that $(S_1, \cdots, S_k) \in \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_1)\times\cdots\times\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_k)$, and for each $i \in [k]$, $\aname_i=\aname_i'$.
+
+\begin{definition}[{\WOTrNFA}-representation]
+    Given a $k$-ary string relation $R\subseteq\act^k = \bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$, where $\AutB_{i,j}$ is a {\WOTrNFA} defining $L_{i,j}$, that is, $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = L_{i,j}$.
+    % where $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB_{i,j})\}$.
+\end{definition}
+
+    
+    
+    \begin{lemma}\label{lem:amass-recog}
+        For each $\theta \in \Theta_\Mm$, the {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$ can be effectively computed.
+    \end{lemma} 
+    % We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aut_i\neq\emptyset$ for each $i\in[k]$ with $\Lang(\Aut_i) = \Lang_i$.
+    
+    According to Lemma~\ref{lem:amass-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$, say $(\AutB_{\theta, i,1},\cdots,\AutB_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
+    Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$ where $q_f\notin Q$, finally setting $F$ as $\{q_f\}$ and $Q$ as $Q\cup\{q_f\}$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
+    % Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$, finally replacing $F$ with $\{q_f\}$ for each $j \in [k]$,  then report ``yes'', otherwise, report ``no''.
+    
+    % The rest of this section is devoted to the proof of Theorem~\ref{thm:iff-recog}.
+    The rest of this section is devoted to the proof of Lemma~\ref{lem:amass-recog}. We shall distinguish whether $\lmd(A_0) = \STK$ or not. 
+    % The former case is simpler because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the latter, the more general case, the back stack may contain, apart from the tasks rooted at $\STK$ activities, one single task rooted at $A_0$. 
+    We shall consider the two cases in Section~\ref{sec:amass-stk} and Section~\ref{sec:amass-nostk} respectively.
+    
+    %Let us introduce a notation. 
+    
+    
+
+In this case, we prove Lemma~\ref{lem:amass-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
+
+Before presenting the rules, let us introduce several notations. 
+
 
 Since $\TranSet_{A} = \TranSet_{\Mm}$, hence $\Qq_{A}$ is a {WOTrPDS}.
 
@@ -268,6 +314,11 @@ The proof of Lemma~\ref{lem:amass-recog} is similar to the proof of Lemma~\ref{l
 
 \subsection{The case $\lmd(A_0) \neq \STK$}\label{sec:amass-nostk}
 
+
+Our idea is to construct a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then it could recognize different contents of $A_0$-task according to the contents of non-$A_0$-tasks.
+Then we compute the configurations which $A_0$-task is the top task by computing the $\post^*$ of the {\WOTrPDS}, finally compute all configurations reached from the initial configuration.
+
+% Intuitively, we assume that the current content of $A_0$-task is $A_0'CBA_0$, then when we start $B$ from $A_0'$ with the intent flag $\rtfflag$, then the content is $BA_0'C\dag A_0$. Moreover, we have $A_0'CBA_0\in\Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$ and $BA_0'C\dag A_0 \in \Lang((\Aut_{A_0 \stackrel{C}\rightsquigarrow A_0'}))$, hence the proposition does not hold.
 
 % Recall that we construct a {\PDS} $\Pp'_{A_0}$ to simulate the $A_0$-task and compute $\AutReach$ to solve the configuration reachability problem of $\STK$-dominating $\LMAMASS$ when $\lmd(A_0)\neq\STK$. 
 % and in the procedure to compute $\AutReach$, we need to modify the $\Pp'_{A_0}$-{\NFA} $\Aut$ via $\STK(\Aut)$ and $\topact_{A}(\Aut)$. 

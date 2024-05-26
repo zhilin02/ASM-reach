@@ -1,3 +1,4 @@
+%!TEX root = main.tex
 
 %\zhilin{The introduction to Android system below is copied from https://developer.android.com/}
 In Android, an application, usually referred to as an \emph{app}, is regarded as a collection of \emph{activities}. An activity is a type of app components, an instance of which provides a graphical user interface on screen and  serves the entry point for interacting with the user\cite{Androiddoc}. An app typically has many activities for different user interactions (e.g., dialling phone numbers, reading contact lists, etc). A distinguished activity is the \emph{main} activity, which is started when the app is launched.
@@ -12,7 +13,7 @@ In Android, an application, usually referred to as an \emph{app}, is regarded as
 A \emph{task} is a collection of activities that users interact with when performing a certain job.
 The activities in a task are arranged in a stack %---the \emph{back stack}---\tl{this is not quite precise?!}
 in the order in which each activity is opened. For example, an email app might have one activity to show a list of latest messages. When the user selects a message, a new activity opens to view that message. This new activity is pushed to the stack. If the user presses the ``Back'' button, an activity is finished and is popped off the stack. [In practice, the onBackPressed() method can be overloaded and triggered when the ``Back'' button is clicked. Here we assume---as a model abstraction---that the onBackPressed() method is not overloaded.]
-Furthermore, multiple tasks may run concurrently in the Android platform and the \emph{back stack} stores all the tasks as a stack as well. In other words, it has a nested structure being a stack of stacks (tasks).
+Furthermore, multiple tasks may run concurrently in the Android platform and the \emph{back stack} stores all the tasks as a stack as well. In other words, it has a nested structure being a stack of stacks (tasks). The first task that is started when an app is launched is called the \emph{main task}. Note that the main task contains the main activity as the bottom activity. 
 %
 %In other words, there may exist multiple tasks in the back stack, and they are organized as a stack as well.
 We remark that %the back stack evolves in a way that the role of apps is diminished, in the  sense that
