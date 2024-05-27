@@ -92,21 +92,21 @@ A language over $\Gamma$ is \emph{regular} if it can be defined by an \NFA.
 
 \subsection{Pushdown systems}
 A \emph{pushdown system} ({\PDS}) $\Pp$ is a tuple $(P,\Gamma,\Delta)$, where $P$ is a finite set of control states, $\Gamma$ is a finite stack alphabet, and $\Delta\subseteq P\times\Gamma\times\Gamma^{\le 2}\times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\epsilon\}\cup\Gamma\cup\Gamma\times\Gamma$.
-Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A \emph{configuration} of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the \emph{content} of the stack (with the leftmost symbol being the top of the stack). Let $\conf_{\Pp}$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\conf_{\Pp}$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the \emph{reflexive and transitive closure} of $\xrightarrow{\Pp}$.
+Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A \emph{configuration} of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the \emph{content} of the stack (with the leftmost symbol being the top of the stack). Let $\confs(\Pp)$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\confs(\Pp)$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the \emph{reflexive and transitive closure} of $\xrightarrow{\Pp}$.
 
-A configuration $(p',w')$ is reachable from $(p,w)$ if $(p,w)\xRightarrow{\Pp}(p',w')$. For $C\subseteq\conf_{\Pp}$, let $\pre^*_\Pp(C)$ (resp. $\post^*_\Pp(C)$) denote the set of \emph{predecessors} (resp. \emph{successors}) of elements of $C$, that is, $\{(p',w')\mid \exists (p,w)\in C,(p',w')\xRightarrow{\Pp}(p,w)\}$ (resp. $\{(p',w')\mid \exists (p,w)\in C,(p,w)\xRightarrow{\Pp}(p',w')\}$).
+A configuration $(p',w')$ is reachable from $(p,w)$ if $(p,w)\xRightarrow{\Pp}(p',w')$. For $C \subseteq \confs(\Pp)$, let $\pre^*_\Pp(C)$ (resp. $\post^*_\Pp(C)$) denote the set of \emph{predecessors} (resp. \emph{successors}) of elements of $C$, that is, $\{(p',w')\mid \exists (p,w)\in C,(p',w')\xRightarrow{\Pp}(p,w)\}$ (resp. $\{(p',w')\mid \exists (p,w)\in C,(p,w)\xRightarrow{\Pp}(p',w')\}$).
 
 %As a standard machinery to solve the reachability of {\PDS}, a $\Pp$-\emph{nondeterministic-finite-automaton} ($\Pp$-{\NFA}) is an {\NFA} $\Aut = (P',\Gamma,\delta,I,F)$ such that $I\subseteq P\subseteq P'$. 
 %Let $(p,w)\in\conf_{\Pp}$, $(p,w)$ is accepted by $\Aut$ if $p\in I$ and $p\xRightarrow[\Aut]{w}p_f$ and $p_f\in F$. We use $\Aut(p)$ to denote the $\Pp$-{\NFA} obtained from $\Aut$ by replacing $I$ with $\{p\}$.
 
 As a standard machinery to solve reachability for PDS, a \emph{$\Pp$-nondeterministic-finite-automaton} ($\Pp$-NFA) is an NFA $\Aut=(P', \Gamma, \delta, I, F)$ such that $I \subseteq P \subseteq P'$ \cite{BEM97}.
 Evidently, $\Pp$-NFA are a special class of NFA. 
-Let $\Aut = (P', \Gamma, \delta, I, F)$ be a  $\Pp$-NFA and  $(p, w) \in \conf_\Pp$. Then $(p, w)$ is \emph{accepted} by $\Aut$ if $p \in I$ and there is an accepting run $p_0 p_1 \cdots p_n$ of $\Aut$ on $w$ with $p_0 = p$. Let $\conf_\Aut$ denote the set of configurations accepted by $\Aut$. Moreover, let $\Lang(\Aut)$ denote the set of words $w$ such that $(p, w) \in \conf_\Aut$ for some $p \in I$. 
+Let $\Aut = (P', \Gamma, \delta, I, F)$ be a  $\Pp$-NFA and  $(p, w) \in \confs(\Pp)$. Then $(p, w)$ is \emph{accepted} by $\Aut$ if $p \in I$ and there is an accepting run $p_0 p_1 \cdots p_n$ of $\Aut$ on $w$ with $p_0 = p$. Let $\confs(\Aut)$ denote the set of configurations accepted by $\Aut$. Moreover, let $\Lang(\Aut)$ denote the set of words $w$ such that $(p, w) \in \confs(\Aut)$ for some $p \in I$. 
 %For brevity, we usually write NFA instead of $\Pp$-NFA when $\Pp$ is clear from the context. 
-For an $\Pp$-NFA $\Aut = (P', \Gamma, \delta, I, F)$ and $p' \in P$, we use $\Aut(p')$ to denote the $\Pp$-NFA obtained from $\Aut$ by replacing $I$ with $\{p'\}$. A set of configurations $C \subseteq \conf_\Pp$ is \emph{regular} if there is a $\Pp$-NFA $\Aut$ recognizing $C$, that is, $\conf_\Aut = C$. %\zhilin{added some notation for MA}\FU{I added the definition of regular set.}
+For an $\Pp$-NFA $\Aut = (P', \Gamma, \delta, I, F)$ and $p' \in P$, we use $\Aut(p')$ to denote the $\Pp$-NFA obtained from $\Aut$ by replacing $I$ with $\{p'\}$. A set of configurations $C \subseteq \confs(\Pp)$ is \emph{regular} if there is a $\Pp$-NFA $\Aut$ recognizing $C$, that is, $\confs(\Aut) = C$. %\zhilin{added some notation for MA}\FU{I added the definition of regular set.}
 
 \begin{theorem}[\cite{BEM97}]\label{thm-pds}
-	Given  a PDS $\Pp$ and a set of configurations accepted by a $\Pp$-NFA $\Aut$, we can compute, in polynomial time in $|\Pp|+|\Aut|$, two $\Pp$-NFAs $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\conf_\Aut)$ and $\post^*_\Pp(\conf_\Aut)$ respectively.
+	Given  a PDS $\Pp$ and a set of configurations accepted by a $\Pp$-NFA $\Aut$, we can compute, in polynomial time in $|\Pp|+|\Aut|$, two $\Pp$-NFAs $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\confs(\Aut))$ and $\post^*_\Pp(\confs(\Aut))$ respectively.
 \end{theorem}
 
 The $\Pp$-NFAs $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-pds} are constructed by applying the saturation procedures. Let us recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ in the sequel, since later on, we focus on the computation of $\post^*$.
@@ -138,7 +138,7 @@ A transduction $\tau$ over an alphabet $\Gamma$ is a binary relation over $\Gamm
 %In particular, $\emptyset \subseteq \Gamma^* \times \Gamma^*$ is the transduction that transduces no strings.
 We use $\tau_{\id}$ to denote the identity transduction, namely,  $\{(w,w) \mid w \in \Gamma^*\}$. 
 Moreover, we use $\tau_\varepsilon$ to denote the transduction $\{\varepsilon, \varepsilon\}$, namely the transduction comprising a single element $(\varepsilon, \varepsilon)$.
-For a transduction $\tau$ and a string $w$, we write $\tau(w):= \{w' \mid (w,w') \in \tau \}$.
+For a transduction $\tau$ and a string $w$, we write $\tau(w):= \{w' \mid (w, w') \in \tau \}$.
 
 %\tl{why not just define l2l transducers as we only use them?}
 A \emph{nondeterministic finite transducer} (\NFT) $\Tran$ is a tuple $(Q, \Gamma, \delta, I, F)$, 
@@ -294,11 +294,11 @@ Intuitively, $q \xRightarrow[\Aut]{w | \tau} q'$ means that in $\Aut$,  $q'$ is 
 
 A configuration $(p, w)$ of $\Pp$ is accepted by $\Aut$ if $p \xRightarrow[\Aut]{w | \tau} q$ for some $q \in F$ and $\tau \in \langle \TranSet \rangle$ such that $(\varepsilon, \varepsilon) \in \tau$.
 %
-Let us use $\ConfSet_\Aut$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
+Let us use $\confs(\Aut)$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
 
 
 \begin{theorem}[\cite{Song18}]\label{thm-trpds}
-	Given  a {\TrPDS} $\Pp$ and a set of configurations accepted by a $\Pp$-{\TrNFA} $\Aut$, we can compute two $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\conf_\Aut)$ and $\post^*_\Pp(\conf_\Aut)$ respectively.
+	Given  a {\TrPDS} $\Pp$ and a set of configurations accepted by a $\Pp$-{\TrNFA} $\Aut$, we can compute two $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\confs(\Aut))$ and $\post^*_\Pp(\confs(\Aut))$ respectively.
 \end{theorem}
 
 The $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-trpds} are constructed by applying the saturation procedures. Let us recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ in the sequel, since later on, we focus on the computation of $\post^*$.

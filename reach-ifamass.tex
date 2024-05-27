@@ -174,9 +174,8 @@ to the intersection problem of {\WOTrNFA} and {\NFA}, which is shown to be decid
 \subsubsection{Finite automata with well-partially-ordered transductions}\label{sec-wotrnfa}
  
 \begin{definition}[{\WOTrNFA}] %[Finite automata with finite ascending chians and antichains transductions]
-	Given a {\WOTrPDS} $\Pp=(P, \Gamma, \TranSet, \Delta)$ with $\Tranbasis$ as the union-basis of $\langle \TranSet \rangle$, a $\Pp$-{\WOTrNFA} is a tuple $\Aut =(Q, \Gamma, \delta, I, 
-	F)$,
-	where $Q$ is the set of states such that $P \subseteq Q$, $I\subseteq P\subseteq Q$ is the set of initial states, $F$ is the set of final states,  
+	Given a {\WOTrPDS} $\Pp=(P, \Gamma, \TranSet, \Delta)$ with $\Tranbasis$ as the union-basis of $\langle \TranSet \rangle$, a $\Pp$-{\WOTrNFA} is a tuple $\Aut =(Q, \Gamma, \delta, I, F)$,
+	where $Q$ is the set of states such that $P \subseteq Q$, $I\subseteq P\subseteq Q$ is the set of initial states, $F \subseteq Q$ is the set of final states,  
 	%and the set of initial states is $P$, %is a finite set of states, $\Sigma$ is a finite alphabet, 
 	%$\TranSet$ is a finite set of transductions, %$I \subseteq Q$ (reps. $F \subseteq Q$) is a finite set of initial (reps. final) states, 
 	and $\delta \subseteq Q \times \Gamma_\varepsilon \times \Tranbasis \times Q$ is a finite set of transition rules.
@@ -199,7 +198,7 @@ Intuitively, $q \xRightarrow{w | \tau} q'$ means that in $\Aut$,  $q'$ is reache
 A configuration $(p, w)$ of $\Pp$ is accepted by $\Aut$ if $p\in I$ and $p \xRightarrow{w | \tau} q$ for some $q \in F$ and $\tau \in \langle \TranSet \rangle$ such that $(\varepsilon, \varepsilon) \in \tau$.
 %
 Let us use $\confs(\Aut)$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
-Moreover, let $\ConfSet(\Aut)$ to denote the set of words $w$ such that $(p, w)\in\confs(\Aut)$ for some $p \in I$.
+Moreover, let $\Lang(\Aut)$ to denote the set of words $w$ such that $(p, w)\in\confs(\Aut)$ for some $p \in I$.
 For a $\Pp$-$\WOTrNFA$ $\Aut = (Q, \Gamma, \delta, I, F)$, we use $\Aut(p')$ to denote to denote the $\Pp$-$\WOTrNFA$ obtained from $\Aut$ by replacing $I$ with $\{p'\}$.
 
 It turns out that $\Pp$-{\WOTrNFA} is capable of representing \emph{non-regular} set of configurations, as %witnessed 
@@ -328,8 +327,8 @@ By iterating this process, in the end, we obtain $\Aut^{\pre*}_{\Pp}$, as illust
 \qed
 \end{example}
 
-Given the {\WOTrPDS} $\Pp= (P, \Gamma, \TranSet, \Delta)$, $p_1, p_2 \in P$, and two regular languages $L_1, L_2$ represented by {\NFA}s $\Aut_1 = (Q_1, \Gamma, \delta_1, I_1, F_1)$ and $\Aut_2 = (Q_2, \Gamma, \delta_2, I_2, F_2)$ respectively, the regular reachability problem is reduced to the intersection problem of the $\Pp$-{\WOTrNFA} $(\Aut_1'(p_1))^{\post*}_{\Pp}$ and the $\Pp$-{\NFA} $\Aut_2(p_2)$, 
-i.e., checking $\ConfSet((\Aut_1'(p_1))^{\post*}_{\Pp}) \cap \ConfSet(\Aut_2(p_2)) \neq \emptyset$, where $\Aut_1' = (Q_1, \Gamma, \delta_1', I_1, F_1)$ and $\delta_1' = \{(p,\gamma,\tau_{\id}, p')\mid (p,\gamma,p')\in\delta_1\}$.
+Given the {\WOTrPDS} $\Pp= (P, \Gamma, \TranSet, \Delta)$, $p_1, p_2 \in P$, and two regular languages $L_1, L_2$ represented by {\NFA}s $\Aut_1 = (Q_1, \Gamma, \delta_1, I_1, F_1)$ and $\Aut_2 = (Q_2, \Gamma, \delta_2, I_2, F_2)$ respectively, the regular reachability problem is reduced to the intersection problem of the $\Pp$-{\WOTrNFA} $(\Aut_1'(p_1))^{\post*}_{\Pp}(p_2)$ and the $\Pp$-{\NFA} $\Aut_2(p_2)$, 
+i.e., checking $\Lang((\Aut_1'(p_1))^{\post*}_{\Pp}(p_2)) \cap \Lang(\Aut_2(p_2)) \neq \emptyset$, where $\Aut_1' = (Q_1, \Gamma, \delta_1', I_1, F_1)$ and $\delta_1' = \{(p,\gamma,\tau_{\id}, p')\mid (p,\gamma,p')\in\delta_1\}$.
 % where $\Aut_1[p_1]$ is obtained from $\Aut_1$ by adding a transition $(p_1, a, q)$ for each $(q_0, a, q) \in \delta_1$ with $q_0 \in I_1$, similarly for $\Aut_2[p_2]$. 
 Then Theorem~\ref{thm-wstrpds-reach} follows from Proposition~\ref{prop-wstrnfa-nfa-intersect} in the next subsection.
 
@@ -338,7 +337,7 @@ Then Theorem~\ref{thm-wstrpds-reach} follows from Proposition~\ref{prop-wstrnfa-
 
 \subsubsection{The intersection problem of {\WOTrNFA} and {\NFA}} \label{sec:fatrnfa}
 %\begin{definition}[{\WOTrNFA}-{\NFA} intersection problem]
-The {\WOTrNFA}-{\NFA} intersection problem is, for given $\Pp$-{\WOTrNFA} $\Aut$ and $\Pp$-{\NFA} $\AutB$, to decide  whether $\ConfSet(\Aut) \cap \ConfSet(\AutB) = \emptyset$. We shall show that this problem %the {\WOTrNFA}-{\NFA} intersection problem to 
+The {\WOTrNFA}-{\NFA} intersection problem is, for given $\Pp$-{\WOTrNFA} $\Aut$ and $\Pp$-{\NFA} $\AutB$, to decide  whether $\Lang(\Aut) \cap \Lang(\AutB) = \emptyset$. We shall show that this problem %the {\WOTrNFA}-{\NFA} intersection problem to 
 can be reduced to (polynomially many) instances of the sub-covering problem of a downward-WSTS, which is decidable by Theorem~\ref{thm-dwsts}.
 %\end{definition}
 
@@ -394,16 +393,18 @@ Therefore, $\rightarrow$ is downward reflexive-compatible with respect to $\prec
 	\item Finally, given two states $(q_1, \tau_1, q'_1)$ and $(q_2, \tau_2, q'_2)$ (where $\tau_1, \tau_2$ are given as {\NFT}s), from Proposition~\ref{prop-nft-inclusion}, we can effectively decide whether $\tau_1 \preceq \tau_2$, namely, $\tau_2 \subseteq \tau_1$. Therefore, $\wstsnodes_{\Aut,\AutB}$ has decidable $\preceq$.
 \end{itemize}
 
-Then $\ConfSet(\Aut) \cap \ConfSet(\AutB) \neq \emptyset$ iff $p \xRightarrow{w | \tau} q$, $p' \xRightarrow{w} q'$, and $(\varepsilon, \varepsilon) \in \tau$ for some $p \in I$, $p'\in I'$, $w \in \Gamma^*$, $\tau \in \langle \TranSet \rangle$, $q \in F$, and $q' \in F'$. Suppose that a $\Tranbasis$-representation of $\tau_{id}$ is $\beta_1 \cup \cdots \cup \beta_k$. 
+Then $\Lang(\Aut) \cap \Lang(\AutB) \neq \emptyset$ iff $p \xRightarrow{w | \tau} q$, $p' \xRightarrow{w} q'$, and $(\varepsilon, \varepsilon) \in \tau$ for some $p \in I$, $p'\in I'$, $w \in \Gamma^*$, $\tau \in \langle \TranSet \rangle$, $q \in F$, and $q' \in F'$. Suppose that a $\Tranbasis$-representation of $\tau_{id}$ is $\beta_1 \cup \cdots \cup \beta_k$. 
 The construction of $\wstsnodes_{\Aut,\AutB}$ entails that $p \xRightarrow{w | \tau} q$, $p' \xRightarrow{w} q'$, and $(\varepsilon, \varepsilon) \in \tau$ for some $w \in \Gamma^*$  and $\tau \in \langle \TranSet \rangle$  iff $(q, \beta', q')$ is reachable from $(p, \beta_i, p')$ in $\wstsnodes_{\Aut,\AutB}$ and $\beta' \preceq \tau_\varepsilon$ for some $\beta' \in \Tranbasis$ and $i \in [k]$, where $\beta'$ occurs as a disjunct of a $\Tranbasis$-representation of $\tau$. 
 %
-Furthermore, $(q, \beta', q')$ is reachable from $(p, \beta_i, p')$ in $\wstsnodes_{\Aut,\AutB}$ and $\beta' \preceq \tau_\varepsilon$ for some $\beta' \in \Tranbasis$ and $i \in [k]$ iff $(q, \beta', q')$ is reachable from $(p, \beta_i, p')$ in $\wstsnodes_{\Aut,\AutB}$ and $(q, \beta', q')$ sub-covers $(q, \tau_\varepsilon, q')$ for some $\beta' \in \Tranbasis$ and $i \in [k]$. Therefore, we deduce that \emph{$\ConfSet(\Aut) \cap \ConfSet(\AutB) \neq \emptyset$ iff there are $p \in I$, $p' \in I'$, $q \in F$, $q' \in F'$, and $i \in [k]$ such that starting from $(p, \beta_i, p')$, a state that sub-covers $(q, \tau_\varepsilon, q')$ can be reached}.
+Furthermore, $(q, \beta', q')$ is reachable from $(p, \beta_i, p')$ in $\wstsnodes_{\Aut,\AutB}$ and $\beta' \preceq \tau_\varepsilon$ for some $\beta' \in \Tranbasis$ and $i \in [k]$ iff $(q, \beta', q')$ is reachable from $(p, \beta_i, p')$ in $\wstsnodes_{\Aut,\AutB}$ and $(q, \beta', q')$ sub-covers $(q, \tau_\varepsilon, q')$ for some $\beta' \in \Tranbasis$ and $i \in [k]$. Therefore, we deduce that \emph{$\Lang(\Aut) \cap \Lang(\AutB) \neq \emptyset$ iff there are $p \in I$, $p' \in I'$, $q \in F$, $q' \in F'$, and $i \in [k]$ such that starting from $(p, \beta_i, p')$, a state that sub-covers $(q, \tau_\varepsilon, q')$ can be reached}.
 %\end{quote}
 We conclude from Theorem~\ref{thm-dwsts} that the {\WOTrNFA}-{\NFA} intersection problem is decidable.
 \end{proof}
 
 
-\subsection{Solving the reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
+\subsection{Solving the configuration reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
+
+From the definition of the configuration reachability problem in Section~\ref{sec-conf-reach}, for the $\singletask$-dominating $\IFAMASS$ $\Mm$, we should solve the following problem: given an {\NFA} $\Aa' = (Q', \act, \delta', I', F')$ over the alphabet $\act$, decide whether $\confs((\aft(A_0), \Aa')) \cap \RConfs(\Mm) \neq \emptyset$. 
 
 While it is relatively easy to simulate the operations $\POP, \PUSH, \STP, \CTP$, %by the transition rules of $\Pp_\Aut$, 
 it is challenging to  simulate $\RTF$. The semantics of $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ requires to move the topmost occurrence of $B$ (if there is any) to the top of the stack. The most direct way to simulate  $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ ans $A \neq B$ is by two transition rules $p \xrightarrow{A / B | \tau_{B, A}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$
@@ -431,8 +432,6 @@ The aforementioned tricks are justified by the observation that the transition $
 
 %We first show that a  {\ASS} $\Aut = (Act, A_0,\Delta)$ can be simulated by a pushdown system with transductions $\Pp_\Aut = (P_\Aut, \Gamma_\Aut, \TranSet_\Aut, \Delta_\Aut)$. Then we prove that $(\langle \TranSet_\Aut \rangle, \preceq)$ is well-ordered, that is, $\Pp_\Aut$ is a {\WOTrPDS}. The decidability of the configuration reachability problem of {\ASS} then follows from Theorem~\ref{thm-wstrpds-reach}.
 
-\zhilin{stopped here}
-
 \paragraph*{From $\Mm$ to $\Pp_\Mm$} 
 The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where 
 \begin{itemize}
@@ -444,17 +443,14 @@ The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where
             \item for each $A \in \act$, $(p_0, A, \varepsilon, \tau_{\id}, p_0) \in \Delta_{\Mm}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
 			\item for each transition $A \xrightarrow{\startactivity(\phi)} B$, 
 			\begin{itemize}
-				\item if $\phi \models \ctpflag$, such that $A \neq B$, we have 
-				\begin{itemize}
-					\item $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$, 
-					\item $(p_0, A, \varepsilon, \tau_{B}, p_B) \in \Delta_{\Mm}$, $(p_B, B, B, \tau_{\id}, p_0)  \in \Delta_{\Mm}$, and for each $\gamma \in \Gamma_\Mm \setminus \{B\}$, $(p_B, \gamma, \varepsilon, \tau_{\id}, p_B) \in \Delta_{\Mm}$, 
-				\end{itemize}
-				\item if $\phi\models \neg\ctpflag \wedge \rtfflag$ such that $A \neq B$, we have $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$ 
+				\item if $\phi \models \ctpflag$ and $A \neq B$, then $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$, $(p_0, A, \varepsilon, \tau_{B}, p_B) \in \Delta_{\Mm}$, $(p_B, B, B, \tau_{\id}, p_0)  \in \Delta_{\Mm}$, and for each $\gamma \in \Gamma_\Mm \setminus \{B\}$, $(p_B, \gamma, \varepsilon, \tau_{\id}, p_B) \in \Delta_{\Mm}$, 
+%
+				\item if $\phi\models \neg\ctpflag \wedge \rtfflag$ and $A \neq B$, then $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$ 
                 and $(p_0, A, BA, \tau_{B, \dag}, p_0) \in \Delta_{\Mm}$,
                 %
-				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ and $A \neq B$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$,
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ and $A \neq B$, then $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$,
 %
-				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$.
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$, then $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$.
 			\end{itemize}
             %
         \end{itemize}
@@ -466,12 +462,16 @@ The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where
 %\end{itemize}
 %Intuitively, $\tau_{\CTK}$ transduces $w\bot$ into $\dag^{|w|}\bot$.
 
-Let $\Aut_{A_0} = (P_\Mm, \Gamma_{\Mm}, \{p_0, A_0, \tau_{\id}, p_f\}, \{p_0\}, \{p_f\})$ be a $\Pp_{\Mm}$-$\WOTrNFA$, and $\Aut = (Q, \act, \delta, I, F)$ be an $\NFA$ over the alphabet $\act$, 
-then the configuration reachability problem of $\Mm$ is solved as follows:  If $\ConfSet((\Aut_{A_0})^{\post^*}_{\Pp_{\Mm}})\cap \ConfSet(\Aut') \neq \emptyset$, where $\Aut'$ is obtained from $\Aut$ by adding the transitions $(q,\dag,q)$ for every $q \in Q$, then report ``yes'', otherwise, report ``no''.
+%\zhilin{stopped here}
 
 
+If we know that $\Pp_\Mm$ constructed above is a {\WOTrPDS}, then the problem of deciding whether $\confs((\aft(A_0), \Aa')) \cap \RConfs(\Mm) \neq \emptyset$ is reduced to the regular reachability problem of $\Pp_\Mm$, that is, decide whether $\Lang(\Aa'')  \cap \Lang((\Aut_{A_0})^{\post^*}_{\Pp_{\Mm}}(p_0)) \neq \emptyset$, where $\Aa''$ is obtained from $\Aa'$ by adding the transitions $(q, \dag, q)$ for every $q \in Q'$ and $\Aut_{A_0}$ is the {\WOTrNFA} recognizing the set of initial configurations, i.e. $\Aut_{A_0} = (P_\Mm \cup \{p_f\}, \Gamma_{\Mm}, \{(p_0, A_0, \tau_{\id}, p_f)\}, \{p_0\}, \{p_f\})$. 
 
-To show that $\Pp_\Mm$ is a {\WOTrPDS}, it is sufficient to show the following result. 
+%Let $\Aut_{A_0} = (P_\Mm \cup \{p_f\}, \Gamma_{\Mm}, \{(p_0, A_0, \tau_{\id}, p_f)\}, \{p_0\}, \{p_f\})$ be a $\Pp_{\Mm}$-$\WOTrNFA$, and $\Aut = (Q, \act, \delta, I, F)$ be an $\NFA$ over the alphabet $\act$, 
+%then the configuration reachability problem of $\Mm$ is solved as follows:  If $\ConfSet((\Aut_{A_0})^{\post^*}_{\Pp_{\Mm}})\cap \ConfSet(\Aut') \neq \emptyset$, where $\Aut'$ is obtained from $\Aut$ by adding the transitions $(q,\dag,q)$ for every $q \in Q$, then report ``yes'', otherwise, report ``no''.
+
+
+It remains to show that $\Pp_\Mm$ is a {\WOTrPDS}. It is sufficient to prove the following result. 
 %$\langle \TranSet_\Aut \rangle$ has a union-basis $\Tranbasis$ satisfying the four conditions in Definition~\ref{def:defatpds}.
 
 \begin{proposition}\label{lem-transet-wo}
@@ -480,12 +480,13 @@ $\langle \TranSet_\Mm \rangle$ has a union-basis $\Tranbasis$ satisfying the fou
 
 % We now complete the proof of Theorem~\ref{thm:st-amass-reach}. For a given {\NFA} $\AutB = (Q, \act, \delta, I, F)$ over $\act$, let $\AutB'$ be the {\NFA} obtained from $\AutB$ by adding the transitions $(q, \dag, q)$ for every $q \in Q$. Then $\ConfSet(\Mm) \cap \ConfSet(\AutB) \neq \emptyset$ iff there is $w \in \ConfSet(\AutB')$ such that $(p_0, A_0) \xRightarrow{\Pp_\Mm} (p_0, w)$.
 %$pre^*_{\Pp_\Aut}(\ConfSet(\AutB'[p_0])) \cap \{(p_0, A_0)\} \neq \emptyset$, where $\AutB'[p_0]$ is obtained from $\AutB'$ by adding the state $p_0$ and the transitions $(p_0, a, q)$ for all $(p, a, q) \in \delta$ with $p \in I$. 
-From Theorem~\ref{thm-wstrpds-reach}, we conclude that Theorem~\ref{thm:st-amass-reach} holds.
 
-The rest of this section is devoted to the proof of Proposition~\ref{lem-transet-wo}, Proposition~\ref{prop-tranbasis-ef} and Proposition~\ref{prop-tranbasis-udist}.
+%From Theorem~\ref{thm-wstrpds-reach}, we conclude that Theorem~\ref{thm:st-amass-reach} holds.
 
+The rest of this section is devoted to the proof of Proposition~\ref{lem-transet-wo}.
+%, Proposition~\ref{prop-tranbasis-ef} and Proposition~\ref{prop-tranbasis-udist}.
 
-\subsection*{Proof of Proposition~\ref{lem-transet-wo}}
+%\subsection*{Proof of Proposition~\ref{lem-transet-wo}}
 To prove Proposition~\ref{lem-transet-wo}, we first define $\Tranbasis_\Mm$.
 For technical convenience, we fix a linear order $<$ on $\act$. Moreover, we introduce some additional notations for transductions.
 \begin{itemize}
@@ -521,8 +522,8 @@ $\preceq$ is union-distributive over $\Tranbasis_\Mm$-representations.
 \end{proposition}
 
 
-\subsection*{Proof of Proposition~\ref{prop-tranbasis-ef}}
-\begin{proof}
+%\subsection*{Proof of Proposition~\ref{prop-tranbasis-ef}}
+\begin{proof}[Proposition~\ref{prop-tranbasis-ef}]
 	We prove by a structural induction on the definition of $\langle \TranSet_\Mm \rangle$.
 	
 %	We first notice that every finite union of {\UFNF} $\beta_1 \cup \cdots \cup \beta_m$ can be turned into an {\AUNF} $\beta'_1 \cup \cdots \cup \beta'_n$, where $\beta'_1, \cdots, \beta'_n$ are antichains, by iterating the following process until no more {\UFNF} can be removed: if $\beta_i \preceq \beta_j$ (that is, $\beta_j \subseteq \beta_i$),  we remove $\beta_j$. Therefore, in the proof below, to show   $\beta_1 \cup \cdots \cup \beta_m$ is an {\AUNF}, we only need to show (i) in Definition~\ref{def-nf}.
@@ -643,8 +644,8 @@ $\preceq$ is union-distributive over $\Tranbasis_\Mm$-representations.
 	Then $\lceil \gamma, \gamma' \rfloor^{-1} \tau = \bigcup \limits_{j \in [m]} \lceil \gamma, \gamma' \rfloor^{-1} \beta_j$. From the claim, each of $\lceil \gamma, \gamma' \rfloor^{-1} \beta_j$ can be rewritten into $\Tranbasis$-representations. Thus $\lceil \gamma, \gamma' \rfloor^{-1} \tau$ can be rewritten into $\Tranbasis$-representations as well.
 \end{proof}
 
-\subsection*{Proof of Proposition~\ref{prop-tranbasis-udist}}
-\begin{proof}
+%\subsection*{Proof of Proposition~\ref{prop-tranbasis-udist}}
+\begin{proof}[Proposition~\ref{prop-tranbasis-udist}]
 
 Suppose that $\beta \in \Tranbasis_\Mm$ and $\tau \in \langle \TranSet_\Mm \rangle$ whose $\Tranbasis_\Mm$-representation is $\beta_\tau=\beta_{\tau, 1} \cup \cdots \cup \beta_{\tau, n_\tau}$, and $\tau \preceq \beta$. We show $ \beta_{\tau, i} \preceq \beta$ for some $i \in [n_\tau]$.
 
