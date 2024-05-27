@@ -2,11 +2,11 @@
 
 Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent flags, thus can be seen as an integration of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$. 
 
+Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
+
 A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}-\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
 Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \singletask$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
 To resolve this problem, we propose a new idea by \emph{focusing on the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. 
-
-Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
 
 In the sequel, we first consider the simpler case $\lmd(A_0) = \singletask$, then consider the case $\lmd(A_0) \neq \singletask$.
 
@@ -100,7 +100,7 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 In this case, we compute a finite set of {\WOTrNFA} tuples to represent the set of reachable configurations.
 For this purpose, for each $A \in \act_\singletask$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
 
-The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$ where 
+The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where 
 \begin{itemize}
 \item $P_{A} = \{p_0\}\cup\{ p_{B}\mid B \in  \act_\standard \cup \act_\singletop \cup \{A\}\}$,
 \item $\Gamma_{A} = \act_\standard \cup \act_\singletop \cup \{A, \dag\}$, 
@@ -116,7 +116,7 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$ where
 	    %	    	
 		%	\item for each transition $B \xrightarrow{\startactivity(\phi)} C$ such that if $B \neq A$ and $\phi \models \ntkflag$, then $C = A$, 
 			\begin{itemize}
-				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, then 
+				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $\phi \models \neg \ntkflag$, and $C \in \act_\standard \cup \act_\singletop$, then 
 				%
 				\begin{itemize}
 				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
@@ -129,11 +129,12 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$ where
                 we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
                 and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
 %
-				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ and $B \neq C$, or $\phi=\bot$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
+				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
 				%
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
 				\end{itemize}
 				
-				\item if $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$.
+				\item if $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$.
 				%
             %
             \end{itemize}
@@ -142,6 +143,9 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$ where
 
 \zhilin{stopped here}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{
 Let $A\in\act_\STK$. We define a {\WOTrPDS} $\Pp_{A} = (P, \Gamma_{A}, \TranSet_{A},\Delta_{A} )$, where
 % to simulate the behaviors of the $A'$-task of $\Mm$ for each $A'\in\act_{\STK}$, where
 \begin{itemize}
@@ -182,7 +186,13 @@ Let $A\in\act_\STK$. We define a {\WOTrPDS} $\Pp_{A} = (P, \Gamma_{A}, \TranSet_
 Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarrow{\startactivity(\bot)} A'' \in \Delta$ satisfying the following condition are ignored: $\lmd(A') = \singleinstance$, or $\lmd(A'') = \singleinstance$, or $\lmd(A'') = \singletask$ and $A'' \neq A$. 
 Moreover, if $\lmd(A) = \singleinstance$, according to the definition of $\STK$-dominating $\AMASS$ and $\Qq_A$, we know that $\Delta_A = \{(p_0,A,\epsilon,\tau_\id, p_0)\}$.
 \end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Note that 
+
+We shall use the tuples $(\aname_1 \cdots \aname_k, (\AutB_{1},\cdots,\AutB_{k}))$ such that for each $i \in [k]$, $\Aut_i$ is a $\Pp_{A_i}$-{\WOTrNFA} for some $A_i \in \act_\singletask \cup \act_\singleinstance$ satisfying $\aft(A_i) = \aname_i$, to represent the set of reachable configurations of $\Mm$.  
 
 \begin{definition}[{\WOTrNFA}-representations]
     Given a $k$-ary string relation $R \subseteq (\act^*)^k$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$ such that for every $i \in [n]$ and $j \in [k]$,  $\AutB_{i,j}$ is a {\WOTrNFA} over the alphabet $\act$, moreover, $R = \bigcup \limits_{i \in [n]} \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, 1}) \times \cdots \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, k})$.

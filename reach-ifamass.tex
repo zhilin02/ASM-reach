@@ -1,14 +1,19 @@
 %!TEX root = main.tex
 
- \zhilin{stopped here}
+Let us assume that $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is an $\STK$-dominating $\IFAMASS$, that is, for all activities $A \in \act$, $\lmd(A) = \standard$ and $\aft(A) = \aft(A_0)$, moreover, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, we have $\phi \models \neg \ntkflag$. As a result, there is only one task in each configuration of $\Mm$.
+Nevertheless, the reachability problem of $\Mm$ is far from trivial, since in a transition $A \xrightarrow{\startactivity(\phi)} B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$, if there is at least one occurrence of $B$ in the task, then $B$ will be moved to the top of the task. In other words, the $\rtfflag$ flag requires modifying not only the top symbol of the task, but also the non-top symbols. 
 
-Let us assume that $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is an $\STK$-dominating $\IFAMASS$.
+Our main idea to solve the reachability problem of $\STK$-dominating $\IFAMASS$ is to simulate the behavior of the $\rtfflag$ flag as a transduction on the contents of the task. As mentioned before, {\TrPDS} is a model that extends pushdown systems with transductions, where the closure of transductions is required to be finite. Nevertheless, as we shall see later on, the closure of transductions used to simulate $\rtfflag$ is infinite. To tackle this issue, we introduce a new decidable extension of pushdown systems with transductions, called pushdown system with well-partially-ordered transductions (\WOTrPDS), where the transduction closure can be infinite. 
 
+In the sequel, we first define {\WOTrPDS} and prove the decidability of its reachability problem (Section~\ref{sec-wpotrpds}). Then we show how to utilize {\WOTrPDS} to solve the reachability problem of $\Mm$ (Section~\ref{sec-ifamass-reach}). 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{
 In this case, there is only one task in $\Mm$, then the configuration reachability problem of $\Mm$ is defined as follows: 
 \begin{quote}
 Given an $\NFA$ $\Aut$ over the alphabet $\act$, decide whether $\ConfSet(\Aut)\cap \RConfs(\Mm) \neq \emptyset$.
 \end{quote}
-\hide{
 Recall that the definition of $\STK$-dominating $\IFAMASS$, then we let $\tau= A\xrightarrow{\startactivity(\bot)}B$ and let $\rho = (S_1, \cdots, S_n)$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$,  we define the semantics of $\STK$-dominating $\IFAMASS$ as follows:
 \begin{itemize}
 	\item If $\phi \models\ctpflag$ and $B \in \toptsk(\rho)$, then $\rho' =\clrtop(\rho, B)$,
@@ -22,7 +27,7 @@ Recall that the definition of $\STK$-dominating $\IFAMASS$, then we let $\tau= A
 		\end{itemize}
 	\end{itemize}
 \end{itemize}
-}
+%
 Our approach to tackle the configuration reachability problem of $\Mm$ is to simulate $\Mm$ by an extension of {\TrPDS}, i.e., pushdown systems with well-partially-ordered transductions ({\WOTrPDS}). In {\WOTrPDS}, the closure of transductions admits a basis which is well-partially-ordered with respect to the superset relation.
 Theorem~\ref{thm-wstrpds-reach} shows the regular reachability problem of {\WOTrPDS} is decidable and Section~\ref{sec-proof-reach} proves the configuration reachability problem of $\STK$-dominating $\AMASS$ in this case is decidable.
 
@@ -36,10 +41,10 @@ it is challenging to simulate $\mvacttop$. Given a transition $A\xrightarrow{\st
 %
 \item $\tau_{\not B}$ checks that $B$ does not occur in the input string but keeps the input string unchanged. 
 \end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%
 
-However, such a direct simulation would entail an \emph{infinite} transduction closure:
-$\tau^n_{B, A}$  (where $n \ge 1$), i.e. the $n$-fold composition of $\tau_{B,A}$, is the transduction that removes the first $n$ occurrences of $B$ from the input string and add $n$ $A$'s in the beginning. 
-Therefore, we could not use {\TrPDS} to simulate $\Mm$, 
+\subsection{Pushdown system with well-partially-ordered transductions}\label{sec-wpotrpds}
 
 \begin{definition}[Union-basis of transduction sets]\label{def-ubasis}
 Let $\TranSet$ be a set of transductions and $\Tranbasis \subseteq \TranSet$. Then $\Tranbasis$ is called a \emph{union-basis} of $\TranSet$ if each $\tau \in \TranSet$ is equivalent to a finite union of transductions from $\Tranbasis$ (called a $\Tranbasis$-representation of $\tau$). 
@@ -47,7 +52,7 @@ Let $\TranSet$ be a set of transductions and $\Tranbasis \subseteq \TranSet$. Th
 \end{definition}
 
 %We are ready to define pushdown systems with well-partially-ordered transductions.
-\begin{definition}[Pushdown systems with well-partially-ordered transductions, \WOTrPDS] \label{def:defatpds}
+\begin{definition}[\WOTrPDS] \label{def:defatpds}
     A \emph{pushdown system with well-partially-ordered transductions} (\WOTrPDS) is a tuple $\Pp = (P, \Gamma, \TranSet, \Delta)$, 
     where $P$ is a finite set of $control\ states$, $\Gamma$ is a finite $stack\ alphabet$, $\TranSet \subseteq \UTrans$ is a finite set of letter-to-letter transductions, and $\Delta \subseteq P \times \Gamma \times \Gamma^{\le 2} \times \TranSet \times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\varepsilon\} \cup \Gamma \cup \Gamma \times \Gamma$. In other words, each transition in $\Delta$ is of one of the following forms, $(p, \gamma, \varepsilon, \tau, p')$, $(p, \gamma, \gamma',\tau, p')$, or $(p, \gamma, \gamma'_1 \gamma'_2, \tau, p')$ such that $\gamma, \gamma', \gamma'_1, \gamma'_2 \in \Gamma$ and $\tau \in \TranSet$. 
    Moreover, it is required that there is a union-basis $\Tranbasis \subseteq \langle \TranSet \rangle$ such that 
@@ -163,12 +168,12 @@ introduce a new model, viz., \emph{finite automata with well-partially-ordered t
 Then in Section~\ref{sect:decidability}, we utilize the saturation technique to reduce the regular reachability problem of {\WOTrPDS} %the decidability % by reducing 
 to the intersection problem of {\WOTrNFA} and {\NFA}, which is shown to be decidable in Section~\ref{sec:fatrnfa}.
 
-We prove Theorem~\ref{thm:st-amass-reach} by showing that a {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ can be constructed from a given {\AMASS} $\Mm = (\act, A_0,\lmd,\aft,\Delta)$ to simulate the behaviors of $\Mm$. We show the details in Section~\ref{sec-proof-reach}
+%We prove Theorem~\ref{thm:st-amass-reach} by showing that a {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ can be constructed from a given {\AMASS} $\Mm = (\act, A_0,\lmd,\aft,\Delta)$ to simulate the behaviors of $\Mm$. We show the details in Section~\ref{sec-proof-reach}
 
 
-\subsection{Finite automata with well-partially-ordered transductions}\label{sec-wotrnfa}
+\subsubsection{Finite automata with well-partially-ordered transductions}\label{sec-wotrnfa}
  
-\begin{definition}[Finite automata with well-partially-ordered transductions, {\WOTrNFA}] %[Finite automata with finite ascending chians and antichains transductions]
+\begin{definition}[{\WOTrNFA}] %[Finite automata with finite ascending chians and antichains transductions]
 	Given a {\WOTrPDS} $\Pp=(P, \Gamma, \TranSet, \Delta)$ with $\Tranbasis$ as the union-basis of $\langle \TranSet \rangle$, a $\Pp$-{\WOTrNFA} is a tuple $\Aut =(Q, \Gamma, \delta, I, 
 	F)$,
 	where $Q$ is the set of states such that $P \subseteq Q$, $I\subseteq P\subseteq Q$ is the set of initial states, $F$ is the set of final states,  
@@ -218,7 +223,7 @@ For a $\Pp$-{\WOTrNFA} $\Aut$, $\pre^*_\Pp(\confs(\Aut))$  denotes the set of co
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Saturation} \label{sect:decidability}
+\subsubsection{Saturation} \label{sect:decidability}
 Let $\Pp = (P, \Gamma, \TranSet, \Delta)$ be a  {\WOTrPDS} where $\Tranbasis$, the union-basis of  $\langle \TranSet \rangle$, is a wpo, and let $\Aut = (Q, \Gamma, \delta, I, F)$ be a $\Pp$-{\WOTrNFA}. %We prove Theorem~\ref{thm-wstrpds-reach} by 
 We apply the saturation procedures from \cite{SM+15,Song18} to obtain a $\Pp$-{\WOTrNFA} $\Aut^{\pre^*}_{\Pp}$ (resp. $\Pp$-{\WOTrNFA} $\Aut^{\post^*}_{\Pp}$), which represents $\pre^*_\Pp(\confs(\Aut))$ (resp. $\post^*_\Pp(\confs(\Aut))$).
 
@@ -331,7 +336,7 @@ Then Theorem~\ref{thm-wstrpds-reach} follows from Proposition~\ref{prop-wstrnfa-
 %Here when we add a transition $(p,\gamma,\tau'',p')$ into $\Aa$, if there exists a transition $(p, \gamma,\tau',p')$ in the current automaton, we modify the transition $(p,\gamma,\tau',p')$ to $(p,\gamma,\tau'\cup\tau'',p')$ instead of adding $(p,\gamma,\tau'',p')$.
 
 
-\subsection{The intersection problem of {\WOTrNFA} and {\NFA}} \label{sec:fatrnfa}
+\subsubsection{The intersection problem of {\WOTrNFA} and {\NFA}} \label{sec:fatrnfa}
 %\begin{definition}[{\WOTrNFA}-{\NFA} intersection problem]
 The {\WOTrNFA}-{\NFA} intersection problem is, for given $\Pp$-{\WOTrNFA} $\Aut$ and $\Pp$-{\NFA} $\AutB$, to decide  whether $\ConfSet(\Aut) \cap \ConfSet(\AutB) = \emptyset$. We shall show that this problem %the {\WOTrNFA}-{\NFA} intersection problem to 
 can be reduced to (polynomially many) instances of the sub-covering problem of a downward-WSTS, which is decidable by Theorem~\ref{thm-dwsts}.
@@ -398,21 +403,35 @@ We conclude from Theorem~\ref{thm-dwsts} that the {\WOTrNFA}-{\NFA} intersection
 \end{proof}
 
 
-\subsection{Proof of Theorem~\ref{thm:st-amass-reach}}\label{sec-proof-reach}
-Our idea is to ues {\WOTrPDS} $\Pp_{\Mm}$ to simulate the behaviors fo $\Mm$, recall that we use $\tau_{B, A}$ to simulate $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ with $\phi_{\rtfflag}\models\rtfflag\wedge\neg\ctpflag$.
+\subsection{Solving the reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
+
+While it is relatively easy to simulate the operations $\POP, \PUSH, \STP, \CTP$, %by the transition rules of $\Pp_\Aut$, 
+it is challenging to  simulate $\RTF$. The semantics of $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ requires to move the topmost occurrence of $B$ (if there is any) to the top of the stack. The most direct way to simulate  $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ ans $A \neq B$ is by two transition rules $p \xrightarrow{A / B | \tau_{B, A}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$
+%\jl{this should be $p \xrightarrow{A / BA | \tau_{\not B}} p$}
+(where $p$ is a state in $\Pp_\Aut$), corresponding to the two situations that $B$ occurs/does no occur in the stack, where 
+\begin{itemize}
+\item $\tau_{B, A}$ is the transduction that removes the first occurrence of $B$ from the input string and adds $A$ in the beginning, and
+%
+\item $\tau_{\not B}$ checks that $B$ does not occur in the input string but keeps the input string unchanged. 
+\end{itemize}
+
+%Our idea is to ues {\WOTrPDS} $\Pp_{\Mm}$ to simulate the behaviors fo $\Mm$, recall that we use $\tau_{B, A}$ to simulate $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ with $\phi_{\rtfflag}\models\rtfflag\wedge\neg\ctpflag$.
+
 However, such a direct simulation would entail an \emph{infinite} antichain in the transduction closure: $\tau^n_{B, A}$  (where $n \ge 1$), i.e. the $n$-fold composition of $\tau_{B,A}$, is the transduction that removes the first $n$ occurrences of $B$ from the input string and add $n$ $A$'s in the beginning. It is easy to observe that for every $i, j$ with $i \neq j$, $\tau^i_{B, A}$ and $\tau^j_{B, A}$ are incomparable with respect to $\preceq$, namely, neither $\tau^i_{B, A} \subseteq \tau^j_{B, A}$, nor $\tau^j_{B, A} \subseteq \tau^i_{B, A}$. Therefore, $\tau_{B, A}, \tau^2_{B, A}, \tau^3_{B, A}, \cdots$ comprises an infinite antichain with respect to $\preceq$. 
 
 To ensure that the transduction closure of $\Pp_\Mm$  has a well-partially-ordered union-basis, we
-apply the following tricks: when simulating $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ with $A \neq B$,
+apply the following tricks: when simulating $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ and $A \neq B$,
 \begin{itemize}
 \item instead of moving the first occurrence of $B$ to the beginning of the input string, we replace the first occurrence of $B$ with a dummy symbol $\dag$ and push $B$ into the stack, and
 %
-\item $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ is simulated by the transition rules $p \xrightarrow{A / BA | \tau_{B, \dag}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$, where $\tau_{B, \dag}$ is the transduction that replaces \emph{at least the first occurrence of $B$ with $\dag$}. More precisely, $\tau_{B, \dag}$ nondeterministically chooses some $n \ge 1$ and replaces each of the first $n$ occurrences of $B$ with $\dag$.
+\item $A \xrightarrow{\startactivity(\phi)}B$ is simulated by the transition rules $p \xrightarrow{A / BA | \tau_{B, \dag}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$, where $\tau_{B, \dag}$ is the transduction that replaces \emph{at least the first occurrence of $B$ with $\dag$}. More precisely, $\tau_{B, \dag}$ nondeterministically chooses some $n \ge 1$ and replaces each of the first $n$ occurrences of $B$ with $\dag$.
 \end{itemize}
 %\tl{revisit here}
-The aforementioned tricks are justified by the observation that the transition $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ could be continuously applied for multiple times: Namely, when the topmost occurrence of $B$ is moved to the top of the stack, $B$ can be popped and $A$ becomes the top activity of the stack again. Then the transition $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ can be applied for the second time to move the top second occurrence of $B$  (referring to the original contents of the stack) to the top. Furthermore, this process can be continued if there are still some occurrences of $B$ in the stack. Therefore, the simulation of $A\xrightarrow{\startactivity(\phi_{\rtfflag})}B$ by $p \xrightarrow{A / BA | \tau_{B, \dag}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$ is sound in the sense that it does \emph{not} introduce unreachable configurations.
+The aforementioned tricks are justified by the observation that the transition $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ and $A \neq B$ could be continuously applied for multiple times: Namely, when the topmost occurrence of $B$ is moved to the top of the stack, $B$ can be popped and $A$ becomes the top activity of the stack again. Then the transition $A \xrightarrow{\startactivity(\phi)}B$ can be applied for the second time to move the top second occurrence of $B$  (referring to the original contents of the stack) to the top. Furthermore, this process can be continued if there are still some occurrences of $B$ in the stack. Therefore, the simulation of $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ and $A \neq B$ by $p \xrightarrow{A / BA | \tau_{B, \dag}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$ is sound in the sense that it does \emph{not} introduce unreachable configurations.
 
 %We first show that a  {\ASS} $\Aut = (Act, A_0,\Delta)$ can be simulated by a pushdown system with transductions $\Pp_\Aut = (P_\Aut, \Gamma_\Aut, \TranSet_\Aut, \Delta_\Aut)$. Then we prove that $(\langle \TranSet_\Aut \rangle, \preceq)$ is well-ordered, that is, $\Pp_\Aut$ is a {\WOTrPDS}. The decidability of the configuration reachability problem of {\ASS} then follows from Theorem~\ref{thm-wstrpds-reach}.
+
+\zhilin{stopped here}
 
 \paragraph*{From $\Mm$ to $\Pp_\Mm$} 
 The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where 
@@ -423,17 +442,19 @@ The {\WOTrPDS} $\Pp_\Mm = (P_\Mm, \Gamma_\Mm, \TranSet_\Mm, \Delta_\Mm)$ where
 \item $\Delta_{\Mm}$ is defined as follows:
         \begin{itemize}
             \item for each $A \in \act$, $(p_0, A, \varepsilon, \tau_{\id}, p_0) \in \Delta_{\Mm}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
-			\item for each transition $A\xrightarrow{\startactivity(\phi)}B$, 
+			\item for each transition $A \xrightarrow{\startactivity(\phi)} B$, 
 			\begin{itemize}
-				\item if $\phi\models\stpflag$ and $A\neq B$, or $\phi=\bot$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$, 
-				\item if $\phi\models\ctpflag$, such that $A\neq B$, we have 
+				\item if $\phi \models \ctpflag$, such that $A \neq B$, we have 
 				\begin{itemize}
 					\item $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$, 
 					\item $(p_0, A, \varepsilon, \tau_{B}, p_B) \in \Delta_{\Mm}$, $(p_B, B, B, \tau_{\id}, p_0)  \in \Delta_{\Mm}$, and for each $\gamma \in \Gamma_\Mm \setminus \{B\}$, $(p_B, \gamma, \varepsilon, \tau_{\id}, p_B) \in \Delta_{\Mm}$, 
 				\end{itemize}
-				\item if $\phi\models\rtfflag\wedge\neg\ctpflag$, such that $A\neq B$, we have 
-                we have $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$ 
-                and $(p_0, A, BA, \tau_{B, \dag}, p_0) \in \Delta_{\Mm}$.
+				\item if $\phi\models \neg\ctpflag \wedge \rtfflag$ such that $A \neq B$, we have $(p_0, A, BA, \tau_{\not B}, p_0) \in \Delta_{\Mm}$ 
+                and $(p_0, A, BA, \tau_{B, \dag}, p_0) \in \Delta_{\Mm}$,
+                %
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ and $A \neq B$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$,
+%
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$, we have $(p_0, A, BA, \tau_{\id}, p_0) \in \Delta_{\Mm}$.
 			\end{itemize}
             %
         \end{itemize}
