@@ -140,8 +140,8 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where
             \end{itemize}
         \end{itemize}
 \end{itemize}
+%For a $\Pp_A$-{\WOTrNFA} $\Aut$, let us use $\Lang(\Aut)$ to denote $w \in \act^+$ such that there is $w' \in (\Gamma_A)^+$ satisfying that $w' \in \Lang(\Aut)$ and $prj_{\act}(w') = w$. 
 
-\zhilin{stopped here}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -190,16 +190,23 @@ Moreover, if $\lmd(A) = \singleinstance$, according to the definition of $\STK$-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Note that 
 
-We shall use the tuples $(\aname_1 \cdots \aname_k, (\AutB_{1},\cdots,\AutB_{k}))$ such that for each $i \in [k]$, $\Aut_i$ is a $\Pp_{A_i}$-{\WOTrNFA} for some $A_i \in \act_\singletask \cup \act_\singleinstance$ satisfying $\aft(A_i) = \aname_i$, to represent the set of reachable configurations of $\Mm$.  
+Recall that the configuration reachability problem of an $\AMASS$ $\Mm$ is to decide for a given tuple $(\aname_1 \cdots \aname_k, (\Aut_1,\cdots, \Aut_k))$ where $\Aut_i$ is an {\NFA} for each $i \in [k]$, whether $\confs((\aname_1 \cdots \aname_k, (\Aut_1,\cdots, \Aut_k))) \cap \RConfs(\Mm) \neq \emptyset$. 
+%
+We shall use the tuples $(\aname'_1 \cdots \aname'_l, (\AutB_{1},\cdots,\AutB_{l}))$ to represent the configurations from $\RConfs(\Mm)$, where for each $i \in [l]$, $\Aut_i$ is a $\Pp_{A_i}$-{\WOTrNFA} for some $A_i \in \act_\singletask \cup \act_\singleinstance$ satisfying $\aft(A_i) = \aname_i$.  Note that the alphabet of $\AutB_{j}$ for each $j \in [l]$, that is, $\Gamma_{A_j}$, contains the dummy symbol $\dag$,  while the alphabet of $\Aut_i$  for each $i \in [k]$ is $\act$. If $\RConfs(\Mm)$ can be represented by a finite set of tuples, then the configuration reachability problem is reduced to checking whether there exists a tuple $(\aname_1 \cdots \aname_k, (\AutB_{1},\cdots,\AutB_{k}))$ such that $\Lang(\AutB_i) \cap \Lang(\Aut'_i) \neq \emptyset$ for each $i \in [k]$, where $\Aut'_i$ is obtained from $\Aut_i$ by adding $(q, \dag, q)$ for each state $q$ in it. 
 
-\begin{definition}[{\WOTrNFA}-representations]
-    Given a $k$-ary string relation $R \subseteq (\act^*)^k$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$ such that for every $i \in [n]$ and $j \in [k]$,  $\AutB_{i,j}$ is a {\WOTrNFA} over the alphabet $\act$, moreover, $R = \bigcup \limits_{i \in [n]} \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, 1}) \times \cdots \Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i, k})$.
+As a result, it is sufficient to show that $\RConfs(\Mm)$ enjoys a {\WOTrNFA}-representation, that is, $\RConfs(\Mm)$ can be represented by a finite set of tuples $(\aname'_1 \cdots \aname'_l, (\AutB_{1},\cdots,\AutB_{l}))$. 
+
+\begin{definition}[{\WOTrNFA}-representation]
+    For each $\theta = \aname'_1 \cdots \aname'_l \in \Theta_\Mm$, a {\WOTrNFA}-representation of $\RConfs(\Mm, \theta)$ is $(\AutB_{i, 1},\cdots,\AutB_{i, l})_{i \in [n]}$ such that for every $i \in [n]$ and $j \in [l]$,  $\AutB_{i, j}$ is a $\Pp_{A_j}$-{\WOTrNFA} (where $\aft(A_j) = \aname'_j$), and 
+    $$\RConfs(\Mm, \theta) =\{(\aname'_1 \cdots \aname'_{l}, (w_1, \cdots, w_{l})) \mid  i \in [n], \forall j \in [l].\ w_j \in \Lang(\AutB_{i, j})|_{\act}\}.$$
     % where $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB_{i,j})\}$.
 \end{definition}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{
 Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$.
 
 \hide{
@@ -221,8 +228,6 @@ Then for a configuration $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ where f
 % \end{center}
 
 
-
-
 Let $(\AutB_1,\cdots,\AutB_k)$ be an {\WOTrNFA} tuple over the alphabet $\act\cup\{\dag,\triangleleft\}$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\AutB_1,\cdots,\AutB_k))$.
 
 The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as {\WOTrNFA}-representations defined in the sequel. 
@@ -237,35 +242,27 @@ and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then we define $\
     Given a $k$-ary string relation $R\subseteq\act^k = \bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, a {\WOTrNFA}-representation of $R$ is $\{(\AutB_{i,1},\cdots,\AutB_{i,k})\}_{i\in[n]}$, where $\AutB_{i,j}$ is a {\WOTrNFA} defining $L_{i,j}$, that is, $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = L_{i,j}$.
     % where $\Lang_{\mhcancel{\dag,\triangleleft}}(\AutB_{i,j}) = \{w_1\cdots w_n\mid \dag^*w_1\cdots\dag^*w_n\dag^*\triangleleft\in\Lang(\AutB_{i,j})\}$.
 \end{definition}
-
-    
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
     
     \begin{lemma}\label{lem:amass-recog}
-        For each $\theta \in \Theta_\Mm$, the {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$ can be effectively computed.
+        For each $\theta \in \Theta_\Mm$, a {\WOTrNFA}-representation of $\RConfs(\Mm, \theta)$ can be effectively computed.
     \end{lemma} 
     % We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aut_i\neq\emptyset$ for each $i\in[k]$ with $\Lang(\Aut_i) = \Lang_i$.
+
+\zhilin{stopped here}
     
-    According to Lemma~\ref{lem:amass-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$, say $(\AutB_{\theta, i,1},\cdots,\AutB_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
-    Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$ where $q_f\notin Q$, finally setting $F$ as $\{q_f\}$ and $Q$ as $Q\cup\{q_f\}$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
+%    According to Lemma~\ref{lem:amass-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$, say $(\AutB_{\theta, i,1},\cdots,\AutB_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
+%    Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$ where $q_f\notin Q$, finally setting $F$ as $\{q_f\}$ and $Q$ as $Q\cup\{q_f\}$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
     % Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$, finally replacing $F$ with $\{q_f\}$ for each $j \in [k]$,  then report ``yes'', otherwise, report ``no''.
     
-    % The rest of this section is devoted to the proof of Theorem~\ref{thm:iff-recog}.
-    The rest of this section is devoted to the proof of Lemma~\ref{lem:amass-recog}. We shall distinguish whether $\lmd(A_0) = \STK$ or not. 
-    % The former case is simpler because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the latter, the more general case, the back stack may contain, apart from the tasks rooted at $\STK$ activities, one single task rooted at $A_0$. 
-    We shall consider the two cases in Section~\ref{sec:amass-stk} and Section~\ref{sec:amass-nostk} respectively.
-    
-    %Let us introduce a notation. 
-    
-    
-
-In this case, we prove Lemma~\ref{lem:amass-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
+We prove Lemma~\ref{lem:amass-recog} by showing that $\RConfs(\Mm, \theta)$ can be \emph{saturated by repeatedly applying a finite set of rules}. 
 
 Before presenting the rules, let us introduce several notations. 
 
-
-Since $\TranSet_{A} = \TranSet_{\Mm}$, hence $\Qq_{A}$ is a {WOTrPDS}.
-
-Intuitively, $\Qq_{A}$ simulates the behavior of a task of $\Mm$ where $A$ is already in the bottom of the task. 
+Since $\TranSet_{A} = \TranSet_{\Mm}$, hence $\Pp_{A}$ is a {WOTrPDS}.
+Intuitively, $\Pp_{A}$ simulates the behavior of a task of $\Mm$ where $A$ is already in the bottom of the task. 
 
 
 % By slightly abusing the notation, for a $\Qq_{A}$-{\WOTrNFA} $\AutB$, 

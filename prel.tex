@@ -49,7 +49,7 @@ For instance, the standard ``less than or equal to'' relation $\leq$ is a well-p
 
 
 An alphabet $\Gamma$ is a finite set of letters.  A \emph{string} over $\Gamma$ is a finite sequence of letters from $\Gamma$. In particular, $\varepsilon$ denotes %the empty sequence is called 
-the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (resp. nonempty) strings over $\Gamma$. A \emph{language} $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$.
+the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (resp. nonempty) strings over $\Gamma$. A \emph{language} $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$. Let $w$ be a string over $\Gamma$ and $\Gamma' \subseteq \Gamma$. We use $w |_{\Gamma'}$ to denote the string obtained from $w$ by removing the symbols not in $\Gamma'$. For instance, let $w = a  c b c$ and $\Gamma' = \{a,b\}$, then $w|_{\Gamma'} = ab$. Moreover, for a language $L \subseteq \Gamma^*$ and $\Gamma' \subseteq \Gamma$, we use $L|_{\Gamma'}$ to denote the set of strings $w |_{\Gamma'}$ for $w \in L$. 
  
 \subsection{Nondeterministic finite automata}
 %Fix a finite \emph{alphabet} $\Gamma$. Elements in $\Gamma^*$ are called \emph{strings}. Let $\varepsilon$ denote the empty string and  $\Gamma^+ = \Gamma^* \setminus \{\varepsilon\}$. A \emph{language} is a subset of $\Gamma^*$. Moreover, we also use $\Gamma_\varepsilon$ to denote $\Gamma \cup \{\varepsilon\}$.
