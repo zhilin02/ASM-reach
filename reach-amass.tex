@@ -99,8 +99,15 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 
 In this case, we compute a finite set of {\WOTrNFA} tuples to represent the set of reachable configurations.
 For this purpose, for each $A \in \act_\singletask$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
+Let us fix an $A \in \act_\singletask$. In $\Pp_A$, the transitions of $\Mm$ that keep the $A$-task as the top task will be used. According to the definition of $\singletask$-dominating $\AMASS$, for a transition $B \xrightarrow{\startactivity(\phi)} C$, if $B \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $C \in \act_\singletask \cup \act_\singleinstance$. Therefore, we distinguish between the following situations for the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task. 
+\begin{itemize}
+\item $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$,
+%
+\item $B \in \act_\standard \cup \act_\singletop$ and $C = A$. (Note that according the semantics of $\AMASS$, in this case, no matter what $\phi$ is, all the activities on the top of $A$ will be removed, since $\lmd(A) = \singletask$. In particular, $A$ will not be moved to the top of the stack, even if $\phi \models \rtfflag$.)
+\end{itemize}
+Here we ignore the transitions $A \xrightarrow{\startactivity(\phi)} A$, since it does not change the content of the stack. 
 
-The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where 
+We are ready to present the construction of $\Pp_A$. Let $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where 
 \begin{itemize}
 \item $P_{A} = \{p_0\}\cup\{ p_{B}\mid B \in  \act_\standard \cup \act_\singletop \cup \{A\}\}$,
 \item $\Gamma_{A} = \act_\standard \cup \act_\singletop \cup \{A, \dag\}$, 
@@ -110,13 +117,13 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where
         \begin{itemize}
             \item for each $B \in \Gamma_{A} \setminus \{\dag\}$, $(p_0, B, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
 	    %
-	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task, to construct $\Delta_A$,  specifically, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ such that $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and if $\phi \models \ntkflag$, then $C = A$, 
+	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task, to construct $\Delta_A$, 
 	    %therefore, we distinguish the following two cases: either $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, or $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$, 
-	    (Recall that according to the definition of $\singletask$-dominating $\AMASS$, for a transition $B \xrightarrow{\startactivity(\phi)} C$, if $B \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $C \in \act_\singletask \cup \act_\singleinstance$.)
+	    %
 	    %	    	
 		%	\item for each transition $B \xrightarrow{\startactivity(\phi)} C$ such that if $B \neq A$ and $\phi \models \ntkflag$, then $C = A$, 
 			\begin{itemize}
-				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $\phi \models \neg \ntkflag$, and $C \in \act_\standard \cup \act_\singletop$, then 
+				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$, then 
 				%
 				\begin{itemize}
 				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
@@ -134,12 +141,15 @@ The {\WOTrPDS} $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where
 				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
 				\end{itemize}
 				
-				\item if $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$.
+				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$. 
 				%
             %
             \end{itemize}
         \end{itemize}
 \end{itemize}
+From the construction of $\Pp_A$, we know that in every configuration that are reachable from the configuration $(p_0, A)$, there is exactly one occurrence of $A$ in the stack, moreover,  $A$ is always kept as the bottom symbol of the stack. 
+The fact that $\Pp_{A}$ is a {\WOTrPDS} can be shown similarly to the fact that $\Pp_\Mm$ is a {\WOTrPDS} in Section~\ref{sec:reach-ifamass}.
+Moreover, for $A \in \act_\singleinstance$, we define $\Pp_A = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where $P_A = \{p_0\}$, $\Gamma_A = \{A\}$, $\TranSet_A = \{\tau_{\id}\}$, and $\Delta_A = \{(p_0, A, A, p_0), (p_0, A, \varepsilon, p_0)\}$. Note that $\Pp_A$ can be seen as a {\PDS} since $\TranSet_A = \{\tau_{\id}\}$.
 %For a $\Pp_A$-{\WOTrNFA} $\Aut$, let us use $\Lang(\Aut)$ to denote $w \in \act^+$ such that there is $w' \in (\Gamma_A)^+$ satisfying that $w' \in \Lang(\Aut)$ and $prj_{\act}(w') = w$. 
 
 
@@ -251,30 +261,26 @@ and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then we define $\
     \end{lemma} 
     % We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aut_i\neq\emptyset$ for each $i\in[k]$ with $\Lang(\Aut_i) = \Lang_i$.
 
-\zhilin{stopped here}
     
 %    According to Lemma~\ref{lem:amass-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\WOTrNFA}-representation of $\RLang(\Mm, \theta)$, say $(\AutB_{\theta, i,1},\cdots,\AutB_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
 %    Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$ where $q_f\notin Q$, finally setting $F$ as $\{q_f\}$ and $Q$ as $Q\cup\{q_f\}$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
     % Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\AutB_{\theta, i, j}) \cap \Lang(\Aut_j') \neq \emptyset$ where let $\Aut_j = (Q,\act,\delta,I,F)$, $\Aut_j'$ is obtained from $\Aut_j$ by adding the transitions $(q,\dag,q)$ for every $q\in Q$, then adding the transitions $(q,\triangleleft,q_f)$ for every $q\in F$, finally replacing $F$ with $\{q_f\}$ for each $j \in [k]$,  then report ``yes'', otherwise, report ``no''.
     
-We prove Lemma~\ref{lem:amass-recog} by showing that $\RConfs(\Mm, \theta)$ can be \emph{saturated by repeatedly applying a finite set of rules}. 
+We prove Lemma~\ref{lem:amass-recog} by showing that $\RConfs(\Mm, \theta)$ for each $\theta \in \Theta_\Mm$ can be \emph{saturated by repeatedly applying a finite set of rules}. 
 
 Before presenting the rules, let us introduce several notations. 
 
-Since $\TranSet_{A} = \TranSet_{\Mm}$, hence $\Pp_{A}$ is a {WOTrPDS}.
-Intuitively, $\Pp_{A}$ simulates the behavior of a task of $\Mm$ where $A$ is already in the bottom of the task. 
-
-
-% By slightly abusing the notation, for a $\Qq_{A}$-{\WOTrNFA} $\AutB$, 
-% let us use $\Lang(\AutB(p_0))$ to denote $w \in \act^+$ such that $(p_0, w) \in \conf_{\AutB}$. 
-In the sequel, we define the $\Qq_{A}$-{\WOTrNFA}s $\AutB_{A}$ and $\AutB_{A\rightsquigarrow B}$ for $B \in \Gamma_A$ such that $\Lang(\AutB_A) = \{A\}$ and $\Lang(\AutB_{A\rightsquigarrow B}) =B\act^* \cap \Lang((\AutB_{A})^{\post^*}_{\Qq_A})$. 
+In the sequel, we define the $\Pp_{A}$-{\WOTrNFA}s $\AutB_{A}$ and $\AutB_{A\rightsquigarrow B}$ for $B \in \Gamma_A$ such that $\Lang(\AutB_A) = \{A\}$ and $\Lang(\AutB_{A\rightsquigarrow B}) =B\act^* \cap \Lang((\AutB_{A})^{\post^*}_{\Pp_A})$. 
 \begin{itemize}
     \item $\AutB_{A} = (P', \Gamma_A, \{(p_0, A,\tau_\id, p_f)\},\{p_0\},\{p_f\} )$, where $P' = P \cup \{p_f\} \cup \{\langle p_0,A'\rangle \mid A'\in\Gamma_A\}$ with $p_f \not \in P$.  
     %
-    \item For $B \in \Gamma_A$, $\AutB_{A\rightsquigarrow B}$ is obtained from $(\AutB_{A})^{\post^*}_{\Qq_A}$ by \emph{removing all non-$B$ transitions out of $p_0$}, then removing all transitions that cannot be reached from $p_0$. 
+    \item For $B \in \Gamma_A$, $\AutB_{A\rightsquigarrow B}$ is obtained from $(\AutB_{A})^{\post^*}_{\Pp_A}$ by removing all non-$B$ transitions out of $p_0$, then removing all transitions that cannot be reached from $p_0$. 
 \end{itemize}
 Note that it is possible that $\Lang(\AutB_{A\rightsquigarrow B}) = \emptyset$.
-From the definition of $\Qq_A$, $\AutB_A$, and $\AutB_{A\rightsquigarrow B}$, we know that $\Lang((\AutB_A)^{\post^*}_{\Qq_A}) = \bigcup\limits_{B\in\Gamma_A} \Lang(\AutB_{A\rightsquigarrow B})$ and $\Lang(\AutB_{A\rightsquigarrow A}) = \Lang(\AutB_A)$. 
+From the definitions, it is easy to see that $\Lang((\AutB_A)^{\post^*}_{\Pp_A}) = \bigcup\limits_{B\in\Gamma_A} \Lang(\AutB_{A\rightsquigarrow B})$. Moreover, from the definition of $\Pp_A$, since there is exactly one occurrence of $A$ in the stack and $A$ is always the bottom symbol of the stack, we have $\Lang(\AutB_{A\rightsquigarrow A}) = \Lang(\AutB_A)$. 
+
+
+\zhilin{stopped here}
 
 We are ready to present the procedure that computes effectively $\AutReach$, a finite set of pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$ where each of $\AutB_i$'s are of the form $\AutB_{A\rightsquigarrow B}$ for $A \in \act_\singletask\cup\act_\singleinstance$ and $B \in \Gamma_A$, by repeatedly applying a finite set of saturation rules, such that
 \[\RConfs(\Mm) = \bigcup \limits_{(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k)) \in \AutReach} \confs_{\mhcancel{\dag,\triangleleft}}((\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))).\]
