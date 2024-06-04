@@ -6,7 +6,7 @@ Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $
 
 A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}-\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
 Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \singletask$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
-To resolve this problem, we propose a new idea by \emph{focusing on the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. 
+To resolve this problem, we propose a new idea by \emph{focusing on the evolvement of the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. By doing this, we can apply the saturation rules to compute a {\WOTrNFA} from the {\WOTrPDS} for the main task, thus avoiding removing transitions from {\WOTrNFA}s.
 
 In the sequel, we first consider the simpler case $\lmd(A_0) = \singletask$, then consider the case $\lmd(A_0) \neq \singletask$.
 
@@ -279,11 +279,11 @@ In the sequel, we define the $\Pp_{A}$-{\WOTrNFA}s $\AutB_{A}$ and $\AutB_{A\rig
 Note that it is possible that $\Lang(\AutB_{A\rightsquigarrow B}) = \emptyset$.
 From the definitions, it is easy to see that $\Lang((\AutB_A)^{\post^*}_{\Pp_A}) = \bigcup\limits_{B\in\Gamma_A} \Lang(\AutB_{A\rightsquigarrow B})$. Moreover, from the definition of $\Pp_A$, since there is exactly one occurrence of $A$ in the stack and $A$ is always the bottom symbol of the stack, we have $\Lang(\AutB_{A\rightsquigarrow A}) = \Lang(\AutB_A)$. 
 
+We are ready to present the procedure that computes effectively $\AutReach$, a finite set of pairs $(\aname'_1 \cdots \aname'_l, (\AutB_1, \cdots, \AutB_l))$ where each of $\AutB_i$'s is of the form $\AutB_{A\rightsquigarrow B}$ for $A \in \act_\singletask\cup\act_\singleinstance$ and $B \in \Gamma_A$, by repeatedly applying a finite set of saturation rules, such that
+for each $\theta = \aname'_1 \cdots \aname'_{l} \in \Theta_\Mm$, 
+$$\RConfs(\Mm, \theta) =\bigcup \limits_{(\theta, (\AutB_1, \cdots, \AutB_l)) \in \AutReach} \left\{(\theta, (w_1, \cdots, w_{l})) \mid \forall j \in [l].\ w_j \in \Lang(\AutB_{j})|_{\act} \right\}.$$
 
-\zhilin{stopped here}
-
-We are ready to present the procedure that computes effectively $\AutReach$, a finite set of pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$ where each of $\AutB_i$'s are of the form $\AutB_{A\rightsquigarrow B}$ for $A \in \act_\singletask\cup\act_\singleinstance$ and $B \in \Gamma_A$, by repeatedly applying a finite set of saturation rules, such that
-\[\RConfs(\Mm) = \bigcup \limits_{(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k)) \in \AutReach} \confs_{\mhcancel{\dag,\triangleleft}}((\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))).\]
+%\[\RConfs(\Mm) = \bigcup \limits_{(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k)) \in \AutReach} \confs_{\mhcancel{\dag,\triangleleft}}((\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))).\]
 
 Initially, let $\AutReach := \{(\aft(A_0),(\Aut_{A_0}))\}$.
 Then it adds pairs to $\AutReach$, according to the following saturation rules, until no more pairs can be added. 
@@ -294,22 +294,22 @@ Then it adds pairs to $\AutReach$, according to the following saturation rules, 
 \begin{minipage}{0.9\textwidth}
 \begin{enumerate}
     %
-    \item If $A \xrightarrow{\startactivity(\phi)}A' \in\Delta$, $\lmd(A')=\STK$ or $\singleinstance$, $(\theta, (\AutB_1,\cdots,\AutB_k)) \in \AutReach$ such that $\Lang(\AutB_1) \neq \emptyset$ and $\AutB_1 = \AutB_{B\rightsquigarrow A}$ for some $B \in \act_\singletask\cup\act_\singleinstance$, moreover, $\namefun_{A'}(\theta) = \bot$,
-    then let $\AutReach: = \AutReach \cup \{(\aft(A')\theta, (\AutB_{A'},\AutB_1,\cdots,\AutB_k))\}$.
+    \item If $A \xrightarrow{\startactivity(\phi)}A' \in\Delta$, $\lmd(A')=\STK$ or $\singleinstance$, $(\aname'_1 \cdots \aname'_l, (\AutB_1,\cdots,\AutB_l)) \in \AutReach$ such that $\Lang(\AutB_1) \neq \emptyset$ and $\AutB_1 = \AutB_{B\rightsquigarrow A}$ for some $B \in \act_\singletask\cup\act_\singleinstance$, moreover, $\namefun_{A'}(\aname'_1 \cdots \aname'_l) = \bot$,
+    then let $\AutReach: = \AutReach \cup \{(\aft(A')\aname'_1 \cdots \aname'_l, (\AutB_{A'},\AutB_1,\cdots,\AutB_k))\}$.
     % where $\AutB_1'$ is obtained from $\AutB_1$ by 
     % removing all non-$A$ transitions out of $p_0$, then removing all transitions cannot be reached from $p_0$.
         \textbf{[launch an $A'$-task]}
 
-    \item If $A \xrightarrow{\startactivity(\phi)}A' \in\Delta$, $\lmd(A')=\STK$ or $\singleinstance$, $(\theta, (\AutB_1,\cdots,\AutB_k)) \in \AutReach$ such that $\Lang(\AutB_1) \neq \emptyset$ and $\AutB_1 = \AutB_{B\rightsquigarrow A}$ for some $B \in \act_\singletask\cup\act_\singleinstance$, moreover, $\namefun_{A'}(\theta) = i$ for some $i \in [k]$ with $i > 1$, 
-        then let $\AutReach:= \AutReach \cup \{(\theta', (\AutB_{A'}, \AutB_1, \cdots,\AutB_{i-1},\AutB_{i+1},\cdots,\AutB_{k}))\}$, where $\theta' = \aname_i\aname_1\dots\aname_{i-1}\aname_{i+1}\dots\aname_k$. 
+    \item If $A \xrightarrow{\startactivity(\phi)}A' \in\Delta$, $\lmd(A')=\STK$ or $\singleinstance$, $(\aname'_1 \cdots \aname'_l, (\AutB_1,\cdots,\AutB_l)) \in \AutReach$ such that $\Lang(\AutB_1) \neq \emptyset$ and $\AutB_1 = \AutB_{B\rightsquigarrow A}$ for some $B \in \act_\singletask\cup\act_\singleinstance$, moreover, $\namefun_{A'}(\theta) = i$ for some $i \in [l]$ with $i > 1$, 
+        then let $\AutReach:= \AutReach \cup \{(\theta', (\AutB_{A'}, \AutB_1, \cdots,\AutB_{i-1},\AutB_{i+1},\cdots,\AutB_{l}))\}$, where $\theta' = \aname'_i\aname'_1\dots\aname'_{i-1}\aname'_{i+1}\dots\aname'_l$. 
         % and $\AutB_1'$ is obtained from $\AutB_1$ by removing all non-$A$ transitions out of $p_0$, then removing all transitions cannot be reached from $p_0$.
         \textbf{[escalate the $A'$-task to be the top and reset its content to $[A']$]}
         %
-    \item If $(\aname_1 \cdots \aname_k, (\AutB_1,\cdots,\AutB_k)) \in \AutReach$ and $k>1$, then let $\AutReach := \AutReach \cup \{(\aname_2\dots\aname_k, (\AutB_2,\cdots,\AutB_k))\}$.
+    \item If $(\aname'_1 \cdots \aname'_l, (\AutB_1,\cdots,\AutB_l)) \in \AutReach$ and $l>1$, then let $\AutReach := \AutReach \cup \{(\aname'_2\dots\aname'_l, (\AutB_2,\cdots,\AutB_l))\}$.
         \textbf{[pop all activities in the top task]}
 %
-    \item If $(\theta, (\AutB_1,\cdots,\AutB_k)) \in \AutReach$, $\AutB_1 = \AutB_{A\rightsquigarrow B}$ for some $A\in\act_{\STK}\cup\act_{\SIT}$ and $B \in \Gamma_A$, and $B'  \in \Gamma_A$ such that $\Lang(\AutB_{A\rightsquigarrow B'}) \neq \emptyset$, then let 
-    $\AutReach := \AutReach \cup \{(\theta, (\AutB_{A\rightsquigarrow B'}, \AutB_2,\cdots,\AutB_k))\}$. 
+    \item If $(\aname'_1 \cdots \aname'_l, (\AutB_1,\cdots,\AutB_l)) \in \AutReach$, $\AutB_1 = \AutB_{A\rightsquigarrow B}$ for some $A\in\act_{\STK}\cup\act_{\SIT}$ and $B \in \Gamma_A$, and $B'  \in \Gamma_A$ such that $\Lang(\AutB_{A\rightsquigarrow B'}) \neq \emptyset$, then let 
+    $\AutReach := \AutReach \cup \{(\aname'_1 \cdots \aname'_l, (\AutB_{A\rightsquigarrow B'}, \AutB_2,\cdots,\AutB_l))\}$. 
     % then adds the tuple $(\theta, (\AutB_1^{\post^*},\AutB_2,\cdots,\AutB_k))$ to $\AutReach$.
 %    such that $\AutB_1 = \AutB_A^B$ for some $A\in\act_{\STK},B\in\act$, then adds the tuple $(\theta, (\AutB_A^{B'},\AutB_2,\cdots,\AutB_k))$ to $\AutReach$ for each $B'\in\act$ with $\Lang(\AutB_A^{B'})\neq\emptyset$.
         \textbf{[simulate the behaviors of the top task]}
@@ -322,10 +322,41 @@ Then it adds pairs to $\AutReach$, according to the following saturation rules, 
 The aforementioned procedure terminates since $\Theta_\Mm$ is finite and the set of {\NFA}s $\Aut_{A\rightsquigarrow B}$ occurring in $\AutReach$ is finite.
 Let $\AutReach_f$ denote the value of $\AutReach$ when the aforementioned procedure terminates. 
 
-The proof of Lemma~\ref{lem:amass-recog} is similar to the proof of Lemma~\ref{lem:iff-recog}.
-
+Since Lemma~\ref{lem:amass-recog} can be proved similarly to Lemma~\ref{lem:iff-recog}, its proof is omitted. 
 
 \subsection{The case $\lmd(A_0) \neq \STK$}\label{sec:amass-nostk}
+
+As mentioned before, in this case, we focus on the evolvement of the main task, construct a {\WOTrPDS} $\Pp_{\Mm}$ for it, and abstract the contents of the other tasks into the control states of $\Pp_{\Mm}$. 
+
+Note that from a configuration where the main task (i.e. the $A_0$-task) is the top task, we may move a non-main task to the top, then keep modifying the non-main tasks, and eventually return to the main task again (that is, the main task becomes the top task again). Let us call this task-switching process as $A_0;\mhcancel{A_0};A_0$ \emph{switchings}. If we focus on the evolvement of the main task, then we need summarize the effects of the $A_0;\mhcancel{A_0};A_0$ \emph{switchings} into the transitions of $\Pp_{\Mm}$.
+In the sequel, we show how this can be done. 
+
+%Let us first formally define the concept of $A_0;\mhcancel{A_0};A_0$ \emph{switchings}. 
+Formally, an $A_0;\mhcancel{A_0};A_0$ \emph{switching} denotes a path in $\xrightarrow[\Mm]{}$ where the $A_0$-task is on the top in the \emph{first} and \emph{last} configuration, and in all the \emph{intermediate} configurations, the $A_0$-task is \emph{not} the top task. 
+%
+%The main idea of the construction is to simulate the $A_0;\mhcancel{A_0};A_0$ switching by a "macro"-transition of $\Pp_{\Mm}$. 
+Note that the $A_0$-task regains the top task in the last configuration either by starting the activity $A_0'$ or by emptying the tasks above the $A_0$-task. Suppose that, for an $A_0;\mhcancel{A_0};A_0$ switching, $\alpha$ (resp. $\beta$) is the abstraction of the non-$A_0$-tasks in the first (resp. last) configuration. 
+Then this $A_0;\mhcancel{A_0};A_0$ switching will be simulated by a "macro"-transition of $\Pp_{\Mm}$, where the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Pp_{\Mm}$ is updated accordingly. 
+Specifically, the stack content of $\Pp_{\Mm}$ is updated as follows. 
+\begin{itemize}
+    \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by starting the activity $A_0'$, say with the transition $A\xrightarrow{\startactivity(\phi)}A_0'$, (in this case, the switching is called an \emph{active} switching), then
+    \begin{itemize}
+        \item if $\phi \models \ctkflag$, all the symbols in the stack will be popped and $A_0'$ will be pushed into the stack,
+        \item otherwise, $A_0'$ will be pushed into the stack if the $A_0$-task does not contain $A_0'$, and all the symbols above $A_0'$ will be popped otherwise.
+    \end{itemize}
+%
+    \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by popping empty all the tasks on top of the $A_0$-task (in this case, the switching is called a \emph{passive} switching), then the content of the stack stays unchanged.
+%        
+\end{itemize}
+
+To define the abstractions of the non-$A_0$-tasks, we can ignore the $A_0$-task and imagine that the bottom activity of every task is either from $\act_{\singletask}$ or $\act_{\singleinstance}$.  Then we represent the set of reachable configurations (where the content of the $A_0$-task is ignored) as pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, similarly to the case that $\lmd(A_0) = \singletask$. 
+
+Therefore, we define the set of abstractions of the non-$A_0$-tasks, denoted by $\abs_{\mhcancel{A_0}}$, as the set of pairs 
+\[(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))\]
+such that $\aname_1 \cdots \aname_k$ is a sequence of mutually distinct affinities from $\aft((\act_{\singletask} \cup \act_{\singleinstance}) \setminus \{A'_0\})$, and for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$. (Note that $\Pp_{A_i}$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}.) 
+
+\zhilin{stopped here}
+
 
 
 Our idea is to construct a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then it could recognize different contents of $A_0$-task according to the contents of non-$A_0$-tasks.
