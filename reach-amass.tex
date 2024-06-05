@@ -5,10 +5,10 @@ Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent fl
 Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
 
 A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}-\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
-Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \singletask$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
+Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
 To resolve this problem, we propose a new idea by \emph{focusing on the evolvement of the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. By doing this, we can apply the saturation rules to compute a {\WOTrNFA} from the {\WOTrPDS} for the main task, thus avoiding removing transitions from {\WOTrNFA}s.
 
-In the sequel, we first consider the simpler case $\lmd(A_0) = \singletask$, then consider the case $\lmd(A_0) \neq \singletask$.
+In the sequel, we first consider the simpler case $\lmd(A_0) = \STK$ or $\SIT$, then consider the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -95,11 +95,16 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 % However, if we do not delete the transitions from $\Aut$, it may recognize some unreachable configurations from the initial configuration. Since the content of $A_0$-task is relevant to the non-$A_0$-tasks. 
 
 
-\subsection{The case $\lmd(A_0) = \STK$}\label{sec:amass-stk}
+\subsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:amass-stk}
 
 In this case, we compute a finite set of {\WOTrNFA} tuples to represent the set of reachable configurations.
-For this purpose, for each $A \in \act_\singletask$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
-Let us fix an $A \in \act_\singletask$. In $\Pp_A$, the transitions of $\Mm$ that keep the $A$-task as the top task will be used. According to the definition of $\singletask$-dominating $\AMASS$, for a transition $B \xrightarrow{\startactivity(\phi)} C$, if $B \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $C \in \act_\singletask \cup \act_\singleinstance$. Therefore, we distinguish between the following situations for the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task. 
+For this purpose, for each $A \in \act_\singletask \cup \singleinstance$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
+
+If $\lmd(A) = \SIT$, then we define a {\WOTrPDS} $\Pp_A  = (P_A, \Gamma_A, \TranSet_A, \Delta_A)$, where $P_A = \{p_0\}$, $\Gamma_A = \{A\}$, $\TranSet_A = \{\tau_{\id}\}$, and $\Delta_A = \{(p_0, A, \epsilon, p_0)\}$. Note that $\Pp_A$ is actually a {\PDS}. 
+
+In the sequel, let us assume that $\lmd(A) = \STK$. 
+
+In $\Pp_A$, the transitions of $\Mm$ that keep the $A$-task as the top task will be used. According to the definition of $\singletask$-dominating $\AMASS$, for a transition $B \xrightarrow{\startactivity(\phi)} C$, if $B \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $C \in \act_\singletask \cup \act_\singleinstance$. Therefore, we distinguish between the following situations for the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task. 
 \begin{itemize}
 \item $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$,
 %
@@ -324,11 +329,13 @@ Let $\AutReach_f$ denote the value of $\AutReach$ when the aforementioned proced
 
 Since Lemma~\ref{lem:amass-recog} can be proved similarly to Lemma~\ref{lem:iff-recog}, its proof is omitted. 
 
-\subsection{The case $\lmd(A_0) \neq \STK$}\label{sec:amass-nostk}
+\subsection{The case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$}\label{sec:amass-nostk}
 
 As mentioned before, in this case, we focus on the evolvement of the main task, construct a {\WOTrPDS} $\Pp_{\Mm}$ for it, and abstract the contents of the other tasks into the control states of $\Pp_{\Mm}$. 
 
-Note that from a configuration where the main task (i.e. the $A_0$-task) is the top task, we may move a non-main task to the top, then keep modifying the non-main tasks, and eventually return to the main task again (that is, the main task becomes the top task again). Let us call this task-switching process as $A_0;\mhcancel{A_0};A_0$ \emph{switchings}. If we focus on the evolvement of the main task, then we need summarize the effects of the $A_0;\mhcancel{A_0};A_0$ \emph{switchings} into the transitions of $\Pp_{\Mm}$.
+Let $A'_0$ be the unique activity such that $\lmd(A'_0) = \singletask$ and $\aft(A'_0) = \aft(A_0)$.  
+
+From a configuration where the main task (i.e. the $A_0$-task) is the top task, we may move a non-main task to the top, then keep modifying the non-main tasks, and eventually return to the main task again (that is, the main task becomes the top task again). Let us call this task-switching process as $A_0;\mhcancel{A_0};A_0$ \emph{switchings}. If we focus on the evolvement of the main task, then we need summarize the effects of the $A_0;\mhcancel{A_0};A_0$ \emph{switchings} into the transitions of $\Pp_{\Mm}$.
 In the sequel, we show how this can be done. 
 
 %Let us first formally define the concept of $A_0;\mhcancel{A_0};A_0$ \emph{switchings}. 
@@ -349,13 +356,74 @@ Specifically, the stack content of $\Pp_{\Mm}$ is updated as follows.
 %        
 \end{itemize}
 
-To define the abstractions of the non-$A_0$-tasks, we can ignore the $A_0$-task and imagine that the bottom activity of every task is either from $\act_{\singletask}$ or $\act_{\singleinstance}$.  Then we represent the set of reachable configurations (where the content of the $A_0$-task is ignored) as pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, similarly to the case that $\lmd(A_0) = \singletask$. 
+To define the abstractions of the non-$A_0$ tasks, we can ignore the $A_0$-task and imagine that the bottom activity of every task is either from $\act_{\singletask}$ or $\act_{\singleinstance}$.  Then we represent the set of reachable configurations (where the content of the $A_0$-task is ignored) as pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, similarly to the case that $\lmd(A_0) = \singletask$. 
 
 Therefore, we define the set of abstractions of the non-$A_0$-tasks, denoted by $\abs_{\mhcancel{A_0}}$, as the set of pairs 
 \[(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))\]
-such that $\aname_1 \cdots \aname_k$ is a sequence of mutually distinct affinities from $\aft((\act_{\singletask} \cup \act_{\singleinstance}) \setminus \{A'_0\})$, and for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$. (Note that $\Pp_{A_i}$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}.) 
+such that 
+\begin{itemize}
+\item $\aname_1 \cdots \aname_k$ is a sequence of mutually distinct affinities from $\aft((\act_{\singletask} \cup \act_{\singleinstance}) \setminus \{A'_0\})$, and 
+\item for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$, 
+\end{itemize}
+where $\Pp_{A_i} = (P_{A_i}, \Gamma_{A_i}, \TranSet_{A_i}, \Delta_{A_i})$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}.
+
+Let $A$ be the top activity of the $A_0$-task and $\alpha \in \abs_{\mhcancel{A_0}}$ be the abstraction of the current contents of the non-$A_0$ tasks. For constructing $\Pp_{\Mm}$, we would like to know which abstractions $\beta$ of the non-$A_0$ tasks can be reached after an $A_0;\mhcancel{A_0};A_0$ switching. Moreover, if the switching is active, namely, through a transition $B \xrightarrow{\startactivity(\phi')} A'_0$, then $\phi'$ determines how the content of the $A_0$-task evolves. Therefore, we shall compute for a given $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$, a set $\reach(A, \alpha)$ that comprises the following pairs, 
+\begin{itemize}
+\item the pairs $(\beta, \phi')$ such that $\beta$ is reached from $\alpha$ by an active $A_0;\mhcancel{A_0};A_0$ switching, where in the first configuration, $A$ is the top activity of the $A_0$-task and $\alpha$ is the abstraction of the non-$A_0$ tasks, and in the last configuration, $\beta$ is the abstraction of the non-$A_0$ tasks, moreover, a transition $B \xrightarrow{\startactivity(\phi')} A'_0$ is used to return to the $A_0$-task for some $B$,  
+%
+\item the pairs $(\beta, \bot)$ such that $\beta$ is reached from $\alpha$ by a passive $A_0;\mhcancel{A_0};A_0$ switching, where in the first configuration, $A$ is the top activity of the $A_0$-task and $\alpha$ is the abstraction of the non-$A_0$ tasks, and in the last configuration, $\beta$ is the abstraction of the non-$A_0$ tasks. 
+\end{itemize}
+
+In the sequel, we first assume that $\reach(A, \alpha)$ can be computed for $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$ and construct $\Pp_\Mm$. Then we show how to compute $\reach(A, \alpha)$. 
+
+\paragraph*{Construction of $\Pp_\Mm$} 
+We first define a {\WOTrPDS} $\Pp'_{A_0}$ that simulate the transitions of $\Mm$ that modifies only the content of the $A_0$-task. Then we add to $\Pp'_{A_0}$ the ``macro'' transitions that simulate the $A_0;\mhcancel{A_0};A_0$ switchings, to construct $\Pp_\Mm$.  
+
+Because the bottom activity of the $A_0$-task is $A_0$ such that $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, the construction of $\Pp'_{A_0}$ is slightly more involved than that of $\Pp_A$ for $A \in \act_\singletask$ in Section~\ref{sec:amass-stk}. In particular, we use two states $p_0, p_1$ to distinguish between whether $A'_0$ is in the stack or not. Moreover, in order to simulate the behaviors of the transitions $B \xrightarrow{\startactivity(\phi)} A'_0$ with $\phi \models \CTK$, where the stack is emptied before $A'_0$ is pushed, we introduce an additional symbol $\triangleleft$ to act as the bottom symbol of the stack and an additional state $p_{\sf ctk}$ for clearing the stack. 
 
 \zhilin{stopped here}
+
+Formally, the {\WOTrPDS} $\Pp'_{A_0}$ is defined as $(P_{A_0}, \Gamma_{A_0}, \TranSet_{A_0}, \Delta_{A_0})$, where 
+\begin{itemize}
+\item $P_{A_0} = \{p_0, p_1\}\cup\{ p_{B,0}, p_{B,1} \mid B \in  \act_\standard \cup \act_\singletop\} \cup \{p_{A'_0,1}, p_{\sf ctk}\}$,
+\item $\Gamma_{A} = \act_\standard \cup \act_\singletop \cup \{A, \dag\}$, 
+\item $\TranSet_A = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act_\standard \cup \act_\singletop \} \cup \{\tau_{B} \mid B \in \act_\standard \cup \act_\singletop\}  \cup \{\tau_{\not B} \mid B \in \act_\standard \cup \act_\singletop\}$, 
+%where $\tau_B$ (resp. $\tau_{\not B}$) is the transduction that checks that $B$ occurs (resp. does not occur) in the input string but keeps the input string unchanged, and 
+\item $\Delta_{A}$ is defined as follows:
+        \begin{itemize}
+            \item for each $B \in \Gamma_{A} \setminus \{\dag\}$, $(p_0, B, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
+	    %
+	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task, to construct $\Delta_A$, 
+	    %therefore, we distinguish the following two cases: either $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, or $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$, 
+	    %
+	    %	    	
+		%	\item for each transition $B \xrightarrow{\startactivity(\phi)} C$ such that if $B \neq A$ and $\phi \models \ntkflag$, then $C = A$, 
+			\begin{itemize}
+				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$, then 
+				%
+				\begin{itemize}
+				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
+				\begin{itemize}
+					\item $(p_0, C, CB, \tau_{\not C}, p_0) \in \Delta_{A}$, 
+					\item $(p_0, B, \varepsilon, \tau_{C}, p_C) \in \Delta_{A}$, $(p_C, C, C, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{C\}$, $(p_C, \gamma, \varepsilon, \tau_{\id}, p_C) \in \Delta_{A}$, 
+				\end{itemize}
+%
+				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  
+                we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
+                and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
+%
+				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
+				%
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
+				\end{itemize}
+				
+				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$. 
+				%
+            %
+            \end{itemize}
+        \end{itemize}
+\end{itemize}
+
 
 
 

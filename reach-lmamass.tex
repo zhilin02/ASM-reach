@@ -16,7 +16,7 @@
 %    \end{itemize}
 %\end{itemize}
 
-Let us assume that $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ is an $\singletask$-dominating $\LMAMASS$.
+Let us assume that $\Mm=(\act, A_0, \lmd, \aft, \Delta)$ is an $\singletask$-dominating $\LMAMASS$.
 
 We show how to solve the configuration reachability problem of $\Mm$.  
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. 
@@ -60,17 +60,17 @@ We shall consider the two cases in Section~\ref{sec:lmamass-stk} and Section~\re
 %Let us introduce a notation. 
 
 
-\subsection{The case $\lmd(A_0) = \STK$}\label{sec:lmamass-stk}
+\subsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:lmamass-stk}
 
 In this case, we prove Lemma~\ref{lem:iff-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
 
 Before presenting the rules, let us introduce several notations. 
 
-Let $A \in \act_\singletask\cup\act_{\singleinstance}$. 
-We define a {\PDS} $\Pp_{A} = (P, \Gamma_{A}, \Delta_{A})$, where 
+Let $A \in \act_\singletask$. 
+We define a {\PDS} $\Pp_{A} = (P_A, \Gamma_{A}, \Delta_{A})$, where 
 \begin{itemize}
-\item $P = \{p_0, p_{\pop}\}$, 
-\item $\Gamma_{A} = \act_{\standard}\cup\act_{\singletop}\cup\{A\}$ if $\lmd(A) = \singletask$, $\Gamma_{A} = \{A\}$ otherwise.
+\item $P_A = \{p_0, p_{\pop}\}$, 
+\item $\Gamma_{A} = \act_{\standard} \cup \act_{\singletop} \cup \{A\}$ if $\lmd(A) = \singletask$.
 \item $\Delta_{A}$ is defined as follows: 
 \begin{itemize}
 %\item $(p_1, A, p_1) \in \Delta_A$. 
@@ -84,16 +84,18 @@ We define a {\PDS} $\Pp_{A} = (P, \Gamma_{A}, \Delta_{A})$, where
     \item if $\lmd(A) = \singletask$, $A' \neq A$ and $A'' = A$, then $(p_0, A', \epsilon, p_{\pop}) \in \Delta_{A}$, and for each $B \in \Gamma_{A} \setminus \{A\}$, $(p_{\pop}, B, \epsilon, p_{\pop}) \in \Delta_{A}$, moreover, $(p_{\pop}, A, A, p_0) \in \Delta_{A}$. (Intuitively, these transition rules simulate the action of popping the task until reaching an instance of $A$. )
 \end{itemize}
 \end{itemize}
-Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarrow{\startactivity(\bot)} A'' \in \Delta$ satisfying the following condition are ignored: $\lmd(A') = \singleinstance$, or $\lmd(A'') = \singleinstance$, or $\lmd(A'') = \singletask$ and $A'' \neq A$. 
-Moreover, if $\lmd(A) = \singleinstance$, according to the definition of $\STK$-dominating $\LMAMASS$ and $\Pp_A$, we know that $\Delta_A = \{(p_0,A,\epsilon,p_0)\}$.
+Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarrow{\startactivity(\bot)} A'' \in \Delta_A$ satisfying the following condition are ignored: $\lmd(A') = \singleinstance$, or $\lmd(A'') = \singleinstance$, or $\lmd(A'') = \singletask$ and $A'' \neq A$. 
 \end{itemize}
 Intuitively, $\Pp_{A}$ simulates the behavior of a task of $\Mm$ where $A$ is already in the bottom of the task. 
+
+Moreover, for $A \in \act$ such that $\lmd(A) = \singleinstance$, we define $\Pp_A  = (P_A, \Gamma_A, \Delta_A)$, where $P_A = \{p_0\}$, $\Gamma_A = \{A\}$, and $\Delta_A = \{(p_0, A, \epsilon, p_0)\}$.
+
 
 
 %By slightly abusing the notation, for a $\Pp_{A}$-{\NFA} $\Aut$ where $p_0$ is the only initial state, let us use $\Lang(\Aut)$ to denote $w \in \act^+$ such that $(p_0, w) \in \conf_{\Aut}$. 
 In the sequel, we define the $\Pp_{A}$-{\NFA}s $\Aut_{A}$ and $\Aut_{A\rightsquigarrow B}$ for $B \in \Gamma_A$ such that $\Lang(\Aut_A) = \{A\}$ and $\Lang(\Aut_{A\rightsquigarrow B}) =B\act^* \cap \Lang((\Aut_{A})^{\post^*}_{\Pp_A})$. 
 \begin{itemize}
-    \item $\Aut_{A} = (P', \Gamma_A, \{(p_0, A, p_f)\},\{p_0\},\{p_f\} )$, where $P' = P \cup \{p_f\} \cup \{\langle p_0,A'\rangle \mid A'\in\Gamma_A\}$ with $p_f \not \in P$.  
+    \item $\Aut_{A} = (P', \Gamma_A, \{(p_0, A, p_f)\},\{p_0\},\{p_f\} )$, where $P' = P_A \cup \{p_f\} \cup \{\langle p_0,A'\rangle \mid A'\in\Gamma_A\}$ with $p_f \not \in P_A$.  
     %
     \item For $B \in \Gamma_A$, $\Aut_{A\rightsquigarrow B}$ is obtained from $(\Aut_{A})^{\post^*}_{\Pp_A}$ by \emph{removing all non-$B$ transitions out of $p_0$}, then removing all transitions that cannot be reached from $p_0$. 
 \end{itemize}
