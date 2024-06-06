@@ -131,17 +131,17 @@ We are ready to present the construction of $\Pp_A$. Let $\Pp_A = (P_A, \Gamma_A
 				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$, then 
 				%
 				\begin{itemize}
-				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
+				\item if $\phi \models \ctpflag$ and $B \neq C$, then we have 
 				\begin{itemize}
 					\item $(p_0, C, CB, \tau_{\not C}, p_0) \in \Delta_{A}$, 
 					\item $(p_0, B, \varepsilon, \tau_{C}, p_C) \in \Delta_{A}$, $(p_C, C, C, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{C\}$, $(p_C, \gamma, \varepsilon, \tau_{\id}, p_C) \in \Delta_{A}$, 
 				\end{itemize}
 %
-				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  
+				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  then
                 we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
                 and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
 %
-				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
+				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, then we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
 				%
 				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
 				\end{itemize}
@@ -381,50 +381,96 @@ We first define a {\WOTrPDS} $\Pp'_{A_0}$ that simulate the transitions of $\Mm$
 
 Because the bottom activity of the $A_0$-task is $A_0$ such that $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, the construction of $\Pp'_{A_0}$ is slightly more involved than that of $\Pp_A$ for $A \in \act_\singletask$ in Section~\ref{sec:amass-stk}. In particular, we use two states $p_0, p_1$ to distinguish between whether $A'_0$ is in the stack or not. Moreover, in order to simulate the behaviors of the transitions $B \xrightarrow{\startactivity(\phi)} A'_0$ with $\phi \models \CTK$, where the stack is emptied before $A'_0$ is pushed, we introduce an additional symbol $\triangleleft$ to act as the bottom symbol of the stack and an additional state $p_{\sf ctk}$ for clearing the stack. 
 
-\zhilin{stopped here}
-
 Formally, the {\WOTrPDS} $\Pp'_{A_0}$ is defined as $(P_{A_0}, \Gamma_{A_0}, \TranSet_{A_0}, \Delta_{A_0})$, where 
 \begin{itemize}
-\item $P_{A_0} = \{p_0, p_1\}\cup\{ p_{B,0}, p_{B,1} \mid B \in  \act_\standard \cup \act_\singletop\} \cup \{p_{A'_0,1}, p_{\sf ctk}\}$,
-\item $\Gamma_{A} = \act_\standard \cup \act_\singletop \cup \{A, \dag\}$, 
-\item $\TranSet_A = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act_\standard \cup \act_\singletop \} \cup \{\tau_{B} \mid B \in \act_\standard \cup \act_\singletop\}  \cup \{\tau_{\not B} \mid B \in \act_\standard \cup \act_\singletop\}$, 
+\item $P_{A_0} = \{p_0, p_1\}\cup\{ p_{0, B}, p_{1, B} \mid B \in  \act_\standard \cup \act_\singletop\} \cup \{p_{A'_0,1}, p_{\sf ctk}\}$,
+\item $\Gamma_{A_0} = \act_\standard \cup \act_\singletop \cup \{A'_0, \dag, \triangleleft\}$, 
+\item $\TranSet_{A_0} = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act_\standard \cup \act_\singletop \} \cup \{\tau_{B} \mid B \in \act_\standard \cup \act_\singletop\}  \cup \{\tau_{\not B} \mid B \in \act_\standard \cup \act_\singletop\}$, 
 %where $\tau_B$ (resp. $\tau_{\not B}$) is the transduction that checks that $B$ occurs (resp. does not occur) in the input string but keeps the input string unchanged, and 
-\item $\Delta_{A}$ is defined as follows:
+\item $\Delta_{A_0}$ is defined as follows,
         \begin{itemize}
-            \item for each $B \in \Gamma_{A} \setminus \{\dag\}$, $(p_0, B, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
+            \item for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, \triangleleft\}$, $(p_0, \gamma, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A_0}$ and $(p_1, \gamma, \varepsilon, \tau_{\id}, p_1) \in \Delta_{A_0}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
 	    %
-	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A$-task as the top task, to construct $\Delta_A$, 
+            \item $(p_1, A'_0, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A_0}$,
+            %
+	    \item moreover, we consider the transitions $B \xrightarrow{\startactivity(\phi)} C$ of $\Mm$ that keep the $A_0$-task as the top task, to construct $\Delta_{A_0}$, 
 	    %therefore, we distinguish the following two cases: either $B \in \act_\standard \cup \act_\singletop \cup \{A\}$ and $C \in \act_\standard \cup \act_\singletop$, or $B \in \act_\standard \cup \act_\singletop$, $\phi \models \ntkflag$, and $C = A$, 
 	    %
 	    %	    	
 		%	\item for each transition $B \xrightarrow{\startactivity(\phi)} C$ such that if $B \neq A$ and $\phi \models \ntkflag$, then $C = A$, 
 			\begin{itemize}
-				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$, then 
+				\item if $B \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$, $C \in \act_\standard \cup \act_\singletop$, and $\phi \models \neg \ntkflag$, then 
 				%
 				\begin{itemize}
-				\item if $\phi \models \ctpflag$ and $B \neq C$, we have 
+				\item if $\phi \models \ctpflag$ and $B \neq C$, then we have 
 				\begin{itemize}
-					\item $(p_0, C, CB, \tau_{\not C}, p_0) \in \Delta_{A}$, 
-					\item $(p_0, B, \varepsilon, \tau_{C}, p_C) \in \Delta_{A}$, $(p_C, C, C, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{C\}$, $(p_C, \gamma, \varepsilon, \tau_{\id}, p_C) \in \Delta_{A}$, 
+					\item $(p_0, C, CB, \tau_{\not C}, p_0) \in \Delta_{A_0}$ and $(p_1, C, CB, \tau_{\not C}, p_1) \in \Delta_{A_0}$, 
+%
+					\item $(p_0, B, \varepsilon, \tau_{C}, p_{0,C}) \in \Delta_{A_0}$, $(p_{0,C}, C, C, \tau_{\id}, p_0)  \in \Delta_{A_0}$, and for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, C, \triangleleft\}$, $(p_{0,C}, \gamma, \varepsilon, \tau_{\id}, p_{0,C}) \in \Delta_{A_0}$, 
+%					
+					\item $(p_1, B, \varepsilon, \tau_{C}, p_{1, C}) \in \Delta_{A_0}$, $(p_{1, C}, C, C, \tau_{\id}, p_1)  \in \Delta_{A_0}$, and for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, C, \triangleleft\}$, $(p_{1,C}, \gamma, \varepsilon, \tau_{\id}, p_{1,C}) \in \Delta_{A_0}$, 
+%
+					\item $(p_1, B, \varepsilon, \tau_{C}, p_{1, C}) \in \Delta_{A_0}$, for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, C, \triangleleft\}$, $(p_{1,C}, \gamma, \varepsilon, \tau_{\id}, p_{1,C}) \in \Delta_{A_0}$ and $(p_{0,C}, \gamma, \varepsilon, \tau_{\id}, p_{0,C}) \in \Delta_{A_0}$, 
+					$(p_{1,C}, A'_0, \varepsilon, \tau_{\id}, p_{0,C}) \in \Delta_{A_0}$, and $(p_{0, C}, C, C, \tau_{\id}, p_0)  \in \Delta_{A_0}$, 
 				\end{itemize}
 %
 				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  
-                we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
-                and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
+                then $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A_0}$, $(p_1, B, CB, \tau_{\not C}, p_1) \in \Delta_{A_0}$,  $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A_0}$, 
+                and $(p_1, B, CB, \tau_{C, \dag}, p_1) \in \Delta_{A_0}$,
 %
-				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
+				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, then we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A_0}$ and $(p_1, C, CB, \tau_{\id}, p_1) \in \Delta_{A_0}$, 
 				%
-				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
+				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A_0}$ and $(p_1, C, CB, \tau_{\id}, p_1) \in \Delta_{A_0}$,
 				\end{itemize}
 				
-				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$. 
+				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A'_0$,  then 
+				\begin{itemize}
+					\item if $\phi \models \CTK$, then $(p_0, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0}$, $(p_1, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0}$, $(p_{\sf ctk}, \gamma, \varepsilon, \tau_\id, p_{\sf ctk}) \in \Delta_{A_0}$ for each $\gamma \in \Gamma_{A_0} \setminus \{\triangleleft\}$, $(p_{\sf ctk}, \triangleleft, A'_0 \triangleleft, \tau_\id, p_1) \in \Delta_{A_0}$, 
+					%
+					\item otherwise, $(p_0, B, A'_0 B, \tau_{\id}, p_1) \in \Delta_{A_0}$, $(p_1, B, \varepsilon, \tau_{\id}, p_{1, A'_0}) \in \Delta_{A_0}$, $(p_{1, A'_0}, \gamma, \varepsilon, \tau_{\id}, p_{1, A'_0}) \in \Delta_{A_0}$ for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, \triangleleft\}$,  $(p_{1, A'_0}, A'_0, A'_0, \tau_{\id}, p_1) \in \Delta_{A_0}$.  
+				\end{itemize}				
 				%
             %
             \end{itemize}
         \end{itemize}
 \end{itemize}
 
+We are ready to construct $\Pp_\Mm$. 
+We define $\Pp_{\Mm} = (P_{\Mm}, \Gamma_{A_0}, \TranSet_{A_0}, \Delta_{\Mm})$, where $P_{\Mm} = P_{A_0} \times \abs_{\mhcancel{A_0}}$, and $\Delta_{\Mm}$ comprises the following transitions,
+\begin{itemize}
+    \item $((p, \alpha), \gamma, w, \tau, (p', \alpha)) \in \Delta_{\Mm}$ such that $(p, \gamma, w, \tau, p') \in \Delta_{A_0}$ and $\alpha\in\abs_{\mhcancel{A_0}}$,
+    %
+    \item for each $(A, \alpha) \in (\act_{\standard} \cup \act_{\singletop} \cup \{A_0'\}) \times \abs_{\mhcancel{A_0}}$ and $(\beta,\phi')\in\reach(A,\alpha)$, 
+        \begin{itemize}
+            \item if $\phi' \models \ctkflag$, then we have $((p_0, \alpha), A, \epsilon, \tau_{\id}, (p_{\sf ctk}, \beta)) \in \Delta_{\Mm}$ and $((p_1, \alpha), A, \epsilon, \tau_{\id}, (p_{\sf ctk}, \beta)) \in \Delta_{\Mm}$,
+            \item otherwise,
+            \begin{itemize}
+                \item if $A\neq A_0'$, then we have
+                    $((p_0, \alpha), A, A_0'A, \tau_{\id}, (p_1, \beta)) \in \Delta_{\Mm}$ and $((p_1, \alpha), A, \epsilon, \tau_{\id}, (p_{1, A'_0}, \beta)) \in \Delta_{\Mm}$,
+                    %
+                \item if $A=A_0'$, then we have $((p_1, \alpha), A_0', A_0', \tau_{\id}, (p_1, \beta)) \in \Delta_{\Mm}$,
+            \end{itemize}
+        \end{itemize}
+                \textbf{[active switching]}
+    \item for each $(A,\alpha) \in (\act_{\standard} \cup \act_{\singletop} \cup \{A_0'\}) \times \abs_{\mhcancel{A_0}}$ and $(\beta,\bot)\in\reach(A,\alpha)$, we have 
+    $$((p_0, \alpha), A, A, \tau_{\id}, (p_0, \beta)) \in \Delta_{\Mm} \mbox{ and } ((p_1, \alpha), A, A, \tau_{\id}, (p_1, \beta)) \in \Delta_{\Mm}.$$
+            \textbf{[passive switching]}
+\end{itemize}
 
+In the sequel, we show how to compute $\reach(A, \alpha)$. 
+
+\paragraph*{Computation of $\reach(A, \alpha)$}
+When $(\beta, \phi) \in \reach(A, \alpha)$,  $A_0; \mhcancel{A'_0}; A_0$ switching such that
+  
+To compute $\reach(A,\alpha)$, we need to compute all possible abstractions $\beta'$ that could be reachable from $(\aft(B),(\AutB_{B}))$ for each $A\xrightarrow{\startactivity(\phi)}B\in\Delta$ such that $B\in\act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$. Then $\beta$ could be divided into two parts $\beta'$ and $\alpha'$, where $\alpha'$ is obtained from $\alpha$ by removing all $\aname_i$ and $\AutB_i$ such that $C$-task is launched from the procedure of reaching $\beta'$ from $(\aft(B),(\AutB_{B}))$ and $\aft(C) = \aname_i$. Therefore we need to record which tasks launched in the computation of $\beta'$.
+
+For each $B\in\act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$, we let $\AutReach_{B}$ to denote the set of pairs $(\Lambda, \beta')$ where $\Lambda \subseteq \act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$ and $\beta' \in \abs_{\mhcancel{A_0, A_0'}}$. Intuitively, for each $(\Lambda, \beta') \in \AutReach_{B}$, $\beta'$ could be reachable from $(\aft(B),(\AutB_{B}))$ and $\Lambda$ records the activities which launching a new task the this procedure.
+
+Initially, we let $\AutReach_{B} = \{(\{B\}, (\aft(B), (\AutB_B)))\}$. Then it adds pairs to $\AutReach_{B}$ according the following saturation rules, until no more tuples can be added.
+
+
+
+\zhilin{stopped here}
 
 
 Our idea is to construct a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then it could recognize different contents of $A_0$-task according to the contents of non-$A_0$-tasks.
