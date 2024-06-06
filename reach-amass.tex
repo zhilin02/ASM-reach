@@ -460,18 +460,56 @@ We define $\Pp_{\Mm} = (P_{\Mm}, \Gamma_{A_0}, \TranSet_{A_0}, \Delta_{\Mm})$, w
 In the sequel, we show how to compute $\reach(A, \alpha)$. 
 
 \paragraph*{Computation of $\reach(A, \alpha)$}
-When $(\beta, \phi) \in \reach(A, \alpha)$,  $A_0; \mhcancel{A'_0}; A_0$ switching such that
-  
+Let $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$. 
+We show how to compute $\reach(A, \alpha)$. 
+
+%we simulate the effects of active and passive switchings. 
+Suppose that in an $A_0;\mhcancel{A_0};A_0$ switching, $A \xrightarrow{\startactivity(\phi)} B$ is the first transition. 
+
+Let $\rho = ((w_0, \aft(A_0)), (w_1, \aname_1), \cdots, (w_k, \aname_k)))$ be a configuration such that $w_0 = A w'_0$ and $w_i \in \Lang(\AutB_i)$ for each $i \in [k]$.
+Then after applying the transition $A \xrightarrow{\startactivity(\phi)} B$ to $\rho$, if $\aft(B) = \aname_i$ for some $i \in [k]$, then the configuration 
+%
+$$
+\begin{array}{l}
+(([B], \aft(B)), (w_0, \aft(A_0)),  \\
+\ \ \ \ (w_1, \aname_1), \cdots, (w_{i-1}, \aname_{i-1}), (w_{i+1}, \aname_{i+1}), \cdots, (w_{k}, \aname_{k}))
+\end{array}
+$$ 
+%
+is obtained, otherwise, the configuration 
+%
+$$(([B], \aft(B)), (w_0, \aft(A_0)), (w_1, \aname_1), \cdots, (w_k, \aname_k))$$ 
+%
+is obtained. 
+In both configurations, $([B], \aft(B))$ is the top task, followed by the task $(w_0, \aft(A_0))$. 
+%
+Then we consider the set of configurations of $\Mm$ that are reachable from the configuration $(([B], \aft(B)))$, denoted by $\RConfs_\Mm(\{(([B], \aft(B)))\})$. 
+Note that $(([B], \aft(B)))$ is obtained from either of the two configurations by ignoring the $A_0$-task as well as the tasks below it. 
+We would like to compute the set of abstractions of $\RConfs_\Mm(\{(([B], \aft(B)))\})$, i.e. the set of pairs $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l))$.
+Let $\AutReach_B$ denote the set of such pairs. 
+Let $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$ and $\alpha' = (\aname''_1 \cdots \aname''_m, (\AutD_1, \cdots, \AutD_m))$ such that $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_2 \cdots \aname_k$ by removing those affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$, and 
+$(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_2, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
+Then we distinguish between whether an $A_0;\mhcancel{A_0};A_0$ switching is active or not. 
+\begin{itemize}
+\item If $\AutC_1 = \AutB_{A' \rightsquigarrow C}$ and 
+$C \xrightarrow{\startactivity(\phi')} A'_0$ is a transition in $\Mm$, then we have $(\beta, \phi') \in \reach(A, \alpha)$, where  
+$$\beta = (\aname'_1 \cdots \aname'_l \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutD_1, \cdots, \AutD_m)).$$
+[{\bf active switching}]
+%
+\item We also have $(\alpha', \bot) \in \reach(A, \alpha)$. [{\bf passive switching}]
+\end{itemize}
+
+Finally, the set $\AutReach_B$ can be computed by starting from $\{(\aft(B), \AutB_{B})\}$ and applying the saturation rules, similarly to the computation of $\AutReach$ in Section~\ref{sec:amass-stk}, except that the saturation rules corresponding to the transitions $C \xrightarrow{\startactivity(\phi')} A'_0$ are ignored. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{  
 To compute $\reach(A,\alpha)$, we need to compute all possible abstractions $\beta'$ that could be reachable from $(\aft(B),(\AutB_{B}))$ for each $A\xrightarrow{\startactivity(\phi)}B\in\Delta$ such that $B\in\act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$. Then $\beta$ could be divided into two parts $\beta'$ and $\alpha'$, where $\alpha'$ is obtained from $\alpha$ by removing all $\aname_i$ and $\AutB_i$ such that $C$-task is launched from the procedure of reaching $\beta'$ from $(\aft(B),(\AutB_{B}))$ and $\aft(C) = \aname_i$. Therefore we need to record which tasks launched in the computation of $\beta'$.
 
 For each $B\in\act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$, we let $\AutReach_{B}$ to denote the set of pairs $(\Lambda, \beta')$ where $\Lambda \subseteq \act_{\STK}\cup\act_{\SIT}\setminus\{A_0'\}$ and $\beta' \in \abs_{\mhcancel{A_0, A_0'}}$. Intuitively, for each $(\Lambda, \beta') \in \AutReach_{B}$, $\beta'$ could be reachable from $(\aft(B),(\AutB_{B}))$ and $\Lambda$ records the activities which launching a new task the this procedure.
 
 Initially, we let $\AutReach_{B} = \{(\{B\}, (\aft(B), (\AutB_B)))\}$. Then it adds pairs to $\AutReach_{B}$ according the following saturation rules, until no more tuples can be added.
-
-
-
-\zhilin{stopped here}
-
 
 Our idea is to construct a finite abstraction for the non-$A_0$-tasks and incorporating it into the control states of the {\WOTrPDS} of $A_0$-task, then it could recognize different contents of $A_0$-task according to the contents of non-$A_0$-tasks.
 Then we compute the configurations which $A_0$-task is the top task by computing the $\post^*$ of the {\WOTrPDS}, finally compute all configurations reached from the initial configuration.
@@ -673,6 +711,12 @@ We then define the {\WOTrPDS} $\Qq_{\abs} = (P_{\abs},\Gamma_{A_0},\Delta_{\abs}
         $((\alpha,p_b),A,A,\tau_{\id},(\beta,p_b))\in\Delta_{\abs}$,
             \textbf{[swith to the non-$A_0$-tasks and swith back to the $A_0$-task later when the non-$A_0$-tasks above $A_0$-task become empty]}
 \end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\zhilin{stopped here}
+
 
 \paragraph{Computing $\AutReach$} We are ready to present the procedure that computes effectively $\AutReach$.
 % To compute $\AutReach$, our approach is 1) to compute $\AutReach_{A_0}$ to represent the configurations, whose the top task is $A_0$-task, reached from the initial configuration first, 2) to compute $\AutReach_{\mathcircled{A_0}}$ from $\AutReach_{A_0}$ to represent the configurations whose the top task is \emph{not} $A_0$-task and $A_0$-task is \emph{still} in these configurations, 3) to compute $\AutReach_{\mhcancel{A_0}}$ to represent the configurations which $A_0$-task is \emph{not} in these configurations. 
