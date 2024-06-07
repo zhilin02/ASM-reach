@@ -343,12 +343,11 @@ Formally, an $A_0;\mhcancel{A_0};A_0$ \emph{switching} denotes a path in $\xrigh
 %
 %The main idea of the construction is to simulate the $A_0;\mhcancel{A_0};A_0$ switching by a "macro"-transition of $\Pp_{\Mm}$. 
 Note that the $A_0$-task regains the top task in the last configuration either by starting the activity $A_0'$ or by emptying the tasks above the $A_0$-task. Suppose that, for an $A_0;\mhcancel{A_0};A_0$ switching, $\alpha$ (resp. $\beta$) is the abstraction of the non-$A_0$-tasks in the first (resp. last) configuration. 
-Then this $A_0;\mhcancel{A_0};A_0$ switching will be simulated by a "macro"-transition of $\Pp_{\Mm}$, where the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Pp_{\Mm}$ is updated accordingly. 
-Specifically, the stack content of $\Pp_{\Mm}$ is updated as follows. 
+Then this $A_0;\mhcancel{A_0};A_0$ switching will be simulated by a "macro"-transition of $\Pp_{\Mm}$, where the control state will be updated from $\alpha$ to $\beta$, and the stack content of $\Pp_{\Mm}$ is updated as follows. 
 \begin{itemize}
     \item If in the $A_0; \mhcancel{A_0}; A_0$ switching, the $A_0$-task becomes the top task again by starting the activity $A_0'$, say with the transition $A\xrightarrow{\startactivity(\phi)}A_0'$, (in this case, the switching is called an \emph{active} switching), then
     \begin{itemize}
-        \item if $\phi \models \ctkflag$, all the symbols in the stack will be popped and $A_0'$ will be pushed into the stack,
+        \item if $\phi \models \ctkflag$, then all the symbols in the stack will be popped and $A_0'$ will be pushed into the stack,
         \item otherwise, $A_0'$ will be pushed into the stack if the $A_0$-task does not contain $A_0'$, and all the symbols above $A_0'$ will be popped otherwise.
     \end{itemize}
 %
@@ -356,20 +355,21 @@ Specifically, the stack content of $\Pp_{\Mm}$ is updated as follows.
 %        
 \end{itemize}
 
-To define the abstractions of the non-$A_0$ tasks, we can ignore the $A_0$-task and imagine that the bottom activity of every task is either from $\act_{\singletask}$ or $\act_{\singleinstance}$.  Then we represent the set of reachable configurations (where the content of the $A_0$-task is ignored) as pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, similarly to the case that $\lmd(A_0) = \singletask$. 
+To define the abstractions of the non-$A_0$ tasks, we can ignore the $A_0$-task and imagine that the bottom activity of every task is either from $\act_{\singletask}$ or $\act_{\singleinstance}$.  Then we represent the set of reachable configurations (where the $A_0$-task is ignored) as pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, similarly to the case that $\lmd(A_0) = \singletask$. 
 
 Therefore, we define the set of abstractions of the non-$A_0$-tasks, denoted by $\abs_{\mhcancel{A_0}}$, as the set of pairs 
 \[(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))\]
 such that 
 \begin{itemize}
 \item $\aname_1 \cdots \aname_k$ is a sequence of mutually distinct affinities from $\aft((\act_{\singletask} \cup \act_{\singleinstance}) \setminus \{A'_0\})$, and 
-\item for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$, 
+%
+\item for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$, where $\Pp_{A_i} = (P_{A_i}, \Gamma_{A_i}, \TranSet_{A_i}, \Delta_{A_i})$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}. 
 \end{itemize}
-where $\Pp_{A_i} = (P_{A_i}, \Gamma_{A_i}, \TranSet_{A_i}, \Delta_{A_i})$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}. Moreover, we assume that $\abs_{\mhcancel{A_0}}$ includes a special element $\varepsilon$ to denote the fact that there are no non-$A_0$ tasks. 
+Moreover, we assume that $\abs_{\mhcancel{A_0}}$ includes a special element $\varepsilon$ to denote the fact that there are no non-$A_0$ tasks. 
 
-Let $A$ be the top activity of the $A_0$-task and $\alpha \in \abs_{\mhcancel{A_0}}$ be the abstraction of the current contents of the non-$A_0$ tasks. For constructing $\Pp_{\Mm}$, we would like to know which abstractions $\beta$ of the non-$A_0$ tasks can be reached after an $A_0;\mhcancel{A_0};A_0$ switching. Moreover, if the switching is active, namely, through a transition $B \xrightarrow{\startactivity(\phi')} A'_0$, then $\phi'$ determines how the content of the $A_0$-task evolves. Therefore, we shall compute for a given $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$, a set $\reach(A, \alpha)$ that comprises the following pairs, 
+Let $A$ be the top activity of the $A_0$-task and $\alpha \in \abs_{\mhcancel{A_0}}$ be the abstraction of the current contents of the non-$A_0$ tasks. For constructing $\Pp_{\Mm}$, we would like to know which abstractions $\beta$ of the non-$A_0$ tasks can be reached after an $A_0;\mhcancel{A_0};A_0$ switching. Moreover, if the switching is active, namely, through a transition $B \xrightarrow{\startactivity(\phi')} A'_0$, then $\phi'$ determines how the content of the $A_0$-task evolves. Therefore, we shall compute for a given $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$, a set $\reach(A, \alpha)$ that comprises, 
 \begin{itemize}
-\item the pairs $(\beta, \phi')$ such that $\beta$ is reached from $\alpha$ by an active $A_0;\mhcancel{A_0};A_0$ switching, where in the first configuration, $A$ is the top activity of the $A_0$-task and $\alpha$ is the abstraction of the non-$A_0$ tasks, and in the last configuration, $\beta$ is the abstraction of the non-$A_0$ tasks, moreover, a transition $B \xrightarrow{\startactivity(\phi')} A'_0$ is used to return to the $A_0$-task for some $B$,  
+\item the pairs $(\beta, \phi')$ such that $\beta$ is reached from $\alpha$ by an active $A_0;\mhcancel{A_0};A_0$ switching, where in the first configuration, $A$ is the top activity of the $A_0$-task and $\alpha$ is the abstraction of the non-$A_0$ tasks, and in the last configuration, $\beta = (\aname'_1\cdots \aname'_l, (\AutC_1, \cdots, \AutC_l))$ is the abstraction of the non-$A_0$ tasks such that $\AutC_1 = \AutB_{A' \rightsquigarrow B}$, and a transition $B \xrightarrow{\startactivity(\phi')} A'_0$ is used to return to the $A_0$-task,  
 %
 \item the pairs $(\beta, \bot)$ such that $\beta$ is reached from $\alpha$ by a passive $A_0;\mhcancel{A_0};A_0$ switching, where in the first configuration, $A$ is the top activity of the $A_0$-task and $\alpha$ is the abstraction of the non-$A_0$ tasks, and in the last configuration, $\beta$ is the abstraction of the non-$A_0$ tasks. 
 \end{itemize}
@@ -377,13 +377,13 @@ Let $A$ be the top activity of the $A_0$-task and $\alpha \in \abs_{\mhcancel{A_
 In the sequel, we first assume that $\reach(A, \alpha)$ can be computed for $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$ and construct $\Pp_\Mm$. Then we show how to compute $\reach(A, \alpha)$. 
 
 \paragraph*{Construction of $\Pp_\Mm$} 
-We first define a {\WOTrPDS} $\Pp'_{A_0}$ that simulate the transitions of $\Mm$ that modifies only the content of the $A_0$-task. Then we add to $\Pp'_{A_0}$ the ``macro'' transitions that simulate the $A_0;\mhcancel{A_0};A_0$ switchings, to construct $\Pp_\Mm$.  
+We first define a {\WOTrPDS} $\Pp'_{A_0}$, which simulates the transitions of $\Mm$ that modifies only the content of the $A_0$-task. Then we add to $\Pp'_{A_0}$ the ``macro'' transitions that simulate the $A_0;\mhcancel{A_0};A_0$ switchings, and construct $\Pp_\Mm$.  
 
 Because the bottom activity of the $A_0$-task is $A_0$ such that $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, the construction of $\Pp'_{A_0}$ is slightly more involved than that of $\Pp_A$ for $A \in \act_\singletask$ in Section~\ref{sec:amass-stk}. In particular, we use two states $p_0, p_1$ to distinguish between whether $A'_0$ is in the stack or not. Moreover, in order to simulate the behaviors of the transitions $B \xrightarrow{\startactivity(\phi)} A'_0$ with $\phi \models \CTK$, where the stack is emptied before $A'_0$ is pushed, we introduce an additional symbol $\triangleleft$ to act as the bottom symbol of the stack and an additional state $p_{\sf ctk}$ for clearing the stack. 
 
 Formally, the {\WOTrPDS} $\Pp'_{A_0}$ is defined as $(P_{A_0}, \Gamma_{A_0}, \TranSet_{A_0}, \Delta_{A_0})$, where 
 \begin{itemize}
-\item $P_{A_0} = \{p_0, p_1\}\cup\{ p_{0, B}, p_{1, B} \mid B \in  \act_\standard \cup \act_\singletop\} \cup \{p_{A'_0,1}, p_{\sf ctk}\}$,
+\item $P_{A_0} = \{p_0, p_1\}\cup\{ p_{0, B}, p_{1, B} \mid B \in  \act_\standard \cup \act_\singletop\} \cup \{p_{1, A'_0}, p_{\sf ctk}\}$,
 \item $\Gamma_{A_0} = \act_\standard \cup \act_\singletop \cup \{A'_0, \dag, \triangleleft\}$, 
 \item $\TranSet_{A_0} = \{\tau_{\id} \}\cup \{\tau_{B, \dag} \mid B \in \act_\standard \cup \act_\singletop \} \cup \{\tau_{B} \mid B \in \act_\standard \cup \act_\singletop\}  \cup \{\tau_{\not B} \mid B \in \act_\standard \cup \act_\singletop\}$, 
 %where $\tau_B$ (resp. $\tau_{\not B}$) is the transduction that checks that $B$ occurs (resp. does not occur) in the input string but keeps the input string unchanged, and 
@@ -467,7 +467,9 @@ We show how to compute $\reach(A, \alpha)$.
 Suppose that in an $A_0;\mhcancel{A_0};A_0$ switching, $A \xrightarrow{\startactivity(\phi)} B$ is the first transition. 
 
 Let $\rho = ((w_0, \aft(A_0)), (w_1, \aname_1), \cdots, (w_k, \aname_k)))$ be a configuration such that $w_0 = A w'_0$ and $w_i \in \Lang(\AutB_i)$ for each $i \in [k]$.
-Then after applying the transition $A \xrightarrow{\startactivity(\phi)} B$ to $\rho$, if $\aft(B) = \aname_i$ for some $i \in [k]$, then the configuration 
+Then after applying the transition $A \xrightarrow{\startactivity(\phi)} B$ to $\rho$, 
+\begin{itemize}
+\item if $\aft(B) = \aname_i$ for some $i \in [k]$, then the configuration 
 %
 $$
 \begin{array}{l}
@@ -476,16 +478,20 @@ $$
 \end{array}
 $$ 
 %
-is obtained, otherwise, the configuration 
+is obtained, 
+%
+\item otherwise, the configuration 
 %
 $$(([B], \aft(B)), (w_0, \aft(A_0)), (w_1, \aname_1), \cdots, (w_k, \aname_k))$$ 
 %
 is obtained. 
+\end{itemize}
 In both configurations, $([B], \aft(B))$ is the top task, followed by the task $(w_0, \aft(A_0))$. 
 %
-Then we consider the set of configurations of $\Mm$ that are reachable from the configuration $(([B], \aft(B)))$, denoted by $\RConfs_\Mm(\{(([B], \aft(B)))\})$. 
+Then we consider the set of configurations of $\Mm$ that are reachable from the configuration $(([B], \aft(B)))$ by applying the transitions of $\Mm$, except those transitions $C \xrightarrow{\startactivity(\phi')} A'_0$. Let $\RConfs_{\Mm, \mhcancel{A_0}}(\{(([B], \aft(B)))\})$ denote this set of configurations. 
 Note that $(([B], \aft(B)))$ is obtained from either of the two configurations by ignoring the $A_0$-task as well as the tasks below it. 
-We would like to compute the set of abstractions of $\RConfs_\Mm(\{(([B], \aft(B)))\})$, i.e. the set of pairs $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l))$.
+%
+For $\RConfs_{\Mm, \mhcancel{A_0}}(\{(([B], \aft(B)))\})$, we shall compute a finite set of abstractions, namely, a set of pairs $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l))$.
 Let $\AutReach_B$ denote the set of such pairs. 
 Let $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$ and $\alpha' = (\aname''_1 \cdots \aname''_m, (\AutD_1, \cdots, \AutD_m))$ such that $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing those affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$, and 
 $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
@@ -731,17 +737,20 @@ We define the $\Pp_\Mm$-{\WOTrNFA}'s $\AutB_{A_0}$ and $\AutB_{A, \alpha}$, to b
 \end{itemize}
 
 Then $\AutReach_\Mm$ is constructed as follows. 
-For each $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A'_0}}$ such that $\Lang(\AutB_{A, \alpha}) \neq \emptyset$,
+For each $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$ such that $\Lang(\AutB_{A, \alpha}) \neq \emptyset$,
 \begin{itemize}
     \item if $\alpha = \varepsilon$, then $(\aft(A_0), (\AutB_{A, \bot})) \in \AutReach_\Mm$,
     %
     \item if $\alpha = \varepsilon$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then 
-    $$(\aname'_1 \cdots  \aname'_l \aft(A_0), (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}) \in \AutReach_\Mm,$$  
+    $$(\aname'_1 \cdots  \aname'_l \aft(A_0), (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha})) \in \AutReach_\Mm,$$  
     %
     \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, then 
     $$(\aft(A_0)\aname_1 \cdots \aname_k, (\AutB_{A, \alpha}, \AutB_1, \cdots, \AutB_k)) \in \AutReach_\Mm,$$
     %
-    \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1,\cdots,\AutB_k))$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then $(\aname'_1 \cdots  \aname'_l \aft(A_0) \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}, \AutD_1, \cdots, \AutD_m)) \in \AutReach_\Mm$, where $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing the affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$ and $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
+    \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1,\cdots,\AutB_k))$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then 
+    $$(\aname'_1 \cdots  \aname'_l \aft(A_0) \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}, \AutD_1, \cdots, \AutD_m)) \in \AutReach_\Mm,$$ 
+    %
+    where $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing the affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$ and $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
 \end{itemize}
 
 
