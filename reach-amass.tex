@@ -365,7 +365,7 @@ such that
 \item $\aname_1 \cdots \aname_k$ is a sequence of mutually distinct affinities from $\aft((\act_{\singletask} \cup \act_{\singleinstance}) \setminus \{A'_0\})$, and 
 \item for each $i \in [k]$, $\AutB_i = \AutB_{A_i \rightsquigarrow B_i}$ is a $\Pp_{A_i}$-{\WOTrNFA} such that $A_i \in \act_\singletask \cup \act_\singleinstance$, $\aft(A_i) = \aname_i$, and $B_i \in \act_\standard \cup \act_\singletop \cup \{A_i\}$, 
 \end{itemize}
-where $\Pp_{A_i} = (P_{A_i}, \Gamma_{A_i}, \TranSet_{A_i}, \Delta_{A_i})$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}.
+where $\Pp_{A_i} = (P_{A_i}, \Gamma_{A_i}, \TranSet_{A_i}, \Delta_{A_i})$ is the {\WOTrPDS} as defined in Section~\ref{sec:amass-stk}. Moreover, we assume that $\abs_{\mhcancel{A_0}}$ includes a special element $\varepsilon$ to denote the fact that there are no non-$A_0$ tasks. 
 
 Let $A$ be the top activity of the $A_0$-task and $\alpha \in \abs_{\mhcancel{A_0}}$ be the abstraction of the current contents of the non-$A_0$ tasks. For constructing $\Pp_{\Mm}$, we would like to know which abstractions $\beta$ of the non-$A_0$ tasks can be reached after an $A_0;\mhcancel{A_0};A_0$ switching. Moreover, if the switching is active, namely, through a transition $B \xrightarrow{\startactivity(\phi')} A'_0$, then $\phi'$ determines how the content of the $A_0$-task evolves. Therefore, we shall compute for a given $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A_0}}$, a set $\reach(A, \alpha)$ that comprises the following pairs, 
 \begin{itemize}
@@ -487,13 +487,14 @@ Then we consider the set of configurations of $\Mm$ that are reachable from the 
 Note that $(([B], \aft(B)))$ is obtained from either of the two configurations by ignoring the $A_0$-task as well as the tasks below it. 
 We would like to compute the set of abstractions of $\RConfs_\Mm(\{(([B], \aft(B)))\})$, i.e. the set of pairs $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l))$.
 Let $\AutReach_B$ denote the set of such pairs. 
-Let $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$ and $\alpha' = (\aname''_1 \cdots \aname''_m, (\AutD_1, \cdots, \AutD_m))$ such that $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_2 \cdots \aname_k$ by removing those affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$, and 
-$(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_2, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
-Then we distinguish between whether an $A_0;\mhcancel{A_0};A_0$ switching is active or not. 
+Let $(\aname'_1 \cdots \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$ and $\alpha' = (\aname''_1 \cdots \aname''_m, (\AutD_1, \cdots, \AutD_m))$ such that $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing those affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$, and 
+$(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
+Then $\reach(A, \alpha)$ includes the following pairs. 
+%we distinguish between whether an $A_0;\mhcancel{A_0};A_0$ switching is active or not. 
 \begin{itemize}
 \item If $\AutC_1 = \AutB_{A' \rightsquigarrow C}$ and 
 $C \xrightarrow{\startactivity(\phi')} A'_0$ is a transition in $\Mm$, then we have $(\beta, \phi') \in \reach(A, \alpha)$, where  
-$$\beta = (\aname'_1 \cdots \aname'_l \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutD_1, \cdots, \AutD_m)).$$
+$$\beta = (\aname'_1 \cdots \aname'_l \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutD_1, \cdots, \AutD_m)),$$
 [{\bf active switching}]
 %
 \item We also have $(\alpha', \bot) \in \reach(A, \alpha)$. [{\bf passive switching}]
@@ -715,10 +716,39 @@ We then define the {\WOTrPDS} $\Qq_{\abs} = (P_{\abs},\Gamma_{A_0},\Delta_{\abs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\zhilin{stopped here}
+
+\paragraph{Solving the configuration reachability problem of $\Mm$} 
+Essentially, the set of configurations of $\Mm$ that are reachable from the initial configuration  has been captured by the {\WOTrPDS} $\Pp_\Mm$.
+We can utilize $\Pp_\Mm$ to compute a finite set of pairs $(\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, denoted by $\AutReach_\Mm$,  to represent the set of configurations of $\Mm$ that are reachable from the initial configuration. Then the configuration reachability problem of $\Mm$ can be solved easily by utilizing $\AutReach_\Mm$. 
+
+For technical convenience, we adapt the definitions of the {\WOTrPDS} $\Pp'_{A_0}$ and $\Pp_\Mm$ by incorporating the top stack symbol into the control states. Specifically, in $\Pp'_{A_0}$, $P_{A_0}$ is changed to $P_{A_0} \times \Gamma_{A_0}$, and in $\Pp_\Mm$, $P_\Mm = P_{A_0} \times \abs_{\mhcancel{A_0}}$ is changed to $P_{A_0} \times \Gamma_{A_0} \times \abs_{\mhcancel{A_0}}$.  Moreover, the transitions of $\Pp'_{A_0}$ and $\Pp_{\Mm}$ are adapted accordingly. By slightly abusing the notations, we still use $\Pp'_{A_0}$ and $\Pp_\Mm$ to denote the adapted {\WOTrPDS}'s.
+
+We define the $\Pp_\Mm$-{\WOTrNFA}'s $\AutB_{A_0}$ and $\AutB_{A, \alpha}$, to be used in the computation of $\AutReach_\Mm$. 
+\begin{itemize}
+\item $\AutB_{A_0} = (P_\Mm \cup \{p', p_f\}, \Gamma_{A_0}, \delta, \{(p_0, A_0, \bot)\}, \{p_f\})$, where $p', p_f \not \in P_\Mm$ are two fresh states and $\delta = \{((p_0, A_0, \bot), A_0, \tau_{\id}, p'), (p', \triangleleft, \tau_{\id}, p_f)\}$. (Note that $\Lang(\AutB_{A_0}) = \{A_0 \triangleleft\}$.)
+%
+\item For $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A'_0}}$, we define $\AutB_{A, \alpha}$ as the $\Pp_\Mm$-{\WOTrNFA} that is obtained from $(\AutB_{A_0})^{\post^*}_{\Pp_{\Mm}}$ by changing the set of initial sates to $\{(p_0, A, \alpha), (p_1, A, \alpha)\}$. (Note that $\Lang(\AutB_{A, \alpha}) = \Lang((\AutB_{A_0})^{\post^*}_{\Pp_{\Mm}}) \cap A \Gamma^*_{A_0}$.)
+\end{itemize}
+
+Then $\AutReach_\Mm$ is constructed as follows. 
+For each $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \in \abs_{\mhcancel{A'_0}}$ such that $\Lang(\AutB_{A, \alpha}) \neq \emptyset$,
+\begin{itemize}
+    \item if $\alpha = \varepsilon$, then $(\aft(A_0), (\AutB_{A, \bot})) \in \AutReach_\Mm$,
+    %
+    \item if $\alpha = \varepsilon$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then 
+    $$(\aname'_1 \cdots  \aname'_l \aft(A_0), (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}) \in \AutReach_\Mm,$$  
+    %
+    \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1, \cdots, \AutB_k))$, then 
+    $$(\aft(A_0)\aname_1 \cdots \aname_k, (\AutB_{A, \alpha}, \AutB_1, \cdots, \AutB_k)) \in \AutReach_\Mm,$$
+    %
+    \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1,\cdots,\AutB_k))$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then $(\aname'_1 \cdots  \aname'_l \aft(A_0) \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}, \AutD_1, \cdots, \AutD_m)) \in \AutReach_\Mm$, where $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing the affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$ and $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
+\end{itemize}
 
 
-\paragraph{Computing $\AutReach$} We are ready to present the procedure that computes effectively $\AutReach$.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{
+We are ready to present the procedure that computes effectively $\AutReach$.
 % To compute $\AutReach$, our approach is 1) to compute $\AutReach_{A_0}$ to represent the configurations, whose the top task is $A_0$-task, reached from the initial configuration first, 2) to compute $\AutReach_{\mathcircled{A_0}}$ from $\AutReach_{A_0}$ to represent the configurations whose the top task is \emph{not} $A_0$-task and $A_0$-task is \emph{still} in these configurations, 3) to compute $\AutReach_{\mhcancel{A_0}}$ to represent the configurations which $A_0$-task is \emph{not} in these configurations. 
 
 Before presenting the saturation rules, we define the $\Qq_{\abs}$-{\WOTrNFA} $\AutB_{A_0}$ and $\AutB_{\alpha\rightsquigarrow A}$ for $\alpha\in\abs_{\mhcancel{A_0,A_0'}}$ and $A\in\act$ such that $\Lang(\AutB_{A_0}) = [A_0\triangleleft]$ and $\Lang(\AutB_{\alpha\rightsquigarrow A}) = \Lang((\AutB_{A_0})^{\post^*}_{\Qq_{\abs}}((\alpha,p_0)))\cup\Lang((\AutB_{A_0})^{\post^*}_{\Qq_{\abs}}((\alpha,p_1)))\cap A\act^*$.
@@ -793,3 +823,6 @@ Then it adds pairs to $\AutReach$ to recognize the configurations reachable from
 \end{enumerate}
 \end{minipage}
 }
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
