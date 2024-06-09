@@ -1,0 +1,69 @@
+%!TEX root = main.tex
+
+
+There are a plethora of extensions/variants of pushdown systems resulting from different modeling/verification needs of practical systems. 
+We focus on the reachability problem while the more general CTL/LTL model checking problems are skipped. 
+
+Pushdown systems (PDSs) are a classical model of computation which is an extension of finite state automata equipped with a stack of symbols. PDSs have played a prominent role in, among others, program analysis and verification, especially for modeling procedural (imperative) programs. In the past 20 years, new programming paradigms have renewed interests of extensions of PDSs to model important features of emerging programs in practice. For instance, 
+multi-stack pushdown systems have been proposed for multi-threaded procedural programs \cite{QR05,BESS05,TMP07}, and higher-order pushdown systems have been utilized for higher-order functional programs \cite{HMOS08,HMOS17}.
+
+Standard PDSs allow two types of stack operations only, i.e., push and pop. In practice, more general operations on stacks are often required in, e.g.,  conditional pushdown systems \cite{EKS03,LO10} and discrete-time pushdown systems \cite{AAS12}. Uezato and Minamide propose pushdown systems with transductions (TrPDSs, \cite{UM13}), where (letter-to-letter) transductions can be applied to update the stack. They are not of theoretical interests only: TrPDSs have been 
+used in, e.g., procedural programs with call-by-references parameter passing \cite{SM+15,Song18}.
+
+
+%Well-structured pushdown systems (WSPDS) are an extension of pushdown systems with (possibly infinite) well-quasi-ordered control states and  stack alphabets \cite{CO13,CO14}. It was shown therein that several subclasses of WSPDS is decidable, including recursive vector addition systems with states, multi-set pushdown systems, and WSPDS where the set of control states is finite. 
+
+%While it seems possible to transform WPOTrPDS into WSPDS by putting the transductions into control states or stack alphabets, it is unclear whether WPOTrPDS can be casted into these decidable subclasses of WSPDS.
+%While it seems possible to transform WPOTrPDS into WSPDS by putting the transductions into control states, the resulting WSPDS are beyond the aforementioned decidable subclasses in \cite{CO13}.
+%pushdown systems: single stack, multi-stack, well-structured, pushdown systems with transductions,
+%
+
+Well-structured PDSs (WSPDSs \cite{CO13}) combine well-structured transition systems and PDSs, where the set of control states and/or the stack alphabet may be infinite but admit a well-quasi-order. WSPDSs are expressive as they subsume, e.g., recursive vector addition systems with states \cite{BouajjaniE13} and multi-set PDSs \cite{SenV06}. 
+%and dense-timed PDSs \cite{CaiO14}. 
+The reachability problem is undecidable for WSPDSs, but the coverability is decidable if the set of control states is finite. While it appears to be possible to transform a WPOTrPDS into a WSPDS by encoding the transductions in control states or stack alphabets, it is unclear whether  
+the resulting WSPDS belongs to these decidable subclasses of WSPDS known in the literature insofar.
+
+A timed pushdown automaton is a timed extension of a pushdown automaton.  
+Besides the discrete-time pushdown systems mentioned in the introduction, 
+dense-time pushdown systems, where real-valued ages can be assigned to stack symbols and stored into the stack, were also studied and shown to be decidable \cite{AbdullaAS12}. Moreover, it was shown that dense-time pushdown systems can be simulated by WSPDS and thus the decidability results of WSPDS can also be utilized to show their decidability \cite{CO14}.
+
+Apart from TrPDS, there are other models that involve more general operations on stack symbols. 
+PDSs with checkpoints, as an extension of PDSs, can check whether the stack contents belong to regular languages \cite{EsparzaKS03}. They can be simulated by TrPDSs with finite transduction closures.
+%
+Stack automata are an extension of pushdown automata where %besides the normal push and pop operations, 
+the interior stack symbols can be read but not rewritten by an additional head \cite{GGH67}. 
+%
+In pushdown systems with an upper stack \cite{PDT17}, 
+the symbols popped out of the stack remain in the stack and can be overwritten when new symbols are pushed.
+
+Stack automata and pushdown systems with an upper stack are incomparable with WPOTrPDS: on the one hand, WPOTrPDSs allow more powerful updates on the stack; on the other hand, while stack automata and pushdown systems with an upper stack can be simulated by TrPDSs, the transduction closures therein, nevertheless, are infinite and do not have a well-partially-ordered union-basis.
+
+Furthermore, pushdown systems where control states, stack alphabet, and transition relation, instead of being finite, are first-order definable in a fixed countably-infinite structure were studied \cite{ClementeL15}.   
+
+
+%vector addition systems with states, counter machines,
+
+
+There are other types of extensions of PDS which are a bit remote from the current work. For instance, weighted PDSs and extended weighted PDSs were introduced  \cite{RepsSJM05, LalRB05} for data-flow analysis purpose. These two extensions associate transitions with elements from semiring domains. The reachability problem is decidable for bounded idempotent semirings. 
+
+%(Extended) weighted PDSs and TrPDSs are quite different two computation models. At least, the elements from a semiring can neither inspect nor modify the stack content except the top most symbol on the stack. To
+%overcome this problem, weighted pushdown systems with indexed weight domains were proposed in [24,28], which generalize weighted PDSs and TrPDSs.
+
+
+
+
+ 
+
+
+%There are lots of works with context-sensitive infinite state systems. A process rewrite systems combines a PDS and a Petri net, in which vector additions/subtractions between adjacent stack frames during push/pop operations
+%are prohibited [17]. With this restrictions, its reachability becomes decidable. A
+%WQO automaton [9], is a WSTS with auxiliary storage (e.g., stacks and queues).
+%It proves that the coverability is decidable under compatibility of rank functions
+%with a WQO, of which an Multiset PDS is an instance. 
+
+ 
+
+
+
+
+%We show that the reachability analysis can be addressed with the well-known saturation technique for the wide class of oligomorphic structures. Moreover, for the more restrictive homogeneous structures, we are able to give concrete complexity upper bounds. We show ample applicability of our technique by presenting several concrete examples of homogeneous structures, subsuming, with optimal complexity, known results from the literature. We show that infinitely many such examples of homogeneous structures can be obtained with the classical wreath product construction.
