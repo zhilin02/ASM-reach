@@ -1,7 +1,5 @@
 %!TEX root = main.tex
 
-\zhilin{introduction to be polished}
-
 %Motivation
 
 Multi-tasking plays a central role in the Android platform. %, and certainly is a complicated issue.
@@ -36,9 +34,9 @@ For the formalization of Android multitasking mechanism, the most complete exist
 %do not address more complicated activity attributes such as allowTaskReparenting,
 %which are left as the future work.
 
-Based on {\AMASS}, we also %make the first step towards a 
+Based on {\AMASS}, we %make the first step towards a 
 investigate formal analysis of Android multitasking apps, %by investigating 
-in particular, the \emph{reachability problem} which is fundamental to all such analysis. {\AMASS} is akin to pushdown systems with multiple stacks, so it is perhaps not surprising that the problem is hard in general; 
+in particular, the \emph{configuration reachability problem} which is fundamental to all such analysis. {\AMASS} is akin to pushdown systems with multiple stacks, so it is perhaps not surprising that the problem is hard in general; 
 %in fact, we show undecidability for most interesting fragments even with just two launch modes. %(See Theorem~\ref{thm:undec}---\ref{prop:tridec} for details.)
 in the interest of seeking more expressive, practice-relevant decidable fragments,
 %observe that $\standard/\singletop$ activities must be supported, and %$\singletask/\singleinstance$
@@ -50,14 +48,13 @@ we identify a fragment \textbf{$\STK$-dominating {\AMASS}} which assumes
 $\STK$ activities have different task affinities and which further restricts the use of $\STK$ activities and the intent flag $\ntkflag$. This fragment covers a majority of open-source Android apps (e.g., from F-Droid) we have found so far. 
 
 %\tl{claiming this fragment can cover most of open-resource apps we have found?shall we}\zhilin{how about the previous sentence ?}
-One of our technical contributions is to give a decision procedures for the reachability problem of $\STK$-dominating {\AMASS}.
-We also propose pushdown systems with well-partially-ordered transductions (WPOTrPDS), an extension of finite TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered wrt the superset relation, we show that the configuration reachability of WPOTrPDS is decidable, and utilize WPOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
+Our technical contribution is to give a decision procedure for the reachability problem of $\STK$-dominating {\AMASS}. We extend the saturation procedure of pushdowns systems (\PDS) to multiple stacks.  Moreover, we propose pushdown systems with well-partially-ordered transductions (\WOTrPDS), an extension of finite \TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered wrt the superset relation, we show that the configuration reachability of \WOTrPDS is decidable, and utilize \WOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
 %As a complement, we also studied a fragment \textbf{$\singleinstance$-acyclic-mediating ASS}, which include $\singleinstance$, but are free of $\singletask$, activities, subject to additional restrictions.
 %The work, apart from independent interests in the study of multi-stack pushdown systems, lays a solid foundation for further (static) analysis and verification of Android apps related to multi-tasking, enabling model checking of Android apps, security analysis (such as discovering task hijacking), or typical tasks in software engineering such as  % Assist programmers with
 %automatic debugging, model-based testing, etc.
 %task-sensitive analysis of Android apps, generate testcases from the model and test consistent of variants of Android OS.
 
-We summarize the main contributions as follows: (1) We propose pushdown systems with well-partially-ordered transductions (WPOTrPDS), and study the reachability problem for WPOTrPDS.
+We summarize the main contributions as follows: (1) We extend the saturation procedure of PDS to multiple stacks. (2) We propose pushdown systems with well-partially-ordered transductions (WPOTrPDS), and show that the reachability problem for WPOTrPDS is decidable.
 %---to the best of our knowledge---the first comprehensive formal model, Android stack machine, for Android back stacks, which %captures both launch modes and task affinities of activities. The model
 %is also validated by extensive experiments. 
 %	
@@ -65,8 +62,12 @@ We summarize the main contributions as follows: (1) We propose pushdown systems 
 %	
 %	The first model of this kind.
 %
-    (2) We study the reachability problem for Android stack machine ({\AMASS}). 
+    (3) We integrate the saturation procedure for multiple stacks and WPOTrPDS to design a decision procedure for the reachability problem for Android stack machine ({\AMASS}). 
     %Apart from strongest possible undecidablity results in the general case, we %. Show  that the reachability problem is undecidable in general, and
-	We provide the decision procedures for two practically relevant fragments. %l, by exploiting
 	
+The rest of this paper is structured as follows. In Section~\ref{sec:amm}, we give an overview of the Android multitasking mechanism.  
+In Section~ref{sec:prel}, the notations are fixed and some basic concepts and results such as pushdown systems are given. 
+The {\AMASS} model will be defined in Section~\ref{sec:amm}. Then in Section~\ref{sec-conf-reach}, we define the configuration reachability problem, $\STK$-dominating {\AMASS}, and state the main result of this paper. Since the decision procedure is involved, to ease the reading, we choose to present the decision procedure step by step. In Section~\ref{sec:reach-lmamass}, we extend the saturation procedure of {\PDS} to multiple stacks to solve the reachability problem of $\STK$-dominating {\AMASS} where the intent flags are ignored. 
+In Section~\ref{sec:reach-ifamass}, we introduce {\WOTrPDS}, show the decidability of its reachability problem, and utilize it to solve the reachability problem of $\STK$-dominating {\AMASS} where the launch modes of all activities are ``standard'' or ``singleTop''. Finally, we show how the ideas in Section~\ref{sec:reach-lmamass} and Section~\ref{sec:reach-ifamass} can be combined to solve the reachability problem of $\STK$-dominating {\AMASS}. 
 
+This paper extends and differs from the decidability result in~\cite{CHS+18} in the following aspects: 1) In this paper, we follow the {\AMASS} model proposed in \cite{HC+19}, while the model in~\cite{CHS+18} considered only the launch modes and ignore intent flags. 2) The decision procedure in~\cite{CHS+18} relies on pushdown systems with transductions, while in this paper, for the same model, the decision procedure is simplified and obtained by a natural extension of the saturation procedure of pushdown systems (see Section~\ref{sec:reach-lmamass}). 3) Furthermore, in this paper, a novel model of pushdown systems with well-partially-ordered transductions (\WOTrPDS) is proposed to solve the reachability problem of $\STK$-dominating {\AMASS}.  

@@ -231,7 +231,7 @@
 
  
 \begin{abstract}
-In this paper, we propose Android Stack Machine (ASM), a formal model to capture key mechanisms of Android multi-tasking such as activities, back stacks, launch modes, and task affinities. The model is based on pushdown systems with multiple stacks, and focuses on the evolution of the back stack of the Android system when interacting with activities carrying specific launch modes and task affinities. For formal analysis, we study the reachability problem of ASM. While the general problem is shown to be undecidable, we identify  expressive fragments for which various verification techniques for pushdown systems or their extensions are harnessed to show the decidability of the problem.
+In this paper, we consider the reachability problem of Android Stack Machine (ASM), a formal model to capture key mechanisms of Android multi-tasking such as activities, back stacks, launch modes, and task affinities. The model is based on pushdown systems with multiple stacks, and focuses on the evolution of the back stack of the Android system when interacting with activities carrying specific launch modes and task affinities. We investigate the configuration reachability problem of ASM. While the decidability of the reachability problem of ASM is open, we identify an expressive sub-model for which various techniques for pushdown systems or their extensions are harnessed to show the decidability of the reachability problem.
 \end{abstract}
 
 % Use if graphical abstract is present
@@ -244,7 +244,7 @@ In this paper, we propose Android Stack Machine (ASM), a formal model to capture
 % Keywords
 % Each keyword is seperated by \sep
 \begin{keyword}
-Android, multitasking mechanism, stack, configuration reachability, pushdown system, transduction, decision procedure
+Android, multitasking mechanism, stack, configuration reachability, pushdown systems, saturation, transduction, well partial order, downward well-structured transition systems
 \end{keyword}
 \end{frontmatter}
 
@@ -265,7 +265,7 @@ Android, multitasking mechanism, stack, configuration reachability, pushdown sys
 %===================================================================================
 
 
-\section{Preliminaries}  \label{appendix:prel}
+\section{Preliminaries}~\label{sec:prel}
 \input{prel.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -294,18 +294,14 @@ Android, multitasking mechanism, stack, configuration reachability, pushdown sys
 
 \section{Related work}
 %
-%\input{rel.tex}
+\input{related.tex}
 
 %===================================================================================================
 
 \section{Conclusion}
 % 
-%
-%In this paper, we have introduced Android stack machine to formalize the back stack system of the Android platform. %We have done extensive experiments to make sure that the ASM model conforms to the actual behavior of the  Android platform. Moreover, 
-%We have also investigated the decidability of the reachability problem of ASM. While the reachability problem of ASM is undecidable in general, we have identified a fragment, i.e., $\singletask$-dominating ASM, which is expressive and admits decision procedures for reachability.
-%
-%
-%The implementation of the decision procedures is in progress. We also plan to consider other features of Android back stack systems, e.g., the ``allowTaskReparenting'' attribute of activities. A long-term program is to develop an efficient and scalable formal analysis and verification framework for Android apps, towards which the work reported in this paper is the first cornerstone.
+In this paper, we investigated the decidability of the configuration reachability problem of Android Stack Machines (\AMASS). We proposed a decision procedure for an expressive sub-model of {\AMASS}, that is, $\STK$-dominating {\AMASS}. The decision procedure integrates the following two main ideas: 1) We extended the saturation procedure of {\PDS} to multiple stacks. 2) We proposed a novel model of pushdown systems with well-partially-ordered transductions (\WOTrPDS) and showed that the reachability problem for {\WOTrPDS} is decidable.
+In the future, we plan to continue to investigate the decidability of {\AMASS}. 
 
 \newpage
 %\bibliographystyle{cas-model2-names}
