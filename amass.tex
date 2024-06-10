@@ -134,7 +134,8 @@ Let $\rho$ be a configuration with $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n
 	\item $\clrtop(\rho, B) = (([B]\cdot S_1'',\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$, if $S_1=S_1'\cdot[B]\cdot S_1''$ with $S_1'\in (\act\setminus\{B\})^*$,
 	% \item $\clrtsk(\rho, B) = ([B], S_2, \cdots, S_n)$,
 	\item $\newtsk(\rho, B) = (([B],\aft(B)), S_1, \cdots, S_n)$,
-	\item $\mvtsktop(\rho, i)$ is defined as $((S_i,\aname_i), (S_1,\aname_1), \cdots, (S_{i-1},\aname_{i-1}), (S_{i+1},\aname_{i+1}), \cdots, (S_n,\aname_n))$,
+	\item $\mvtsktop(\rho, i)$ is defined as 
+	$$((S_i,\aname_i), (S_1,\aname_1), \cdots, (S_{i-1},\aname_{i-1}), (S_{i+1},\aname_{i+1}), \cdots, (S_n,\aname_n)),$$
     % \item $\gettsk(\rho, B) = S_i$ such that $i \in [n]$ is the \emph{minimum} index satisfying $\aft(A_i)=\aft(B)$, if such an index $i$ exists; $\gettsk(\rho, B) = *$ otherwise.
     %
     \item $\gettsk(\rho, B)$ is defined as follows,
@@ -171,7 +172,8 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
 		%
 		\item If $\lmd(A) = \SIT$, then
     		\begin{itemize}
-    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then $\rho'=\push(\mvtsktop(\rho, i),B),$
+    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+			$$\rho'=\push(\mvtsktop(\rho, i),B),$$
     			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
     		\end{itemize}
 	\end{itemize}
@@ -186,7 +188,8 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
     		\begin{itemize}
     			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then
                 \begin{itemize}
-                    \item if $\topact(S_i)\neq B$, then $\rho'=\push(\mvtsktop(\rho, i),B),$
+                    \item if $\topact(S_i)\neq B$, then 
+                    $$\rho'=\push(\mvtsktop(\rho, i),B),$$
                     \item if $\topact(S_i)= B$, then $\rho'=\mvtsktop(\rho, i),$
                 \end{itemize}
     			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
@@ -249,7 +252,9 @@ Let us use the following example to illustrate the semantics.
 	%
 	\item if $B \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([B],2),([A],1))$, then $C$ is pushed, since $\lmd(C) = \STP$ and $B\neq C$, resulting to the configuration $(([CB],2),([A],1))$,
 	%
-	\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([A],1))$, then a new task $([D], 2)$ is created, since $\lmd(D) = \SIT$ and $\gettsk((([CB],2),([A],1)), D) = *$, resulting to the configuration $(([D],2),([CB],2),([A],1))$,
+	\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([A],1))$, then a new task $([D], 2)$ is created, since 
+	$\lmd(D) = \SIT$ and $\gettsk((([CB],2),([A],1)), D) = *,$ 
+	resulting to the configuration $(([D],2),([CB],2),([A],1))$,
 	%
 	\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $A$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
 	$$\gettsk((([D],2),([CB],2),([A],1)), B) = ([CB],2)$$
