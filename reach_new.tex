@@ -43,24 +43,54 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 %For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 
 \begin{example}
-	We will use the following example to illustrate the semantics of $\STK$-dominating $\AMASS$. \zhilin{the example to be cleaned}
+	We will use the following example to illustrate the concept of $\STK$-dominating $\AMASS$. \zhilin{the example to be cleaned}
 	%, $\STK$-dominating $\IFAMASS$ and $\STK$-dominating $\AMASS$ respectively.
 
+Let $\act = \{A, B, C, D, E\}$, $\lmd$ and $\aft$ be the launch-mode function and task-affinity function which defined in Table~\ref{tab-attribute-stk}.
+Then $\Mm=(\act,A,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$, where $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4, \tau_5, \tau_6\}$, where
+		$\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$,
+		$\tau_2 = B \xrightarrow{\startactivity(\ntkflag)} E$,
+		$\tau_3 = C \xrightarrow{\startactivity(\bot)} D$,
+		$\tau_4 = C \xrightarrow{\startactivity(\bot)} C$,
+		$\tau_5 = D \xrightarrow{\startactivity(\ctpflag)} B$,
+		$\tau_6 = E \xrightarrow{\startactivity(\bot)} D$. 
+Because $\back\in\Delta$, $\lmd(D) = \lmd(E) = \STK$ and $\aft(D) \neq \aft(E)$, and 
+\begin{itemize}
+	\item for $A \xrightarrow{\startactivity(\ntkflag)} C$, $\phi\models\ntkflag$ and $\lmd(C) = \SIT$,
+	\item for $B \xrightarrow{\startactivity(\ntkflag)} E$, $\phi\models\ntkflag$ and $\lmd(E) = \STK$,
+	\item for $C \xrightarrow{\startactivity(\bot)} D$, $\lmd(C) = \SIT$ and $\lmd(D) = \STK$,
+	\item for $C \xrightarrow{\startactivity(\bot)} C$, $\lmd(C) = \SIT$,
+	\item for $D \xrightarrow{\startactivity(\ctpflag)} B$, $\lmd(D) \neq \SIT$ and $\phi\models\neg\ntkflag$,
+	\item for $E \xrightarrow{\startactivity(\bot)} D$, $\lmd(E) \neq \SIT$ and $\phi\models\neg\ntkflag$.
+\end{itemize}
 
-Let $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ be an $\STK$-dominating $\AMASS$,  where $\act = \{A_0, A_1,B_0,B_1\}$, the functions $\lmd$ and $\aft$ are defined in Table~\ref{tab-attribute-stk}.
+	Then the configurations that are reachable from the initial configuration $(([A_0], 0))$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
+	Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration, which may not be the case for $\STK$-dominating $\AMASS$ in general.  
+	\begin{figure}
+		% \vspace{-3mm}
+			\centering
+			\includegraphics[scale = 0.5]{stk-asm-example.pdf}
+			\caption{Configurations reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
+				%in $\phi$
+		% \vspace{-6mm}	
+		\label{stk-asm-example}
+	\end{figure}
+
 \begin{table}[htbp]
 	\begin{center}
 	\begin{tabular}{|c|c|c|c|c|c|}
 	\hline
 	Activity & $\lmd$ & $\aft$\\
 	\hline
-	$A_0$ & $\STK$ & 0\\
+	$A$ & $\STD$ & 0\\
 	\hline
-	$A_1$ & $\STK$ & 1 \\
+	$B$ & $\STP$ & 1 \\
 	\hline
-	$B_0$ & $\STD$ & 0 \\
+	$C$ & $\SIT$ & 1 \\
 	\hline
-	$B_1$ & $\STD$ & 1 \\
+	$D$ & $\STK$ & 2 \\
+	\hline
+	$E$ & $\STK$ & 3 \\
 	\hline
 	\end{tabular}
 	\caption{Attributes of activities}
@@ -68,40 +98,6 @@ Let $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ be an $\STK$-dominating $\AMASS$,  where $
 	\end{center}
 \end{table} 
 
-Moreover, $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4, \tau_5\}$, where
-		$\tau_1 = A_0 \xrightarrow{\startactivity(\bot)} B_0$,
-		$\tau_2 = B_0 \xrightarrow{\startactivity(\rtfflag)} B_1$,
-		$\tau_3 = B_1 \xrightarrow{\startactivity(\rtfflag)} B_0$,
-		$\tau_4 = B_1 \xrightarrow{\startactivity(\bot)} A_1$,
-		$\tau_5 = A_1 \xrightarrow{\startactivity(\bot)} A_0$.
-	Then the configurations that are reachable from the initial configuration $(([A_0], 0))$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
-	For instance, 
-	\begin{itemize}
-	\item if $A_0 \xrightarrow{\startactivity(\bot)} B_0$ is applied to the configuration $(([A_0],0))$, then $B_0$ is pushed, since $\phi\models\neg\ntkflag\wedge\neg\ctpflag\wedge\neg\rtfflag\wedge\neg\ctkflag\wedge\neg\stpflag$ and $\lmd(B_0) = \STD$, resulting to the configuration $(([B_0A_0],0))$, %
-
-	\item if $B_0 \xrightarrow{\startactivity(\rtfflag)} B_1$ is applied to the configuration $(([B_0A_0],0))$, then $B_1$ is pushed, since $\phi\models\rtfflag\wedge\neg\ntkflag\wedge\neg\ctpflag\wedge\neg\ctkflag\wedge\neg\stpflag$ and $\lmd(B_1) = \STD$ and $B_1$ dose not occur in the top task $([B_0A_0],0)$, resulting to the configuration 
-	$(([B_1B_0A_0],0))$,
-	%
-	\item if $B_0 \xrightarrow{\startactivity(\rtfflag)} B_1$ is applied to the configuration 
-	$(([B_0B_1A_0],0))$, then $B_1$ is moved to the top of the top task, since $\phi\models\rtfflag\wedge\neg\ntkflag\wedge\neg\ctpflag\wedge\neg\ctkflag\wedge\neg\stpflag$ and $\lmd(B_1) = \STD$ and $B_1$ occurs in the top task $([B_0B_1A_0],0)$, resulting to the configuration $(([B_1B_0A_0],0))$,
-	%
-	\item if $A_1 \xrightarrow{\startactivity(\bot)} A_0$ is applied to the configuration $(([A_1],1))$, then a new task $([A_0],0)$ is created, since $\lmd(A_0) = \STK$ and $\gettsk((([A_1],1)), A_0) = *$, resulting to the configuration $(([A_0],0),([A_1],1))$,
-	%
-	\item if $A_1 \xrightarrow{\startactivity(\bot)} A_0$ is applied to the configuration $(([A_1],1),([B_1B_0A_0],0))$, then the task $([B_1B_0A_0],0)$ is moved to the top and all the activities above $A_0$, which is $B_1$ and $B_0$ here, are removed from the task $([B_1B_0A_0],0)$, since $\lmd(A_0) = \STK$, 
-	$$\gettsk((([A_1],1),([B_1B_0A_0],0)), A_0) = ([B_1B_0A_0],0)$$
-	and $A_0$ occurs in the task $([B_1B_0A_0],0)$, resulting to the configuration $(([A_0],0),([A_1],1))$,
-	%
-	\end{itemize}
-	Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration, which may not be the case for $\STK$-dominating $\AMASS$ in general.  
-	\begin{figure}
-		% \vspace{-3mm}
-			\centering
-			\includegraphics[scale = 0.5, trim = 3.5cm 0cm 1.5cm 0cm,clip]{stk-asm-example.pdf}
-			\caption{Configurations reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
-				%in $\phi$
-		% \vspace{-6mm}	
-		\label{stk-asm-example}
-	\end{figure}
 
 % example of STK-dominating AMASS here. \zhilin{three examples for $\LMAMASS$, $\IFAMASS$, and $\AMASS$ respectively, to be used in the decision procedure.}
 \end{example}
