@@ -26,7 +26,7 @@ Our goal is to decide whether there is a configuration $\rho$ that is reachable 
 The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as recognizable relations defined in the sequel. 
 
 \begin{definition}[Recognisable relations]
-A $k$-ary string relation $R \subseteq (\act^*)^k$ is \emph{recognisable}  if it is a finite union of products of regular languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a regular language. An {\NFA}-representation of $R$ is $\{(\Aut_{i,1},\cdots,\Aut_{i,k})\}_{i\in[n]}$, where each $\Aut_{i,j}$ is an {\NFA} defining $L_{i,j}$, that is, $\Lang(\Aut_{i,j}) = L_{i,j}$.
+A string relation $R \subseteq (\act^*)^k$ is \emph{recognisable}  if it is a finite union of products of regular languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a regular language. An {\NFA}-representation of $R$ is $\{(\Aut_{i,1},\cdots,\Aut_{i,k})\}_{i\in[n]}$, where each $\Aut_{i,j}$ is an {\NFA} defining $L_{i,j}$, that is, $\Lang(\Aut_{i,j}) = L_{i,j}$.
 \end{definition}
 
 %Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS}, and use a set of {\NFA} tuples to represent the configurations of {\AMASS} $\Mm$.
@@ -88,7 +88,7 @@ Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarr
 \end{itemize}
 Intuitively, $\Pp_{A}$ simulates the behavior of a task of $\Mm$ where $A$ is already in the bottom of the task. 
 
-Moreover, for $A \in \act$ such that $\lmd(A) = \singleinstance$, we define $\Pp_A  = (P_A, \Gamma_A, \Delta_A)$, where $P_A = \{p_0\}$, $\Gamma_A = \{A\}$, and $\Delta_A = \{(p_0, A, \epsilon, p_0)\}$.
+Moreover, for $A \in \act$ such that $\lmd(A) = \singleinstance$, we define a {\PDS} $\Pp_A  = (P_A, \Gamma_A, \Delta_A)$, where $P_A = \{p_0\}$, $\Gamma_A = \{A\}$, and $\Delta_A = \{(p_0, A, \epsilon, p_0)\}$.
 
 
 
@@ -199,7 +199,7 @@ there is  $(\Aut_1, \dots, \Aut_k)$ such that $(\theta, (\Aut_1, \dots, \Aut_k))
 
 \smallskip
 
-\noindent \emph{Induction base $n = 0$}. From $([A_0], \aft(A_0)) \xrightarrow[\Mm]{}^0 \rho$, we have $\rho = ([A_0], \aft(A_0))$. From the computation of $\AutReach_f$, we know that $(\aft(A_0), (\Aut_{A_0})) \in \AutReach_f$. Since $[A_0] \in \Lang(\Aut_{A_0})$, the claim holds for $n = 0$. 
+\noindent \emph{Induction base $n = 0$}. From $([A_0], \aft(A_0)) \xrightarrow[\Mm]{}^0 \rho$, we know that $\rho = ([A_0], \aft(A_0))$. From the computation of $\AutReach_f$, we know that $(\aft(A_0), (\Aut_{A_0})) \in \AutReach_f$. Since $[A_0] \in \Lang(\Aut_{A_0})$, the claim holds for $n = 0$. 
 
 \smallskip
 
@@ -233,7 +233,7 @@ Let us assume $\tau = B \xrightarrow{\startactivity(\bot)} C$ in the sequel. Fro
 
 If $\rho = \rho'$, then we are done. 
 
-If $\rho$ is obtained from $\rho'$ by pushing $C$ to the top task, then $S_1 \in \Lang(\Aut_{A \rightsquigarrow C})$. Moreover, from the 4th saturation rule, we know that $(\theta, (\Aut_{A \rightsquigarrow C}, \Aut'_2, \cdots, \Aut'_l)) \in \AutReach_f$. 
+If $\rho$ is obtained from $\rho'$ by pushing $C$ to the top task, then $S_1 \in \Lang(\Aut_{A \rightsquigarrow C})$. Moreover, from the 4th saturation rule, we know $(\theta, (\Aut_{A \rightsquigarrow C}, \Aut'_2, \cdots, \Aut'_l)) \in \AutReach_f$. 
 Since 
 $$(S_1, \cdots, S_k) \in \Lang(\Aut_{A \rightsquigarrow C}) \times \Lang(\Aut'_2) \times \cdots \times \Lang(\Aut'_l) = \Rel(\Aut_{A \rightsquigarrow C}, \Aut'_2, \cdots, \Aut'_l),$$ 
 we conclude that the claim holds for $n$ in this case. 
@@ -334,7 +334,9 @@ Since $\AutReach_f$ is computed by applying the saturation rules and adding the 
 We prove by an induction on $n \ge 0$ the following claim.  
 
 \smallskip
-\noindent {\bf Claim}. For each $n \ge 0$, if $(\theta, (\Aut_1, \cdots, \Aut_k)) \in \AutReach_n$ with $\theta = \aname_1 \cdots \aname_k$ and $(S_1,\dots,S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$, then $(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} ((S_1, \aname_1), \cdots, (S_k, \aname_k))$.
+\noindent {\bf Claim}. For each $n \ge 0$, if $(\theta, (\Aut_1, \cdots, \Aut_k)) \in \AutReach_n$ with $\theta = \aname_1 \cdots \aname_k$ and $(S_1,\dots,S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$, then 
+%
+$$(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} ((S_1, \aname_1), \cdots, (S_k, \aname_k)).$$
 
 \smallskip
 
@@ -342,7 +344,10 @@ We prove by an induction on $n \ge 0$ the following claim.
 
 
 \noindent \emph{Induction base $n = 0$}. 
-Because $\AutReach_0 = \{(\aft(A_0),(\Aut_{A_0}))\}$, if $(S_1, \cdots, S_k) \in \Rel((\Aut_{A_0}))$, then $k=1$ and $S_1 = [A_0]$. Since $(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} (([A_0], \aft(A_0)))$, it follows that the claim holds for $n = 0$. 
+Because $\AutReach_0 = \{(\aft(A_0),(\Aut_{A_0}))\}$, if $(S_1, \cdots, S_k) \in \Rel((\Aut_{A_0}))$, then $k=1$ and $S_1 = [A_0]$. Since 
+$$(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} (([A_0], \aft(A_0))),$$ 
+%
+it follows that the claim holds for $n = 0$. 
 
 \smallskip
 
@@ -361,7 +366,8 @@ We distinguish which saturation rule is used to add $(\theta,(\Aut_1,\dots,\Aut_
 \paragraph*{The 1st saturation rule} Then  there are a transition rule $\tau = A \xrightarrow{\startactivity(\bot)} A'  \in \Delta$ and $(\theta', (\Aut'_1, \cdots, \Aut'_l)) \in \AutReach_{n-1}$ such that $\lmd(A')=\STK$ or $\singleinstance$, $\Lang(\Aut'_1) \neq \emptyset$, $\Aut'_1 = \Aut_{B\rightsquigarrow A}$ for some $B \in \act_\singletask\cup\act_\singleinstance$, $\namefun_{A'}(\theta') = \bot$, $\theta = \aft(A') \theta'$, and $(\Aut_1, \cdots, \Aut_k) = (\Aut_{A'}, \Aut'_1, \cdots, \Aut'_l)$. 
 Evidently, $\aname_1 = \aft(A')$ and $\theta' = \aname_2 \cdots \aname_k$. 
 
-Suppose $(S_1,\dots,S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$. Then $S_1 = [A']$ and $(S_2, \cdots, S_k) \in \Rel((\Aut'_1, \cdots, \Aut'_l))$. 
+Suppose $(S_1,\dots,S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$. Then $S_1 = [A']$ and 
+$$(S_2, \cdots, S_k) \in \Rel((\Aut'_1, \cdots, \Aut'_l)).$$ 
 
 From $(\theta', (\Aut'_1, \cdots, \Aut'_l)) \in \AutReach_{n-1}$ and the induction hypothesis, we know that $(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} ((S_2, \aname_2), \cdots, (S_k, \aname_k))$. 
 
@@ -381,7 +387,8 @@ From
 %
 $$(S_1, \cdots, S_k) \in \Rel((\Aut_1, \cdots, \Aut_k)) = \Rel((\Aut_{A'}, \Aut'_1, \cdots, \Aut'_{i-1}, \Aut'_{i+1}, \cdots, \Aut'_k)),$$ 
 %
-we know that $S_1 = [A']$, $(S_2, \cdots, S_i) \in \Rel((\Aut'_1, \cdots, \Aut'_{i-1}))$, and $(S_{i+1}, \cdots, S_k) \in \Rel((\Aut'_{i+1}, \cdots, \Aut'_k))$. 
+we know that $S_1 = [A']$, $(S_2, \cdots, S_i) \in \Rel((\Aut'_1, \cdots, \Aut'_{i-1}))$, and 
+$$(S_{i+1}, \cdots, S_k) \in \Rel((\Aut'_{i+1}, \cdots, \Aut'_k)).$$
 
 Let $S' \in \Lang(\Aut'_i)$. Then $(S_2, \cdots, S_i, S', S_{i+1}, \cdots, S_k) \in \Rel(\Aut'_1, \cdots, \Aut'_k)$.
 From $(\theta', (\Aut'_1, \cdots, \Aut'_k)) \in \AutReach_{n-1}$ and the induction hypothesis, we know that  
@@ -406,6 +413,7 @@ Therefore, in this case, the claim holds for $n$.
 \paragraph*{The 3rd saturation rule} Then $\tau = \back$, $(\theta', (\Aut'_1, \cdots, \Aut'_l)) \in \AutReach_{n-1}$,  $\theta' = \aname' \theta$ for some $\aname'$, $\Aut'_1 = \Aut_{A'}$ for some $A' \in \act_\singletask\cup \act_\singleinstance$, and $(\Aut_1, \cdots, \Aut_k) = (\Aut'_2, \cdots, \Aut'_l)$.
 
 From $(S_1, \cdots, S_k) \in \Rel((\Aut_1, \cdots, \Aut_k)) = \Rel((\Aut'_2, \cdots, \Aut'_l))$, we know that $([A'], S_1, \cdots, S_k) \in \Rel((\Aut'_1, \Aut'_2, \cdots, \Aut'_l))$. 
+
 Then according to $(\theta', (\Aut'_1, \cdots, \Aut'_l)) \in \AutReach_{n-1}$ and the induction hypothesis, we know that 
 $$(([A_0], \aft(A_0))) \xRightarrow[\Mm]{} (([A'], \aname'), (S_1, \aname_1), \cdots, (S_k, \aname_k)).$$ 
 
@@ -744,7 +752,7 @@ We prove the equation by showing the left-hand side is a subset of the right-han
     
     \smallskip
     
-    \noindent \emph{Induction base $n = 0$}. From $(([A_0], \aft(A_0))) \xrightarrow[\Mm]{}^0 \rho$, we have $\rho = (([A_0], \aft(A_0)))$. From the computation of $\AutReach_f$, we know that $(\aft(A_0), (\Aut_{A_0\rightsquigarrow A_0})) \in \AutReach_f$. Since $[A_0] \in \Lang(\Aut_{A_0})\subseteq\Lang(\Aut_{A_0\rightsquigarrow A_0})$, the claim holds for $n = 0$. 
+    \noindent \emph{Induction base $n = 0$}. From $(([A_0], \aft(A_0))) \xrightarrow[\Mm]{}^0 \rho$, we know that $\rho = (([A_0], \aft(A_0)))$. From the computation of $\AutReach_f$, we know $(\aft(A_0), (\Aut_{A_0\rightsquigarrow A_0})) \in \AutReach_f$. Since $[A_0] \in \Lang(\Aut_{A_0})\subseteq\Lang(\Aut_{A_0\rightsquigarrow A_0})$, the claim holds for $n = 0$. 
     
     \smallskip
     
@@ -768,7 +776,9 @@ If $\tau = \back$, then we distinguish between whether $|S'_1| > 1$ or not.
 %
 \item If $\Aut'_1 = \Aut_{A_0 \rightsquigarrow B}$  for some $B \in \Gamma_{A_0} \setminus \{A'_0\}$, then the discussion is similar to the previous case, i.e. $\Aut'_1 = \Aut_{A \rightsquigarrow B}$. 
 %
-\item If $\Aut'_1 = \Aut_{A_0 \stackrel{C}{\rightsquigarrow} A'_0}$ for some $C \in \Gamma_{A_0} \setminus \{A'_0\}$, then $S_1 \in \Lang(\Aut_{A \rightsquigarrow C})$. According to the 4th saturation rule, $(\theta, (\Aut_{A \rightsquigarrow C}, \Aut'_1, \cdots, \Aut'_l)) \in \AutReach_f$. Since $(S_1, \cdots, S_k) \in \Rel((\Aut_{A \rightsquigarrow C}, \Aut'_2, \cdots, \Aut'_l))$, we conclude that the claim holds for $n$ in this situation. 
+\item If $\Aut'_1 = \Aut_{A_0 \stackrel{C}{\rightsquigarrow} A'_0}$ for some $C \in \Gamma_{A_0} \setminus \{A'_0\}$, then $S_1 \in \Lang(\Aut_{A \rightsquigarrow C})$. According to the 4th saturation rule, 
+$$(\theta, (\Aut_{A \rightsquigarrow C}, \Aut'_1, \cdots, \Aut'_l)) \in \AutReach_f.$$ 
+Since $(S_1, \cdots, S_k) \in \Rel((\Aut_{A \rightsquigarrow C}, \Aut'_2, \cdots, \Aut'_l))$, we conclude that the claim holds for $n$ in this situation. 
 %
 \item If $\Aut'_1 = \Aut_{A_0 \stackrel{C}{\rightsquigarrow} B}$ for some $C \in \Gamma_{A_0} \setminus \{A'_0\}$ and $B \in \Gamma_{A_0}$ such that $B \neq A'_0$, then $S_1 \in \Lang(\Aut_{A_0 \stackrel{C}{\rightsquigarrow} B'})$ for some $B'$. According to the 4th saturation rule, we have $(\theta, (\Aut_{A_0 \stackrel{C}{\rightsquigarrow} B'}, \Aut'_1, \cdots, \Aut'_l)) \in \AutReach_f$. Since 
 %
@@ -820,12 +830,15 @@ If $\theta = \theta'$, then we distinguish between the forms of $\Aut'_1$.
 \item If $\Aut'_1 = \Aut_{A_0 \rightsquigarrow B}$, then $B' = A'_0$ and $S_1 = [A'_0] \cdot S'_1$.  According to the 4th saturation rule, $(\theta, (\Aut_{A_0 \stackrel{B}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l)) \in \AutReach_f$. Since $(S_1, \cdots, S_k) \in \Rel((\Aut_{A_0 \stackrel{B}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l))$, we know that the claim holds for $n$ in this situation.
 
 %
-\item If $\Aut'_1 = \Aut_{A_0 \stackrel{C}{\rightsquigarrow} B}$ for some $C \in \Gamma_{A_0} \setminus \{A'_0\}$, then $B' = A'_0$ and $S_1 \in  \Lang(\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0})$.  According to the 4th saturation rule, $(\theta, (\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l)) \in \AutReach_f$. Since $(S_1, \cdots, S_k) \in \Rel((\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l))$, we know that the claim holds for $n$ in this situation.
+\item If $\Aut'_1 = \Aut_{A_0 \stackrel{C}{\rightsquigarrow} B}$ for some $C \in \Gamma_{A_0} \setminus \{A'_0\}$, then $B' = A'_0$ and $S_1 \in  \Lang(\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0})$.  According to the 4th saturation rule, 
+$$(\theta, (\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l)) \in \AutReach_f.$$ 
+Since $(S_1, \cdots, S_k) \in \Rel((\Aut_{A \stackrel{C}{\rightsquigarrow} A'_0}, \Aut'_2, \cdots, \Aut'_l))$, we know that the claim holds for $n$ in this situation.
 \end{itemize}
 
 Let us assume $\theta \neq \theta'$ in the sequel. We distinguish between the following two subcases. 
 \begin{itemize}
-    \item \emph{Subcase $\namefun_{B'}(\theta') = \bot$}. Then $k=l+1$, $S_1=[B']$, and $(S_2,\cdots,S_k)=(S_1',\cdots,S_l')$.  According to the 1st saturation rule, $(\theta, (\Aut_{B'}, \Aut_1', \cdots, \Aut_l')) \in \AutReach_f$.
+    \item \emph{Subcase $\namefun_{B'}(\theta') = \bot$}. Then $k=l+1$, $S_1=[B']$, and $(S_2,\cdots,S_k)=(S_1',\cdots,S_l')$.  According to the 1st saturation rule, 
+    $$(\theta, (\Aut_{B'}, \Aut_1', \cdots, \Aut_l')) \in \AutReach_f.$$
     %, where $\Lang(\Aut_1') \cap A\act^* \neq \emptyset$, and $S_1=[A']\in\ConfSet(\Aut_{A'})$, 
    From $(S_1, \cdots, S_k) = ([B'], S_1', \cdots, S_l') \in \Lang(\Aut_{B'}) \times \Lang(\Aut_1') \times \cdots \times \Lang(\Aut_l')$, we conclude that the claim holds for $n$ in this subcase.
     %
@@ -846,7 +859,7 @@ Let us assume $\theta \neq \theta'$ in the sequel. We distinguish between the fo
  \noindent \emph{Case $\lmd(B) = \singleinstance$ and $\lmd(B') = \singletask$ or $\singleinstance$}. 
  
  The discussion is similar to the previous case. 
-    
+%    
 %%%%%%%%%%%%%%%%% the original proof removed
 %%%%%%%%%%%%%%%%% the original proof removed
 \hide{

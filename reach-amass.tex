@@ -138,15 +138,17 @@ We are ready to present the construction of $\Pp_A$. Let $\Pp_A = (P_A, \Gamma_A
 				\end{itemize}
 %
 				\item if $\phi \models \rtfflag \wedge \neg\ctpflag$ and $B\neq C$,  then
-                we have $(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A}$ 
-                and $(p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A}$,
+                we have 
+                $$(p_0, B, CB, \tau_{\not C}, p_0) \in \Delta_{A} \mbox{ and } (p_0, B, CB, \tau_{C, \dag}, p_0) \in \Delta_{A},$$
 %
 				\item if either $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \stpflag$ or $\phi \models \neg\ctpflag \wedge \neg \rtfflag$ and $\lmd(C) = \singletop$, moreover, $B \neq C$, then we have $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$, 
 				%
 				\item if $\phi \models \neg\ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$ and $\lmd(C) = \standard$, then $(p_0, C, CB, \tau_{\id}, p_0) \in \Delta_{A}$,
 				\end{itemize}
 				
-				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A$,  then we have $(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$, $(p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A}$, and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$. 
+				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A$,  then we have 
+				$$(p_0, B, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}, (p_A, A, A, \tau_{\id}, p_0)  \in \Delta_{A},$$ 
+				and for each $\gamma \in \Gamma_A \setminus \{A\}$, $(p_A, \gamma, \varepsilon, \tau_{\id}, p_A) \in \Delta_{A}$. 
 				%
             %
             \end{itemize}
@@ -389,7 +391,9 @@ Formally, the {\WOTrPDS} $\Pp'_{A_0}$ is defined as $(P_{A_0}, \Gamma_{A_0}, \Tr
 %where $\tau_B$ (resp. $\tau_{\not B}$) is the transduction that checks that $B$ occurs (resp. does not occur) in the input string but keeps the input string unchanged, and 
 \item $\Delta_{A_0}$ is defined as follows,
         \begin{itemize}
-            \item for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, \triangleleft\}$, $(p_0, \gamma, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A_0}$ and $(p_1, \gamma, \varepsilon, \tau_{\id}, p_1) \in \Delta_{A_0}$, (Recall that $\back$ can be applied anytime in $\Mm$.)
+            \item for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, \triangleleft\}$, 
+            $$(p_0, \gamma, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A_0} \mbox{ and } (p_1, \gamma, \varepsilon, \tau_{\id}, p_1) \in \Delta_{A_0},$$ 
+            (Recall that $\back$ can be applied anytime in $\Mm$.)
 	    %
             \item $(p_1, A'_0, \varepsilon, \tau_{\id}, p_0) \in \Delta_{A_0}$,
             %
@@ -425,7 +429,11 @@ Formally, the {\WOTrPDS} $\Pp'_{A_0}$ is defined as $(P_{A_0}, \Gamma_{A_0}, \Tr
 				
 				\item if $B \in \act_\standard \cup \act_\singletop$ and $C = A'_0$,  then 
 				\begin{itemize}
-					\item if $\phi \models \CTK$, then $(p_0, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0}$, $(p_1, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0}$, $(p_{\sf ctk}, \gamma, \varepsilon, \tau_\id, p_{\sf ctk}) \in \Delta_{A_0}$ for each $\gamma \in \Gamma_{A_0} \setminus \{\triangleleft\}$, $(p_{\sf ctk}, \triangleleft, A'_0 \triangleleft, \tau_\id, p_1) \in \Delta_{A_0}$, 
+					\item if $\phi \models \CTK$, then 
+					$$(p_0, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0}, (p_1, B, \varepsilon, \tau_{\id}, p_{\sf ctk}) \in \Delta_{A_0},$$ 
+					%
+					and $(p_{\sf ctk}, \gamma, \varepsilon, \tau_\id, p_{\sf ctk}) \in \Delta_{A_0}$ 
+					for each $\gamma \in \Gamma_{A_0} \setminus \{\triangleleft\}$, moreover, $(p_{\sf ctk}, \triangleleft, A'_0 \triangleleft, \tau_\id, p_1) \in \Delta_{A_0}$, 
 					%
 					\item otherwise, $(p_0, B, A'_0 B, \tau_{\id}, p_1) \in \Delta_{A_0}$, $(p_1, B, \varepsilon, \tau_{\id}, p_{1, A'_0}) \in \Delta_{A_0}$, $(p_{1, A'_0}, \gamma, \varepsilon, \tau_{\id}, p_{1, A'_0}) \in \Delta_{A_0}$ for each $\gamma \in \Gamma_{A_0} \setminus \{A'_0, \triangleleft\}$,  $(p_{1, A'_0}, A'_0, A'_0, \tau_{\id}, p_1) \in \Delta_{A_0}$.  
 				\end{itemize}				

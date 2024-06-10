@@ -253,12 +253,13 @@ Let us use the following example to illustrate the semantics.
 	\item if $B \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([B],2),([A],1))$, then $C$ is pushed, since $\lmd(C) = \STP$ and $B\neq C$, resulting to the configuration $(([CB],2),([A],1))$,
 	%
 	\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([A],1))$, then a new task $([D], 2)$ is created, since 
-	$\lmd(D) = \SIT$ and $\gettsk((([CB],2),([A],1)), D) = *,$ 
+	$$\lmd(D) = \SIT \mbox{ and } \gettsk((([CB],2),([A],1)), D) = *,$$ 
 	resulting to the configuration $(([D],2),([CB],2),([A],1))$,
 	%
 	\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $A$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
 	$$\gettsk((([D],2),([CB],2),([A],1)), B) = ([CB],2)$$
-	and $B$ occurs in $([CB], 2)$, resulting to the configuration $(([B],2),([D],2),([A],1))$,
+	and $B$ occurs in $([CB], 2)$, resulting to the configuration 
+	$$(([B],2),([D],2),([A],1)),$$
 	%
 	\item if $D \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top, but $C$ will not be pushed, since $\lmd(C) = \STP$, $\lmd(D) = \SIT$,
 	$$\gettsk((([D],2),([CB],2),([A],1)), C) = ([CB],2)$$
@@ -470,13 +471,16 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
             \item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
 			\item otherwise, 
 			\begin{itemize}
-				\item if $\phi \models\ctpflag$ and $B \in S_i$, then $\rho' =\clrtop(\mvtsktop(\rho, i), B)$,
+				\item if $\phi \models \ctpflag$ and $B \in S_i$, then 
+				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
 				\item otherwise,
 				\begin{itemize}
-					\item if $\phi \models \rtfflag$ and $B \in S_i$, then $\rho'=\mvacttop(\mvtsktop(\rho, i), B)$,
+					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
+					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
 					\item otherwise,
 					\begin{itemize}
-						\item if $\phi \models \stpflag$ and $B = \topact(S_i)$, then $\rho' = \mvtsktop(\rho, i)$,
+						\item if $\phi \models \stpflag$ and $B = \topact(S_i)$, then 
+						$$\rho' = \mvtsktop(\rho, i),$$
 						\item otherwise, $\rho'=\push(\mvtsktop(\rho, i), B)$,
 					\end{itemize}
 				\end{itemize}
@@ -509,10 +513,12 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
             \item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
 			\item otherwise, 
 			\begin{itemize}
-				\item if $\phi \models\ctpflag$ and $B \in S_i$, then $\rho' =\clrtop(\mvtsktop(\rho, i), B)$,
+				\item if $\phi \models\ctpflag$ and $B \in S_i$, then 
+				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
 				\item otherwise,
 				\begin{itemize}
-					\item if $\phi \models \rtfflag$ and $B \in S_i$, then $\rho'=\mvacttop(\mvtsktop(\rho, i), B)$,
+					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
+					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
 					\item otherwise,
 					\begin{itemize}
 						\item if $B = \topact(S_i)$, then $\rho' = \mvtsktop(\rho, i)$,

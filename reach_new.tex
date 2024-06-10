@@ -29,7 +29,7 @@ As we have seen, the semantics of {\AMASS} in Section~\ref{sec:amass} is rather 
 %Due to the semantics of {\AMASS} defined in Section~\ref{sec:semantics-amass} is highly complicated, it is difficult to provide a decision algorithm for solving the configuration reachability problem of {\AMASS}. To this end, we introduce a fragment of {\AMASS} called STK-dominating {\AMASS}, which accommodates all launch mdoes and intent flags. 
 
 \begin{definition}[$\STK$-dominating \AMASS] \label{def:stk-amass}
-    An $\AMASS$  $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
+    Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
     \begin{enumerate}
 		\item $\back\in\Delta$,
         \item the task affinities of $\singletask$-activities (if there is any) are mutually distinct,
