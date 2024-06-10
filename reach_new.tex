@@ -43,63 +43,68 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 %For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 
 \begin{example}
-	We will use the following example to illustrate the concept of $\STK$-dominating $\AMASS$. \zhilin{the example to be cleaned}
-	%, $\STK$-dominating $\IFAMASS$ and $\STK$-dominating $\AMASS$ respectively.
-
-Let $\act = \{A, B, C, D, E\}$, $\lmd$ and $\aft$ be the launch-mode function and task-affinity function which defined in Table~\ref{tab-attribute-stk}.
-Then $\Mm=(\act,A,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$, where $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4, \tau_5, \tau_6\}$, where
-		$\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$,
+We will use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
+Let $\Mm=(\act,A,\lmd,\aft,\Delta)$, where 
+\begin{itemize}
+\item $\act = \{A, B, C, D, E\}$, 
+%
+\item $\lmd(A)=\lmd(B)=\standard$, $\lmd(C) = \singleinstance$, $\lmd(D) = \lmd(E) = \singletask$, 
+%
+\item $\aft(A) = 0$, $\aft(B) = \aft(C) = 1$, $\aft(D) = 2$, $\aft(E) = 3$, 
+%
+\item $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4, \tau_5, \tau_6\}$, where 
+\begin{itemize}
+\item 	$\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$,
 		$\tau_2 = B \xrightarrow{\startactivity(\ntkflag)} E$,
 		$\tau_3 = C \xrightarrow{\startactivity(\bot)} D$,
-		$\tau_4 = C \xrightarrow{\startactivity(\bot)} C$,
+\item		$\tau_4 = C \xrightarrow{\startactivity(\bot)} C$,
 		$\tau_5 = D \xrightarrow{\startactivity(\ctpflag)} B$,
 		$\tau_6 = E \xrightarrow{\startactivity(\bot)} D$. 
-Because $\back\in\Delta$, $\lmd(D) = \lmd(E) = \STK$ and $\aft(D) \neq \aft(E)$, and 
-\begin{itemize}
-	\item for $A \xrightarrow{\startactivity(\ntkflag)} C$, $\phi\models\ntkflag$ and $\lmd(C) = \SIT$,
-	\item for $B \xrightarrow{\startactivity(\ntkflag)} E$, $\phi\models\ntkflag$ and $\lmd(E) = \STK$,
-	\item for $C \xrightarrow{\startactivity(\bot)} D$, $\lmd(C) = \SIT$ and $\lmd(D) = \STK$,
-	\item for $C \xrightarrow{\startactivity(\bot)} C$, $\lmd(C) = \SIT$,
-	\item for $D \xrightarrow{\startactivity(\ctpflag)} B$, $\lmd(D) \neq \SIT$ and $\phi\models\neg\ntkflag$,
-	\item for $E \xrightarrow{\startactivity(\bot)} D$, $\lmd(E) \neq \SIT$ and $\phi\models\neg\ntkflag$.
 \end{itemize}
-
-	Then the configurations that are reachable from the initial configuration $(([A_0], 0))$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
-	Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration, which may not be the case for $\STK$-dominating $\AMASS$ in general.  
-	\begin{figure}
+\end{itemize}
+Then $\Mm$ is an $\STK$-dominating {\AMASS}, since
+\begin{itemize}
+\item in $\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$, $\lmd(C) = \singleinstance$,  
+%
+\item in $\tau_2 = B \xrightarrow{\startactivity(\ntkflag)} E$, $\lmd(E) = \singletask$, 
+%
+\item in $\tau_3 = C \xrightarrow{\startactivity(\bot)} D$, $\lmd(C) = \singleinstance$ and $\lmd(D) = \singletask$, 
+%
+\item in $\tau_4 = C \xrightarrow{\startactivity(\bot)} C$, $\lmd(C) = \singleinstance$. 
+\end{itemize}
+The configurations that are reachable from the initial configuration $(([A_0], 0))$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
+	Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration.  
+	\begin{figure}[htbp]
 		% \vspace{-3mm}
 			\centering
-			\includegraphics[scale = 0.5]{stk-asm-example.pdf}
-			\caption{Configurations reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
+			\includegraphics[scale = 0.4]{stk-asm-example.pdf}
+			\caption{Configurations that are reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
 				%in $\phi$
 		% \vspace{-6mm}	
 		\label{stk-asm-example}
 	\end{figure}
 
-\begin{table}[htbp]
-	\begin{center}
-	\begin{tabular}{|c|c|c|c|c|c|}
-	\hline
-	Activity & $\lmd$ & $\aft$\\
-	\hline
-	$A$ & $\STD$ & 0\\
-	\hline
-	$B$ & $\STP$ & 1 \\
-	\hline
-	$C$ & $\SIT$ & 1 \\
-	\hline
-	$D$ & $\STK$ & 2 \\
-	\hline
-	$E$ & $\STK$ & 3 \\
-	\hline
-	\end{tabular}
-	\caption{Attributes of activities}
-	\label{tab-attribute-stk}
-	\end{center}
-\end{table} 
-
-
-% example of STK-dominating AMASS here. \zhilin{three examples for $\LMAMASS$, $\IFAMASS$, and $\AMASS$ respectively, to be used in the decision procedure.}
+%\begin{table}[htbp]
+%	\begin{center}
+%	\begin{tabular}{|c|c|c|c|c|c|}
+%	\hline
+%	Activity & $\lmd$ & $\aft$\\
+%	\hline
+%	$A$ & $\STD$ & 0\\
+%	\hline
+%	$B$ & $\STP$ & 1 \\
+%	\hline
+%	$C$ & $\SIT$ & 1 \\
+%	\hline
+%	$D$ & $\STK$ & 2 \\
+%	\hline
+%	$E$ & $\STK$ & 3 \\
+%	\hline
+%	\end{tabular}
+%	\caption{Attributes of activities}
+%	\label{tab-attribute-stk}
+%	\end{center}
+%\end{table} 
 \end{example}
 
 
