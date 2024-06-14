@@ -47,13 +47,13 @@ in the interest of seeking more expressive, practice-relevant decidable fragment
 %Although the combination of all of them is unfortunately undecidable,
 %\tl{I am not satisfied here, any comments on how to improve?}.
 %On top of that, we hypothesize that restricting $\singletask$ and $\singleinstance$ activities \emph{individually} is a promising way. To this end,
-we identify a fragment \textbf{$\STK$-dominating {\AMASS}} 
+we identify a fragment referred to as \textbf{$\STK$-dominating {\AMASS}} 
 which 
 %assumes $\STK$ activities have different task affinities and which further restricts the use of $\STK$ activities and the intent flag $\ntkflag$. This fragment 
 covers a majority of open-source Android apps (e.g., from F-Droid) we have found so far. (The precise definition of $\STK$-dominating {\AMASS} is technical and will be given later.) 
 
 %\tl{claiming this fragment can cover most of open-resource apps we have found?shall we}\zhilin{how about the previous sentence ?}
-The primary contribution of the current paper is to give decision procedures for the reachability problem of $\STK$-dominating {\AMASS}. We extend the saturation procedure of pushdowns systems (\PDS) to multiple stacks.  Moreover, we propose pushdown systems with well-partially-ordered transductions (\WOTrPDS), an extension of finite \TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered wrt the superset relation, we show that the configuration reachability of \WOTrPDS is decidable, and utilize \WOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
+The primary contribution of the current paper is to give decision procedures for the reachability problem of $\STK$-dominating {\AMASS}. We extend the saturation procedure of pushdowns systems (\PDS) to multiple stacks.  Moreover, we propose pushdown systems with well-partially-ordered transductions (\WOTrPDS), an extension of finite \TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered with respect to the superset relation, we show that the configuration reachability of \WOTrPDS is decidable, and utilize \WOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
 %As a complement, we also studied a fragment \textbf{$\singleinstance$-acyclic-mediating ASS}, which include $\singleinstance$, but are free of $\singletask$, activities, subject to additional restrictions.
 %The work, apart from independent interests in the study of multi-stack pushdown systems, lays a solid foundation for further (static) analysis and verification of Android apps related to multi-tasking, enabling model checking of Android apps, security analysis (such as discovering task hijacking), or typical tasks in software engineering such as  % Assist programmers with
 %automatic debugging, model-based testing, etc.
