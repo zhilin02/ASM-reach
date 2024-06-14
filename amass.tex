@@ -74,16 +74,9 @@ We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rh
 When an activity is launched, it may not be put in the top task. 
 When an activity $B$ is launched and not going to be put in the top task, the following rules are used to determine which task will it be allocated. 
 \begin{itemize}
-	\item If $\lmd(B) \neq \SIT$, then
-	\begin{itemize}
-	 \item if there is a non-$\SIT$-task whose task affinity is the same as $B$, then $B$ will be put on the task
-	 \item otherwise, a new task will be created to hold $B$.
-	 \end{itemize}
-	\item If $\lmd(B) = \SIT$, then 
-	\begin{itemize}
-	\item if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top, 
-	\item otherwise, a new task is created to hold $B$.
-	\end{itemize}
+	\item In case $\lmd(B) \neq \SIT$, if there is a non-$\SIT$-task whose task affinity is the same as $B$, then $B$ will be put on the task; otherwise, a new task will be created to hold $B$.
+ 
+	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
 \end{itemize}
 
 
@@ -167,6 +160,27 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
 
 %\medskip
 
+%\begin{tcolorbox}[width=1.0\linewidth, title={$\lmd(B) = \STD$}}]
+%%
+%\end{tcolorbox}
+
+
+
+%\fcolorbox{red}{yellow}{%
+%	\minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-2\fboxrule\relax}
+%	If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
+%	\endminipage}\hfill
+%\fcolorbox{red}{yellow}{%
+%	\minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-2\fboxrule\relax}
+%	If $\lmd(A) = \SIT$, then
+%	\begin{itemize}
+%		\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+%		$$\rho'=\push(\mvtsktop(\rho, i),B),$$
+%		\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
+%	\end{itemize}
+%	\endminipage}
+
+
 \noindent {\fbox{$\lmd(B) = \STD$}}
 	\begin{itemize}
 		\item If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
@@ -178,6 +192,13 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
     			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
     		\end{itemize}
 	\end{itemize}
+	
+	
+%	\begin{tcolorbox}[width=1.0\linewidth, title={$\lmd(A) \neq \SIT$}}]
+%      $\rho'= \push(\rho,B)$.
+%	\end{tcolorbox}\hfill
+%	
+	
 
 \noindent \fbox{\fbox{$\lmd(B) = \STP$}}
 	\begin{itemize}
@@ -214,7 +235,9 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
 \end{itemize}
 It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
 
-Let us use the following example to illustrate the semantics.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+We use the following example to illustrate the semantics.
 \begin{example}
 	Let $\Mm = (\act,A,\lmd,\aft,\Delta)$ be an $\LMAMASS$, where $\act = \{A,B,C,D\}$, the functions $\lmd$ and $\aft$ are defined in Table~\ref{tab-attribute}.
 	\begin{table}[htbp]
@@ -279,8 +302,6 @@ Let us use the following example to illustrate the semantics.
 		% $\xrightarrow[\tau_5]{\Mm}(([T_2],T_2,0),([D_1K_2],K_2,0),([P_1D_1],D_1,1))$\\
 		% $\xrightarrow[\tau_6]{\Mm}(([K_2],K_2,0),([T_2],T_2,0),([P_1D_1],D_1,1))$\\
 		
-	
-		
 	\begin{figure}
 		% \vspace{-3mm}
 			\centering
@@ -291,7 +312,7 @@ Let us use the following example to illustrate the semantics.
 		\label{lmasm-example}
 	\end{figure}
 \end{example}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of the example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Intuitively, $\STD$ is similar to $\STP$, without considering the case where $\lmd(A) = \SIT$, when a $\STD$ activity $B$ is started, it is directly pushed into the top task. 
 % Recall that $\STP$ is shorthand of SingleToP, when a $\STP$ activity $B$ is started, it is pushed into the top task if the top activity of the top task is \emph{not} $B$.
 
