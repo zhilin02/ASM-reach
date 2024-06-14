@@ -16,7 +16,10 @@ Android multitasking mechanism has substantially enhanced user experiences of th
 %summarize related problems in stackoverflow as a table, e.g., question 3219726 . This may provides some ideas on what kind of properties can be checked by ASS.
 %
 %Surprisingly, the Android multitasking mechanism, despite its importance, has not been thoroughly studied before, let along a formal treatment. This has impeded further developments of computer-aided (static) analysis and verification for Android apps, which are indispensable for vulnerability analysis (for example, detection of task hijacking \cite{RZXWL15}) and app performance enhancement (for example, estimation of energy consumption \cite{HL+13}).
-For the formalization of Android multitasking mechanism, the most complete existing formal semantics is the Android Stack Machine ({\AMASS}) \cite{HC+19} to capture the key features of Android multitasking mechanism. {\AMASS} addresses the behavior of Android \emph{back stacks}, a key component of the multitasking machinery, and their interplay with attributes of the activity and the intent flags. 
+For the formalization of Android multitasking mechanism, hitherto the most complete %formal semantics 
+model is the Android Stack Machine ({\AMASS}~\cite{HC+19}). % to capture the key features of Android multitasking mechanism. 
+%
+{\AMASS} addresses the behavior of Android \emph{back stacks}, a key component of the multitasking machinery, and their interplay with attributes of the activity and the intent flags. 
 %In this paper, for these attributes we consider four basic \emph{launch modes}, i.e., standard ({\bf $\standard$}), singleTop ({\bf $\singletop$}), singleTask ({\bf $\singletask$}), singleInstance ({\bf $\singleinstance$}), and \emph{task affinities}. (For simplicity more complicated activity attributes such as \emph{allowTaskReparenting} will not be addressed in the present paper.)
 %We remark that, however, the intent flags of activities are abstracted away, to keep the model as neat as possible.
 %We believe that the semantics of ASM, specified as a transition system, captures faithfully the actual mechanism of  Android systems. For each case  of the semantics, we have created ``diagnosis" apps with corresponding launch modes and task affinities, and carried out extensive experiments using these apps, ascertaining its conformance to the %mechanism supported by the
@@ -44,11 +47,13 @@ in the interest of seeking more expressive, practice-relevant decidable fragment
 %Although the combination of all of them is unfortunately undecidable,
 %\tl{I am not satisfied here, any comments on how to improve?}.
 %On top of that, we hypothesize that restricting $\singletask$ and $\singleinstance$ activities \emph{individually} is a promising way. To this end,
-we identify a fragment \textbf{$\STK$-dominating {\AMASS}} which assumes 
-$\STK$ activities have different task affinities and which further restricts the use of $\STK$ activities and the intent flag $\ntkflag$. This fragment covers a majority of open-source Android apps (e.g., from F-Droid) we have found so far. 
+we identify a fragment \textbf{$\STK$-dominating {\AMASS}} 
+which 
+%assumes $\STK$ activities have different task affinities and which further restricts the use of $\STK$ activities and the intent flag $\ntkflag$. This fragment 
+covers a majority of open-source Android apps (e.g., from F-Droid) we have found so far. (The precise definition of $\STK$-dominating {\AMASS} is technical and will be given later.) 
 
 %\tl{claiming this fragment can cover most of open-resource apps we have found?shall we}\zhilin{how about the previous sentence ?}
-Our technical contribution is to give a decision procedure for the reachability problem of $\STK$-dominating {\AMASS}. We extend the saturation procedure of pushdowns systems (\PDS) to multiple stacks.  Moreover, we propose pushdown systems with well-partially-ordered transductions (\WOTrPDS), an extension of finite \TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered wrt the superset relation, we show that the configuration reachability of \WOTrPDS is decidable, and utilize \WOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
+The primary contribution of the current paper is to give decision procedures for the reachability problem of $\STK$-dominating {\AMASS}. We extend the saturation procedure of pushdowns systems (\PDS) to multiple stacks.  Moreover, we propose pushdown systems with well-partially-ordered transductions (\WOTrPDS), an extension of finite \TrPDS, where the closure of transductions may be infinite, but admits a basis which is well-partially-ordered wrt the superset relation, we show that the configuration reachability of \WOTrPDS is decidable, and utilize \WOTrPDS to show that the reachability problem of $\STK$-dominating {\AMASS} is decidable.
 %As a complement, we also studied a fragment \textbf{$\singleinstance$-acyclic-mediating ASS}, which include $\singleinstance$, but are free of $\singletask$, activities, subject to additional restrictions.
 %The work, apart from independent interests in the study of multi-stack pushdown systems, lays a solid foundation for further (static) analysis and verification of Android apps related to multi-tasking, enabling model checking of Android apps, security analysis (such as discovering task hijacking), or typical tasks in software engineering such as  % Assist programmers with
 %automatic debugging, model-based testing, etc.
