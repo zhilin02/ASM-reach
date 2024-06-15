@@ -26,88 +26,7 @@
 
 \section{TBA}
 
-As we have seen, the semantics of {\AMASS} in Section~\ref{sec:amass} is rather complicated. Therefore, it is highly challenging to achieve a decision procedure for the configuration reachability problem of {\AMASS}. In this paper, we restrict our attention to a sub-model of {\AMASS}, called $\STK$-dominating {\AMASS}, and design a decision procedure for it. We shall see later on that the decision procedure for the sub-model is already quite involved and requires nontrivial novel ideas.  
 
-%Due to the semantics of {\AMASS} defined in Section~\ref{sec:semantics-amass} is highly complicated, it is difficult to provide a decision algorithm for solving the configuration reachability problem of {\AMASS}. To this end, we introduce a fragment of {\AMASS} called STK-dominating {\AMASS}, which accommodates all launch mdoes and intent flags. 
-
-\begin{definition}[$\STK$-dominating \AMASS] \label{def:stk-amass}
-    Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
-    \begin{enumerate}
-		\item $\back\in\Delta$,
-        \item the task affinities of $\singletask$-activities (if there is any) are mutually distinct,
-%        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A\in\act_{\singleinstance}$, it holds that $B\in\act_{\singleinstance}\cup\act_{\singletask}$,
-        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A \in \act_\singleinstance$ or $\phi\models \ntkflag$, we have $B \in \act_{\singleinstance} \cup \act_{\singletask}$.
-    \end{enumerate}
-\end{definition}
-Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode, more precisely,  
-each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, 
-whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
-%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
-
-\begin{example}
-We will use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
-Let $\Mm=(\act,A,\lmd,\aft,\Delta)$, where 
-\begin{itemize}
-\item $\act = \{A, B, C, D, E\}$, 
-%
-\item $\lmd(A)=\lmd(B)=\standard$, $\lmd(C) = \singleinstance$, $\lmd(D) = \lmd(E) = \singletask$, 
-%
-\item $\aft(A) = 0$, $\aft(B) = \aft(C) = 1$, $\aft(D) = 2$, $\aft(E) = 3$, 
-%
-\item $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4, \tau_5, \tau_6\}$, where 
-\begin{itemize}
-\item 	$\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$,
-		$\tau_2 = B \xrightarrow{\startactivity(\ntkflag)} E$,
-		$\tau_3 = C \xrightarrow{\startactivity(\bot)} D$,
-\item		$\tau_4 = C \xrightarrow{\startactivity(\bot)} C$,
-		$\tau_5 = D \xrightarrow{\startactivity(\ctpflag)} B$,
-		$\tau_6 = E \xrightarrow{\startactivity(\bot)} D$. 
-\end{itemize}
-\end{itemize}
-Then $\Mm$ is an $\STK$-dominating {\AMASS}, since
-\begin{itemize}
-\item in $\tau_1 = A \xrightarrow{\startactivity(\ntkflag)} C$, $\lmd(C) = \singleinstance$,  
-%
-\item in $\tau_2 = B \xrightarrow{\startactivity(\ntkflag)} E$, $\lmd(E) = \singletask$, 
-%
-\item in $\tau_3 = C \xrightarrow{\startactivity(\bot)} D$, $\lmd(C) = \singleinstance$ and $\lmd(D) = \singletask$, 
-%
-\item in $\tau_4 = C \xrightarrow{\startactivity(\bot)} C$, $\lmd(C) = \singleinstance$. 
-\end{itemize}
-The configurations that are reachable from the initial configuration $(([A_0], 0))$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
-	Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration.  
-	\begin{figure}[htbp]
-		% \vspace{-3mm}
-			\centering
-			\includegraphics[scale = 0.5]{stk-asm-example.pdf}
-			\caption{Configurations that are reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
-				%in $\phi$
-		% \vspace{-6mm}	
-		\label{stk-asm-example}
-	\end{figure}
-
-%\begin{table}[htbp]
-%	\begin{center}
-%	\begin{tabular}{|c|c|c|c|c|c|}
-%	\hline
-%	Activity & $\lmd$ & $\aft$\\
-%	\hline
-%	$A$ & $\STD$ & 0\\
-%	\hline
-%	$B$ & $\STP$ & 1 \\
-%	\hline
-%	$C$ & $\SIT$ & 1 \\
-%	\hline
-%	$D$ & $\STK$ & 2 \\
-%	\hline
-%	$E$ & $\STK$ & 3 \\
-%	\hline
-%	\end{tabular}
-%	\caption{Attributes of activities}
-%	\label{tab-attribute-stk}
-%	\end{center}
-%\end{table} 
-\end{example}
 
 
 \begin{proposition}\label{prop-stk}
@@ -119,15 +38,16 @@ The configurations that are reachable from the initial configuration $(([A_0], 0
     \end{enumerate}
 \end{proposition}
 
-We are ready to state the main result of this paper. 
 
-\begin{theorem}\label{thm:st-amass-reach}
-The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
-\end{theorem}
 
-The rest of this paper is devoted to the proof of Theorem~\ref{thm:st-amass-reach}. Since the decision procedure is involved, to ease the understanding, we present the decision procedure for $\singletask$-dominating $\LMAMASS$ first (Section~\ref{sec:reach-lmamass}), then $\singletask$-dominating $\IFAMASS$ (Section~\ref{sec:reach-ifamass}), and finally consider $\singletask$-dominating $\AMASS$ in its most general case (Section~\ref{sec:reach-amass}). 
+%The rest of this paper is devoted to the proof of Theorem~\ref{thm:st-amass-reach}. 
 
-For technical convenience, let us assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct, moreover, they are different from those of the other activities}, that is, for each $A, B \in \act_\singleinstance$ with $A \neq B$, we have $\aft(A) \neq \aft(B)$, moreover, $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$. Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
+%Since the decision procedure is involved, to ease the understanding, we present the decision procedure for $\singletask$-dominating $\LMAMASS$ first (Section~\ref{sec:reach-lmamass}), then $\singletask$-dominating $\IFAMASS$ (Section~\ref{sec:reach-ifamass}), and finally consider $\singletask$-dominating $\AMASS$ in its most general case (Section~\ref{sec:reach-amass}). 
+
+For technical convenience, we assume that 
+\begin{itemize}
+	\item \emph{the affinities of $\singleinstance$-activities are mutually distinct, moreover, they are different from those of the other activities}, that is, for each $A, B \in \act_\singleinstance$ with $A \neq B$, we have $\aft(A) \neq \aft(B)$, moreover, $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
+\end{itemize} Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
 
 %For simplicity, we assume that $\Mm$ contains $\standard$ and $\singletask$ activities only. 
 %The proof of Theorem~\ref{thm:st-amass-reach} is technically the most challenging part of this paper. 
@@ -144,4 +64,11 @@ For technical convenience, let us assume that \emph{the affinities of $\singlein
 
 
 \section{Configuration reachability problem of $\STK$-dominating $\AMASS$}\label{sec:reach-amass}
+
+We are ready to state the main result of this paper. 
+
+\begin{theorem}\label{thm:st-amass-reach}
+	The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
+\end{theorem}
+
 \input{reach-amass.tex}
