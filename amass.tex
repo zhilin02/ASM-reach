@@ -46,9 +46,9 @@ For readability, we write a transition rule $(A, \startactivity(B, \phi))\in \De
 %\subsection{Semantics of \AMASS}\label{sec:semantics-amass}
 
 
-Let us first introduce some notations to be used in the definition of the semantics.
+%Let us first introduce some notations to be used in the definition of the semantics.
 
-\emph{Tasks and configurations.} A \emph{task} of $\Mm$ is encoded as a pair $(S, \aname)$, where $S= [A_1, \cdots, A_n] \in \act^+$ denotes the content of the stack, with $A_1$ (resp. $A_n$) as  the top (resp. bottom) symbol, denoted by $\topact(S)$ (resp. $\btmact(S)$), and $\aname$ is the affinity of the task, namely, the affinity of the activity which was pushed into the task when the task was created. A task $(S, \aname)$ is called an $\SIT$-task if $\lmd(\btmact(S)) = \SIT$.
+\paragraph{Tasks and configurations} A \emph{task} of $\Mm$ is encoded as a pair $(S, \aname)$, where $S= [A_1, \cdots, A_n] \in \act^+$ denotes the content of the stack, with $A_1$ (resp. $A_n$) as  the top (resp. bottom) symbol, denoted by $\topact(S)$ (resp. $\btmact(S)$), and $\aname$ is the affinity of the task, namely, the affinity of the activity which was pushed into the task when the task was created. A task $(S, \aname)$ is called an $\SIT$-task if $\lmd(\btmact(S)) = \SIT$.
 %We define the \emph{affinity of a task} $S$, denoted by $\aft(S)$, to be $\aft(\btmact(S))$. 
 For $S_1 \in \act^+$ and $S_2 \in \act^+$, we use $S_1 \cdot S_2$ to denote the concatenation of $S_1$ and $S_2$.
 
@@ -69,7 +69,7 @@ The initial configuration is $(([A_0],\aft(A_0)))$ which contains one task $([A_
 
 We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rho \xrightarrow[\Mm]{\tau} \rho'$, where $\tau \in \Delta$ is a transition rule, $\rho \in \confs(\Mm)$, and $\rho' \in \confs(\Mm)$ is obtained by applying $\tau$ to $\rho$. Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
 
-\paragraph*{Task allocation mechanism.} 
+\paragraph{Task allocation mechanism} 
 %Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
 When an activity is launched, it may not be put in the top task. 
 When an activity $B$ is launched and not going to be put in the top task, the following rules are used to determine which task will it be allocated. 
@@ -78,7 +78,6 @@ When an activity $B$ is launched and not going to be put in the top task, the fo
  
 	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
 \end{itemize}
-
 
 
 It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. Therefore, in the sequel, we separate the concerns further and consider the two sub-models of $\AMASS$, namely $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
@@ -116,9 +115,21 @@ The intuitions of the launch modes are actually not that precise. For instance, 
 
 We introduce some auxiliary functions and predicates to be used in the formal semantics of $\LMAMASS$.
 
-\emph{Auxiliary functions and predicates.} 
+%\begin{figure}
+%	\begin{center}
+%\begin{tabular}{l}
+%\hline\\
+% $\topact(S) = A_1$, $\btmact(S) = A_m$\\
+%$\toptsk(\rho) = S_1$, $\topact(\rho) = \topact(\toptsk(\rho))$\\
+%$\push(\rho, B) = (([B]\cdot S_1,\aname_1),(S_2,\aname_2),\cdots,(S_n,\aname_n))$\\
+%\end{tabular}	
+%\caption{Auxiliary functions and predicates} \label{fig:syntax}
+%\end{center}
+%\end{figure}
+
+\paragraph{Auxiliary functions and predicates} 
 %To specify the transition relation precisely and concisely, we define the following functions and predicates. 
-Let $\rho$ be a configuration with $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n))$, and $S=[A_1, \cdots, A_m]$ be a task. 
+Let $\rho= ((S_1,\aname_1),\cdots, (S_n,\aname_n))$ be a configuration and $S=[A_1, \cdots, A_m]$ be a task. 
 \begin{itemize}
 	\item $\topact(S) = A_1$, $\btmact(S) = A_m$,
 	\item $\toptsk(\rho) = S_1$, $\topact(\rho) = \topact(\toptsk(\rho))$, 
@@ -140,9 +151,9 @@ Let $\rho$ be a configuration with $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n
 \end{itemize}
 Note that $\gettsk(\rho, B)$ formalizes the aforementioned task allocation mechanism and the fact that the task affinities of two different non-$\SIT$ tasks are distinct guarantees that the function $\gettsk(\rho, B)$ is well-defined. 
 
-We are ready to define the semantics of $\LMAMASS$ as the transition relation $\xrightarrow[\Mm]{}$ in the sequel. 
+%We are ready to define the semantics of $\LMAMASS$ as the transition relation $\xrightarrow[\Mm]{}$ in the sequel. 
 
-\emph{Transition relation.} We define the relation $\xrightarrow[\Mm]{}$ which comprises the quadruples $(\rho, \tau, \rho') \in \conf_\Mm \times \Delta  \times \conf_\Mm$ to formalise the semantics of $\Mm$. For readability, we write $(\rho, \tau, \rho')\in\ \xrightarrow[\Mm]{}$  as $\rho \xrightarrow[\Mm]{\tau} \rho'$. 
+\paragraph{Transition relation} We define the relation $\xrightarrow[\Mm]{}$ which comprises the quadruples $(\rho, \tau, \rho') \in \conf_\Mm \times \Delta  \times \conf_\Mm$ to formalise the semantics of $\Mm$. For readability, we write $(\rho, \tau, \rho')\in\ \xrightarrow[\Mm]{}$  as $\rho \xrightarrow[\Mm]{\tau} \rho'$. 
 Let $\xRightarrow[\Mm]{}$ denote the reflexive and transitive closure of $\xrightarrow[\Mm]{}$.
 
 Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$. Moreover, let $S_1 = [A_1',\cdots,A_m']$. Evidently, $A = A_1'$. We show how $\rho'$ can be obtained from $\rho$ and $\tau$.
@@ -160,11 +171,8 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
 
 %\medskip
 
-%\begin{tcolorbox}[width=1.0\linewidth, title={$\lmd(B) = \STD$}}]
-%%
-%\end{tcolorbox}
-
-
+ 
+ 
 
 %\fcolorbox{red}{yellow}{%
 %	\minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-2\fboxrule\relax}
@@ -182,23 +190,34 @@ Then let us consider $\tau = A\xrightarrow{\startactivity(\bot)}B$.
 
 
 \noindent {\fbox{$\lmd(B) = \STD$}}
+
+%\tcbset{width=(\linewidth-2mm)/2,before=,after=\hfill,arc=0mm,
+%	colframe=blue!75!black,colback=white,fonttitle=\bfseries}
+%title=Box \thetcbrasternum,
+%enhanced,size=small] %colframe=red!50!black,colback=red!10!white]
+\begin{tcolorbox}[width=0.4\linewidth, title={$\lmd(A) = \SIT$}]
+	$\rho'= \push(\rho,B)$
+\end{tcolorbox} \hfill
+\begin{tcolorbox}[width=0.6\linewidth, title={$\lmd(A) \neq \SIT$}]
 	\begin{itemize}
-		\item If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
-		%
-		\item If $\lmd(A) = \SIT$, then
-    		\begin{itemize}
-    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
-			$$\rho'=\push(\mvtsktop(\rho, i),B),$$
-    			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
-    		\end{itemize}
+		\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+		$\rho'=\push(\mvtsktop(\rho, i),B),$
+	\item	if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
 	\end{itemize}
+\end{tcolorbox}	
+
+%	\begin{itemize}
+%		\item If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
+%		%
+%		\item If $\lmd(A) = \SIT$, then
+%    		\begin{itemize}
+%    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+%			$$\rho'=\push(\mvtsktop(\rho, i),B),$$
+%    			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
+%    		\end{itemize}
+%	\end{itemize}
 	
-	
-%	\begin{tcolorbox}[width=1.0\linewidth, title={$\lmd(A) \neq \SIT$}}]
-%      $\rho'= \push(\rho,B)$.
-%	\end{tcolorbox}\hfill
-%	
-	
+ 
 
 \noindent \fbox{\fbox{$\lmd(B) = \STP$}}
 	\begin{itemize}
