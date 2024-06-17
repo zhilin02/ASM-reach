@@ -2,14 +2,7 @@
 
 %Motivation
 
-Multi-tasking plays a central role in the Android platform. %, and certainly is a complicated issue.
-%It is considerably different from, say, PC multi-tasking. \tl{why?}
-%As a fundamental concept, according to Android documentation \cite{}, ``a task is a collection of activities that users interact with when performing a certain job". Here an activity usually refers to UI components,  %In other words,
-%and a task contains activities that may belong to multiple apps.
-%
-%each app can run in one or multiple processes.\FU{I am not sure whether an app can run in multiple processes, usually an app is run in a sandbox.}
-%The unique design of Android multitasking
-Its unique design, via activities and back stacks, greatly facilitates organizing user sessions through tasks, and provides rich features such as handy application switching, background app state maintenance, smooth task history navigation (using the ``back" button), etc \cite{RZXWL15}. We refer the readers to Section~\ref{sec:amm} for an overview. 
+Multi-tasking plays a central role in the Android platform. Its unique design via activities and back stacks greatly facilitates organizing user sessions through tasks, and provides rich features such as handy application switching, background app state maintenance, smooth task history navigation (using the ``back'' button), etc \cite{RZXWL15}. We refer the readers to Section~\ref{sec:amm} for an overview. 
 
 Android multitasking mechanism has substantially enhanced user experiences of the Android system and promoted personalized features in app design. However, the mechanism is also notoriously difficult to understand. As a witness, it constantly baffles app developers and has become a common topic of question-and-answer websites (for instance, \cite{stackoverflow}).
 %
@@ -17,14 +10,14 @@ Android multitasking mechanism has substantially enhanced user experiences of th
 %
 %Surprisingly, the Android multitasking mechanism, despite its importance, has not been thoroughly studied before, let along a formal treatment. This has impeded further developments of computer-aided (static) analysis and verification for Android apps, which are indispensable for vulnerability analysis (for example, detection of task hijacking \cite{RZXWL15}) and app performance enhancement (for example, estimation of energy consumption \cite{HL+13}).
 For the formalization of Android multitasking mechanism, hitherto the most complete %formal semantics 
-model is the Android Stack Machine ({\AMASS}~\cite{HC+19}). % to capture the key features of Android multitasking mechanism. 
+model is Android Stack Machine ({\AMASS}~\cite{HC+19}). % to capture the key features of Android multitasking mechanism. 
 %
-{\AMASS} addresses the behavior of Android \emph{back stacks}, a key component of the multitasking machinery, and their interplay with attributes of the activity and the intent flags. 
+{\AMASS} addresses the behavior of Android back stacks, a key component of the multitasking machinery, and their interplay with attributes of the activity and the intent flags. 
 %In this paper, for these attributes we consider four basic \emph{launch modes}, i.e., standard ({\bf $\standard$}), singleTop ({\bf $\singletop$}), singleTask ({\bf $\singletask$}), singleInstance ({\bf $\singleinstance$}), and \emph{task affinities}. (For simplicity more complicated activity attributes such as \emph{allowTaskReparenting} will not be addressed in the present paper.)
 %We remark that, however, the intent flags of activities are abstracted away, to keep the model as neat as possible.
 %We believe that the semantics of ASM, specified as a transition system, captures faithfully the actual mechanism of  Android systems. For each case  of the semantics, we have created ``diagnosis" apps with corresponding launch modes and task affinities, and carried out extensive experiments using these apps, ascertaining its conformance to the %mechanism supported by the
 %Android platform. 
-(Details will be reviewed in Section~\ref{sec:amm}.)
+%(Details will be reviewed in Section~\ref{sec:amm}.)
 
 %
 %The model addresses certain key features of Android multi-tasking such as launchMode and taskAffinity, while skip the other attributes.
@@ -38,13 +31,12 @@ model is the Android Stack Machine ({\AMASS}~\cite{HC+19}). % to capture the key
 %which are left as the future work.
 
 Based on {\AMASS}, we %make the first step towards a 
-investigate formal analysis and verification of the behaviors of Android apps  with respect to the multitasking mechanism, %by investigating 
+investigate formal verification of the behaviors of Android apps  with respect to the multitasking mechanism, %by investigating 
 in particular, the \emph{configuration reachability problem} which is fundamental to all such analysis. 
 %In this paper, we focus on the configuration reachability problem of $\AMASS$. This problem is fundamental to the formal (static) analysis and verification of the behaviors of Android apps
 %
 {\AMASS} is akin to pushdown systems with multiple stacks, so it is perhaps not surprising that the problem is hard in general; 
-%in fact, we show undecidability for most interesting fragments even with just two launch modes. %(See Theorem~\ref{thm:undec}---\ref{prop:tridec} for details.)
-in the interest of seeking more expressive, practice-relevant decidable fragments,
+in the interest of seeking more expressive, practice-relevant decidable fragments, 
 %observe that $\standard/\singletop$ activities must be supported, and %$\singletask/\singleinstance$
 %$\singleinstance$ activities are desirable.\zhilin{seems strange ?}  %commonly used in Android apps. %\footnote{statistics data?}.
 %Although the combination of all of them is unfortunately undecidable,
