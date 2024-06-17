@@ -18,9 +18,10 @@
 \input{asm_lm_semantics.tex}
 
 
-Let us assume that $\Mm=(\act, A_0, \lmd, \aft, \Delta)$ is an $\singletask$-dominating $\LMAMASS$.
+%Let us assume that $\Mm=(\act, A_0, \lmd, \aft, \Delta)$ is an $\singletask$-dominating $\LMAMASS$.
 
-We show how to solve the configuration reachability problem of $\Mm$.  
+\paragraph{Configuration reachability of $\Mm$}
+  
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. 
 Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$.
 % satisfying that for each $i\in[k]$, $\aname_i=\aname_i'$, $S_i\in\ConfSet(\Aut_i)$, moreover, $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$.

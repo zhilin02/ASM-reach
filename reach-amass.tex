@@ -1,5 +1,12 @@
 %!TEX root = main.tex
 
+
+We are ready to state the main result of this paper. 
+
+\begin{theorem}\label{thm:st-amass-reach}
+	The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
+\end{theorem}
+
 Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent flags, thus can be seen as an integration of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$. 
 
 Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.

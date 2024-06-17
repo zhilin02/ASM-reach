@@ -74,16 +74,7 @@ We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rh
 \tl{to see where to put this.} Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
 %%%%%%%%%%%%%%%%%%%%%%
 
-\paragraph{Task allocation mechanism} 
-%Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
-When an activity is launched, it may not be put in the top task, in which case  
-%When an activity $B$ is launched and not going to be put in the top task, 
-the following rules are used to determine which task will it be allocated. 
-\begin{itemize}
-	\item In case $\lmd(B) \neq \SIT$, if there is a non-$\SIT$-task whose task affinity is the same as $B$, then $B$ will be put on the task; otherwise, a new task will be created to hold $B$.
- 
-	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
-\end{itemize}
+
 
 \tl{end of comments: to see where to put this.} 
 
@@ -194,9 +185,8 @@ Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We def
 
 The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$, which will stated in Theorem~\ref{thm:st-amass-reach}. 
 
-For technical convenience, we assume that 
-\begin{itemize}
-	\item \emph{the affinities of $\singleinstance$-activities are mutually distinct, moreover, they are different from those of the other activities}, that is, for each $A, B \in \act_\singleinstance$ with $A \neq B$, we have $\aft(A) \neq \aft(B)$, moreover, $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
-\end{itemize} Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
+For technical convenience, we assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct and are different from those of the other activities}, that is, for $A, B \in \act_\singleinstance$ with $A \neq B$, we assume that  $\aft(A) \neq \aft(B)$ and $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
+
+Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

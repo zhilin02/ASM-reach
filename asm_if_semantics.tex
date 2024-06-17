@@ -11,10 +11,10 @@
 Let $\Mm$ be an $\IFAMASS$, namely, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ for each activity $A$. As a result, there is only one task in each configuration and the task allocation mechanism can be ignored here. Therefore, a configuration here is simply a word $[A_1,\cdots,A_m]\in\act^+$. 
 % there is only one task in $\IFAMASS$.
 
-Before formally defining the semantics of $\Mm$, let us first describe the intuitions of the intent flags. 
-We would like to warn that although the intuitions of these intent flags may help the readers to get some preliminary idea of their meanings, before diving directly into the formal semantics, they are nonetheless inaccurate, especially when different flags may interfere with each other.
+%Before formally defining the semantics of $\Mm$, let us first describe the intuitions of the intent flags. 
+%We would like to warn that although the intuitions of these intent flags may help the readers to get some preliminary idea of their meanings, before diving directly into the formal semantics, they are nonetheless inaccurate, especially when different flags may interfere with each other.
 
-\paragraph{Intuitions of the Intent flags.}  Let us explain the intuitions of the five intent flags in the sequel. 
+\paragraph{Intuitions of the Intent flags}  Let us explain the intuitions of the five intent flags in the sequel. 
 \begin{itemize}
 	\item The $\stpflag$ intent flag:  If it is set,  it has the same effect as starting an activity of the $\STP$ launch mode.
 	\item The $\ctpflag$ intent flag:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then all the activities above the topmost occurrence of the started activity in the task will be removed. Otherwise, the started activity will be pushed into the task.

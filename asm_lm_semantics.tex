@@ -3,12 +3,12 @@
 
 \subsection{Semantics of $\LMAMASS$}
 
-We start with the semantics of $\LMAMASS$ and assume that $\Mm$ is an $\LMAMASS$. 
+%We start with the semantics of $\LMAMASS$ and assume that $\Mm$ is an $\LMAMASS$. 
 
 Before presenting the formal semantics of $\LMAMASS$, let us describe the intuitions behind it.
 
 %
-\emph{Intuitions of the launch modes.}  Let us explain the intuitions of the four launch modes in the sequel. 
+\noindent\emph{Intuitions.}  %Let us explain the intuitions of the four launch modes in the sequel. 
 We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly for $\STP$, $\STK$, and $\SIT$. 
 \begin{itemize}
 	\item The $\STD$ mode: When a new $\STD$-activity is started, it will be pushed into the top task. 
@@ -23,6 +23,23 @@ We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly f
 
 The intuitions of the launch modes are actually not that precise. For instance, when a new $\STD$-activity is stated by an $\SIT$-activity, the $\STD$-activity will not necessarily be pushed to the top task. 
 %Task allocation mechanism is to specify to which task will it be allocated when an activity is launched. 
+
+
+%Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
+When an activity is launched, it may not be put in the top task, in which case  
+%When an activity $B$ is launched and not going to be put in the top task, 
+the following rules are used to determine which task will it be allocated. 
+\begin{itemize}
+	\item In case $\lmd(B) \neq \SIT$, if there is a non-$\SIT$-task whose task affinity is the same as $B$, then $B$ will be put on the task; otherwise, a new task will be created to hold $B$.
+	
+	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
+\end{itemize}
+
+\input{auxdef.tex}
+
+\smallskip
+
+\paragraph{Transition rules} 
 
 
 Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$. Moreover, let $S_1 = [A_1',\cdots,A_m']$. Evidently, $A = A_1'$. We show how $\rho'$ can be obtained from $\rho$ and $\tau$.
