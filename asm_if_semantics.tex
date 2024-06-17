@@ -48,7 +48,7 @@ Let $\rho = [A_1,\cdots,A_m]$ for some $m\ge 1$ be the current configuration and
 
 If $\tau = \back$ then $\rho' = \pop(\rho)$.
 
-Let us assume  $\tau = A\xrightarrow[]{\startactivity(\phi)}B$ in the sequel.
+For the rule  $\tau = A\xrightarrow[]{\startactivity(\phi)}B$,
 
 \begin{itemize}
 	\item If $\phi\models\ctkflag\wedge\ntkflag$, then $\rho' = \clrtsk(\rho, B)$.
@@ -66,7 +66,8 @@ Let us assume  $\tau = A\xrightarrow[]{\startactivity(\phi)}B$ in the sequel.
 		\end{itemize}
 	\end{itemize}
 \end{itemize}
-Let us use the following example to illustrate the semantics.
+
+We use the following example to illustrate the semantics.
 \begin{example}
 	Let $\Mm = (\act,A,\lmd,\aft,\Delta)$ be an $\IFAMASS$, where $\act = \{A,B,C,D\}$, where for each $A'\in\act$, $\lmd(A') = \STD$ and $\aft(A') = 1$. 
 	Moreover, $\Delta = \{\tau_1, \tau_2, \tau_3, \tau_4, \tau_5, \tau_6\}$, where 
