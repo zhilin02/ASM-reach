@@ -1,5 +1,10 @@
 %!TEX root = main.tex
 
+\subsection{Android Multitasking Mechanism} \label{sec:amm}
+\input{amm.tex}
+
+\subsection{Basic Automata Models}
+
 Let $\natnum$ be the set of natural numbers. For $k \in \natnum$, let $[k]=\{1,\cdots, k\}$. %$\Nn_+$ denotes the set of positive integers.  
 %
 Let $S$ be a partially ordered set endowed with a partial order $\leq$. Recall that two elements $a,b\in S$ are said to be \emph{comparable} if $a\leq b$ or $b\leq a$; otherwise, they are \emph{incomparable}.
@@ -51,7 +56,7 @@ For instance, the standard ``less than or equal to'' relation $\leq$ is a well-p
 An alphabet $\Gamma$ is a finite set of letters.  A \emph{string} over $\Gamma$ is a finite sequence of letters from $\Gamma$. In particular, $\varepsilon$ denotes %the empty sequence is called 
 the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (resp. nonempty) strings over $\Gamma$. A \emph{language} $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$. Let $w$ be a string over $\Gamma$ and $\Gamma' \subseteq \Gamma$. We use $w |_{\Gamma'}$ to denote the string obtained from $w$ by removing the symbols not in $\Gamma'$. For instance, let $w = a  c b c$ and $\Gamma' = \{a,b\}$, then $w|_{\Gamma'} = ab$. Moreover, for a language $L \subseteq \Gamma^*$ and $\Gamma' \subseteq \Gamma$, we use $L|_{\Gamma'}$ to denote the set of strings $w |_{\Gamma'}$ for $w \in L$. 
  
-\subsection{Nondeterministic finite automata}
+\subsubsection{Nondeterministic finite automata}
 %Fix a finite \emph{alphabet} $\Gamma$. Elements in $\Gamma^*$ are called \emph{strings}. Let $\varepsilon$ denote the empty string and  $\Gamma^+ = \Gamma^* \setminus \{\varepsilon\}$. A \emph{language} is a subset of $\Gamma^*$. Moreover, we also use $\Gamma_\varepsilon$ to denote $\Gamma \cup \{\varepsilon\}$.
 
 %We will use $a,b,\cdots$ to denote letters from $\Gamma$ and $u, v, w, \cdots$ to denote strings from $\Gamma^*$. For a string $u \in \Gamma^*$, let $|u|$ denote the \emph{length} of $u$ (in particular, $|\varepsilon|=0$). A \emph{position} of a nonempty string $u$ of length $n$ is a number $i \in [n]$ (Note that the first position is $1$, instead of  0). In addition, for $i \in [|u|]$, let $u[i]$ denote the $i$-th letter of $u$. For two strings $u$ and $v$, if there is a string $w$ such that $u = w v$, then $v$ is called a \emph{suffix} of $u$.
@@ -90,7 +95,7 @@ A language over $\Gamma$ is \emph{regular} if it can be defined by an \NFA.
 %
 %For a string $w= a_1 \dots a_n$, we also use the notation $q_1 \xrightarrow[\cA]{w} q_{n+1}$ to denote the fact that there are $q_2,\dots, q_n \in Q$ such that for each $i \in [n]$, $(q_i, a_i, q_{i+1}) \in \delta$.  For an \NFA $\cA=(Q, \delta, q_0, F)$ and $q, q' \in Q$, we use $\cA(q,q')$ to denote the \NFA obtained from $\cA$ by changing the initial state to $q$ and the set of final states to $\{q'\}$. The \emph{size} of an \NFA $\cA=(Q, \delta, q_0, F)$, denoted by $|\cA|$, is defined as $|Q|$, the number of states. For convenience, we will also call an \NFA without initial and final states, that is, a pair $(Q, \delta)$, as a \emph{transition graph}. 
 
-\subsection{Pushdown systems}
+\subsubsection{Pushdown systems}
 A \emph{pushdown system} ({\PDS}) $\Pp$ is a tuple $(P,\Gamma,\Delta)$, where $P$ is a finite set of control states, $\Gamma$ is a finite stack alphabet, and $\Delta\subseteq P\times\Gamma\times\Gamma^{\le 2}\times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\epsilon\}\cup\Gamma\cup\Gamma\times\Gamma$.
 Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A \emph{configuration} of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the \emph{content} of the stack (with the leftmost symbol being the top of the stack). Let $\confs(\Pp)$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\confs(\Pp)$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the \emph{reflexive and transitive closure} of $\xrightarrow{\Pp}$.
 
@@ -133,7 +138,7 @@ Let $\Aut'$ be the current $\Pp$-NFA. Then there are the following three saturat
 Therefore, for a PDS $\Pp=(P,\Gamma,\Delta)$ and a $\Pp$-NFA $\Aut = (P', \Gamma, \delta, I, F)$, the set of states in $\Aut^{\post^*}_\Pp$ is $P' \cup \{\langle p, \gamma \rangle \mid p \in P, \gamma \in \Gamma \}$.
 
 
-\subsection{Transductions}
+\subsubsection{Transductions}
 A transduction $\tau$ over an alphabet $\Gamma$ is a binary relation over $\Gamma^*$, i.e., a subset of $\Gamma^* \times \Gamma^*$. (Note that $\emptyset$ is considered as a transduction.)
 %In particular, $\emptyset \subseteq \Gamma^* \times \Gamma^*$ is the transduction that transduces no strings.
 We use $\tau_{\id}$ to denote the identity transduction, namely,  $\{(w,w) \mid w \in \Gamma^*\}$. 
@@ -242,7 +247,7 @@ Finally, for a transduction $\tau$, let us use $\overline{\tau}$ to denote the \
 %    $(\langle \TranSet \rangle, \preceq)$ is well-ordered iff
 %    $(\langle \overline{\TranSet} \rangle, \preceq)$ is well-ordered.
 
-\subsection{Pushdown systems with transductions}
+\subsubsection{Pushdown systems with transductions}
 
 Let us introduce an extension of pushdown systems, that is, pushdown systems with transductions \cite{UM13,Song18}. 
 
@@ -328,7 +333,7 @@ Therefore, for a {\TrPDS} $\Pp=(P,\Gamma,\Delta)$ and a $\Pp$-{\TrNFA} $\Aut = (
 %\end{proposition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Downward well-structured transition systems}
+\subsubsection{Downward well-structured transition systems}
 
 \begin{definition}[Downward-WSTS]
 A downward well-structured transition system (downward-WSTS) $\dwsts$ is a triple $(S, \rightarrow, \le)$ such that 1) $\le$ is a wpo\footnote{A more general notion than wpo, i.e. well-quasi-order, was used to define WSTS \cite{FS01}. } over $S$, 2) $\rightarrow \subseteq S \times S$ is downward-compatible wrt $\le$, namely, for all $s \ge s'$ and $s \rightarrow t$, there is $t' \in S$ such that $s' \rightarrow^* t'$ and $t \ge t'$ (where $ \rightarrow^*$ denote the reflexive and transitive closure of $\rightarrow$).

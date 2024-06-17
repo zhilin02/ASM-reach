@@ -21,6 +21,8 @@ namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. Among these 23 in
 	%	\item $\dots$.
 \end{itemize}
 
+\subsection{Android Stack Machine}
+
 Let $\flagset=\{\ntkflag, \ctpflag, \stpflag, \ctkflag, \rtfflag \}$ denote the set of intent flags, $\bool(\flagset)$ denote the set of formulae $\phi = \bigwedge \limits_{F \in \flagset} \theta_F$, where $\theta_F = F$ or $\neg F$. For convenience, we use $\bot$ to denote $ \bigwedge \limits_{F \in \flagset} \neg F$. 
 
 \begin{definition}[Android Stack Machine, \AMASS] \label{def:afsm}
@@ -71,7 +73,7 @@ The initial configuration is $(([A_0],\aft(A_0)))$ which contains one task $([A_
 We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rho \xrightarrow[\Mm]{\tau} \rho'$, where $\tau \in \Delta$ is a transition rule, $\rho, \rho' \in \confs(\Mm)$ and $\rho'$ is obtained by applying $\tau$ to $\rho$. As usual, $\xRightarrow[\Mm]{}$ denotes the reflexive and transitive closure of $\xrightarrow[\Mm]{}$.
 
 %%%%%%%%%%%%%%%%
-\tl{to see where to put this.} Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
+%\tl{to see where to put this.} Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
 %%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -166,11 +168,9 @@ each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a ta
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\smallskip
-\noindent\textbf{Configuration reachability problem of $\AMASS$} %\label{sec-conf-reach}
+ \subsection{Configuration reachability problem of $\AMASS$} \label{sec-conf-reach}
 %
-%In this paper, we focus on the configuration reachability problem of $\AMASS$. This problem is fundamental to the formal (static) analysis and verification of the behaviors of Android apps with respect to the multitasking mechanism.  
+ 
 
 Let $\Mm =(\act, A_0, \lmd, \aft, \Delta)$ be an  {\AMASS}. Then we define $\RConfs(\Mm)$ as the set of configurations $\rho$ that are reachable from the initial configuration, that is, 
 $(A_0, \aft(A_0)) \xRightarrow[\Mm]{} \rho$. 
