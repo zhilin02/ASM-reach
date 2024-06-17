@@ -135,7 +135,16 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
 		\item If $\gettsk(\rho, B) = S_i$ for some $i \in [n]$, then $\rho' = \mvtsktop(\rho, i)$.
 		\item If $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
 	\end{itemize}
-	It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
+	
+	This concludes the definition of the transition rules for $\LMAMASS$. 
+	
+	
+	
+%	%%%%%%%%%%%%%%%%
+%	\tl{to see where to put this.} Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
+%	%%%%%%%%%%%%%%%%%%%%%%
+	It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %preserves the invariant of configurations, that is, 
+	satisfies that, if the task affinities of two non-$\singleinstance$ tasks are different in $\rho$ and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then the task affinities of two non-$\singleinstance$ tasks are different in $\rho'$. 
 	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
