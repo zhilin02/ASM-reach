@@ -1,0 +1,124 @@
+\subsection{Semantics of $\AMASS$}
+%To define the semantics of $\AMASS$, we use the same definition of configuration as $\LMAMASS$, and add some auxiliary functions and predicates. 
+
+%Let $\Mm$ be an $\AMASS$. 
+For clarity,  we recall $\mvacttop$ and $\clrtsk$ for the configurations that may contain multiple tasks. 
+%\emph{Auxiliary functions and predicates.} 
+Let $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n))$ be a configuration.
+Then
+\begin{itemize}
+	\item $\mvacttop(\rho, B) = (([B]\cdot S_1'\cdot S_1'',\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$, if $S_1=S_1'\cdot[B]\cdot S_1''$ with $S_1'\in (\act\setminus\{B\})^*$,
+	\item $\clrtsk(\rho, B) = (([B],\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$.
+\end{itemize}
+% In this case, we consider the launch modes, task affinities and intent flags.
+Now we define the semantics of $\AMASS$. 
+
+The semantics of the transition rule $\tau = \back$ is similar to that of $\LMAMASS$.
+
+Let us  assume $\tau = A\xrightarrow[]{\startactivity(\phi)}B$ in the sequel.
+
+Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$. Moreover, let $S_1 = [A_1',\cdots,A_m']$. Evidently, $A = A_1'$.
+
+\medskip
+
+\noindent \fbox{\fbox{$\lmd(B) = \standard$}}
+\begin{itemize}
+	\item If $\lmd(A) \neq \singleinstance$ and $\phi \models \neg \ntkflag$, 
+	\begin{itemize}
+		\item if $\phi \models\ctpflag$ and $B \in \toptsk(\rho)$, then $\rho' =\clrtop(\rho, B)$,
+		\item otherwise,
+		\begin{itemize}
+			\item if $\phi \models \rtfflag$ and $B \in \toptsk(\rho)$, then $\rho'=\mvacttop(\rho, B)$,
+			\item otherwise,
+			\begin{itemize}
+				\item if $\phi \models \stpflag$ and $B = \topact(\rho)$, then $\rho' = \rho$,
+				\item otherwise, $\rho' = \push(\rho, B)$.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	%
+	\item If $\lmd(A) = \singleinstance$ or $\phi \models \ntkflag$, then
+	\begin{itemize}
+		\item if $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
+		\begin{itemize}
+			\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
+			\item otherwise, 
+			\begin{itemize}
+				\item if $\phi \models \ctpflag$ and $B \in S_i$, then 
+				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
+				\item otherwise,
+				\begin{itemize}
+					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
+					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
+					\item otherwise,
+					\begin{itemize}
+						\item if $\phi \models \stpflag$ and $B = \topact(S_i)$, then 
+						$$\rho' = \mvtsktop(\rho, i),$$
+						\item otherwise, $\rho'=\push(\mvtsktop(\rho, i), B)$,
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+		\item if $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
+	\end{itemize}
+\end{itemize}
+
+\noindent \fbox{\fbox{$\lmd(B) = \STP$}}
+\begin{itemize}
+	\item If $\lmd(A) \neq \singleinstance$ and $\phi \models \neg \ntkflag$, 
+	\begin{itemize}
+		\item if $\phi \models\ctpflag$ and $B \in \toptsk(\rho)$, then $\rho' =\clrtop(\rho, B)$,
+		\item otherwise,
+		\begin{itemize}
+			\item if $\phi \models \rtfflag$ and $B \in \toptsk(\rho)$, then $\rho'=\mvacttop(\rho, B)$,
+			\item otherwise,
+			\begin{itemize}
+				\item if $B = \topact(\rho)$, then $\rho' = \rho$,
+				\item otherwise, $\rho' = \push(\rho, B)$.
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+	%
+	\item If $\lmd(A) = \singleinstance$ or $\phi \models \ntkflag$, then
+	\begin{itemize}
+		\item if $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
+		\begin{itemize}
+			\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
+			\item otherwise, 
+			\begin{itemize}
+				\item if $\phi \models\ctpflag$ and $B \in S_i$, then 
+				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
+				\item otherwise,
+				\begin{itemize}
+					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
+					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
+					\item otherwise,
+					\begin{itemize}
+						\item if $B = \topact(S_i)$, then $\rho' = \mvtsktop(\rho, i)$,
+						\item otherwise, $\rho'=\push(\mvtsktop(\rho, i), B)$,
+					\end{itemize}
+				\end{itemize}
+			\end{itemize}
+		\end{itemize}
+		\item if $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
+	\end{itemize}
+\end{itemize}
+
+\noindent \fbox{\fbox{$\lmd(B) = \STK$}}
+\begin{itemize}
+	\item If $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
+	\begin{itemize}
+		\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
+		\item otherwise, 
+		\begin{itemize}
+			\item if $B \notin S_i$, then $\rho' = \push(\mvtsktop(\rho, i), B)$,
+			\item if $B \in S_i$, then $\rho' = \clrtop(\mvtsktop(\rho, i), B)$.
+		\end{itemize}
+	\end{itemize}
+	\item If $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
+\end{itemize}
+\noindent \fbox{\fbox{$\lmd(B) = \SIT$}}
+\begin{itemize}
+	\item If $\gettsk(\rho, B) = S_i$ for some $i \in [n]$, then $\rho' = \mvtsktop(\rho, i)$,
+	\item If $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
+\end{itemize}

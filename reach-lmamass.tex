@@ -15,12 +15,13 @@
 %    \item if $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
 %    \end{itemize}
 %\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{asm_lm_semantics.tex}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Let us assume that $\Mm=(\act, A_0, \lmd, \aft, \Delta)$ is an $\singletask$-dominating $\LMAMASS$.
 
-\paragraph{Configuration reachability of $\Mm$}
+\subsection{Configuration reachability of $\STK$-dominating $\LMAMASS$}
   
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. 
 Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$.
@@ -75,7 +76,7 @@ We shall consider the two cases in Section~\ref{sec:lmamass-stk} and Section~\re
 %Let us introduce a notation. 
 
 
-\subsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:lmamass-stk}
+\subsubsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:lmamass-stk}
 
 In this case, we prove Lemma~\ref{lem:iff-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
 
@@ -128,8 +129,7 @@ We are ready to present the procedure that computes effectively $\AutReach$, a f
 
 Initially, let $\AutReach := \{(\aft(A_0),(\Aut_{A_0}))\}$.
 Then it adds pairs to $\AutReach$, according to the following saturation rules, until no more pairs can be added. 
-
-\smallskip
+ 
 \fbox
 {
 \begin{minipage}{0.9\textwidth}
@@ -157,8 +157,7 @@ Then it adds pairs to $\AutReach$, according to the following saturation rules, 
 \end{enumerate}
 \end{minipage}
 }
-
-\medskip
+ 
 
 The aforementioned procedure terminates since $\Theta_\Mm$ is finite and the set of {\NFA}s $\Aut_{A\rightsquigarrow B}$ occurring in $\AutReach$ is finite.
 Let $\AutReach_f$ denote the value of $\AutReach$ when the aforementioned procedure terminates. 
@@ -455,7 +454,7 @@ We conclude that the claim holds for $n$ in this case.
 
 
 
-\subsection{The case $\lmd(A_0) \neq \STK$}\label{sec:lmamass-nostk}
+\subsubsection{The case $\lmd(A_0) \neq \STK$}\label{sec:lmamass-nostk}
 %
 We then turn to the more general case $\lmd(A_0)\neq\STK$ which is more involved. In this case we prove Lemma~\ref{lem:iff-recog} by also showing the set of configurations that are reachable from the initial configuration can be saturated by repeatedly applying a finite set of rules.
 
@@ -711,8 +710,7 @@ Then it adds pairs to $\AutReach$, according to the following saturation rules, 
 \end{minipage}
 }
 
-
-\smallskip
+ 
 
 The aforementioned 4th saturation rule is justified by the following proposition. 
 %about $(\Aut_{A_0})^{\post^*}_{\Pp_{A_0}}$, $(\Aut_{A_0 \rightsquigarrow B})^{\post^*}_{\Pp_{A_0}}$ and $(\Aut_{A_0\stackrel{C}\rightsquigarrow B})^{\post^*}_{\Pp_{A_0}}$.

@@ -48,7 +48,7 @@ it is challenging to simulate $\mvacttop$. Given a transition $A\xrightarrow{\st
 }
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Pushdown system with well-partially-ordered transductions}\label{sec-wpotrpds}
+\subsubsection{Pushdown system with well-partially-ordered transductions}\label{sec-wpotrpds}
 
 \begin{definition}[Union-basis of transduction sets]\label{def-ubasis}
 Let $\TranSet$ be a set of transductions and $\Tranbasis \subseteq \TranSet$. Then $\Tranbasis$ is called a \emph{union-basis} of $\TranSet$ if each $\tau \in \TranSet$ is equivalent to a finite union of transductions from $\Tranbasis$ (called a $\Tranbasis$-representation of $\tau$). 
@@ -406,7 +406,7 @@ We conclude from Theorem~\ref{thm-dwsts} that the {\WOTrNFA}-{\NFA} intersection
 \end{proof}
 
 
-\subsection{Solving the configuration reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
+\subsubsection{Solving the configuration reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
 
 From the definition of the configuration reachability problem in Section~\ref{sec-conf-reach}, for the $\singletask$-dominating $\IFAMASS$ $\Mm$, we should solve the following problem: given an {\NFA} $\Aa' = (Q', \act, \delta', I', F')$ over the alphabet $\act$, decide whether $\confs((\aft(A_0), \Aa')) \cap \RConfs(\Mm) \neq \emptyset$. 
 

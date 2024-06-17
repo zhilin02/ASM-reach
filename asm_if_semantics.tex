@@ -14,7 +14,7 @@ Let $\Mm$ be an $\IFAMASS$, namely, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ f
 %Before formally defining the semantics of $\Mm$, let us first describe the intuitions of the intent flags. 
 %We would like to warn that although the intuitions of these intent flags may help the readers to get some preliminary idea of their meanings, before diving directly into the formal semantics, they are nonetheless inaccurate, especially when different flags may interfere with each other.
 
-\paragraph{Intuitions of the Intent flags}  Let us explain the intuitions of the five intent flags in the sequel. 
+\paragraph{Intuitions of the Intent flags}  We explain the intuitions of the five intent flags in the sequel. 
 \begin{itemize}
 	\item The $\stpflag$ intent flag:  If it is set,  it has the same effect as starting an activity of the $\STP$ launch mode.
 	\item The $\ctpflag$ intent flag:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then all the activities above the topmost occurrence of the started activity in the task will be removed. Otherwise, the started activity will be pushed into the task.
@@ -27,9 +27,9 @@ Let $\Mm$ be an $\IFAMASS$, namely, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ f
 %To define the semantics of $\IFAMASS$, the concept of configuration is adapted from the definition of configuration for $\LMAMASS$ as follows: A configuration of $\Mm$ is encoded as $[A_1,\cdots,A_m]\in\act^+$.
 
 %Then we introduce some additional and adapted auxiliary functions and predicates that are to be used in the formal semantics of $\IFAMASS$.\\
-We repeat the \emph{caveat} in Section~\ref{sect:semlmamass} for the intuition, introduce some additional functions and predicates. 
+We repeat the \textbf{Caveat} in Section~\ref{sect:semlmamass} for the intuition, introduce some additional functions and predicates. 
 %\emph{Auxiliary functions and predicates.} 
-Let $\rho$ be a configuration with $\rho = [A_1,\cdots,A_m]$. Then
+Let $\rho$ be a configuration with $\rho = [A_1,\cdots,A_m]$.  
 %We define the following auxiliary functions and predicates.
 \begin{itemize}
 	% \item $\topact(\rho) = A_1$, $\btmact(\rho) = A_m$,
@@ -40,6 +40,7 @@ Let $\rho$ be a configuration with $\rho = [A_1,\cdots,A_m]$. Then
 	\item $\mvacttop(\rho, B) = [A_j,A_1,\cdots,A_{j-1},A_{j+1},\cdots A_m]$, if $A_j = B$ for some $j\in[m]$ and $B\notin[A_1,\cdots,A_{j-1}]$,
 	\item $\clrtsk(\rho, B) = [B]$.
 \end{itemize}
+
 Intuitively $\mvacttop(\rho, B)$ is used for defining the semantics of $\rtfflag$, and $\clrtsk(\rho, B)$ is used for defining the semantics of $\ctkflag$.
 
 We are ready to define the semantics of $\IFAMASS$, that is, the relation $\rho \xrightarrow[\Mm]{\tau} \rho'$.
@@ -124,126 +125,3 @@ Let us use the following example to illustrate the semantics.
 	% 	\item when $\stpflag$ tasks effect, then $B$ is pushed into the task when the top activity of the task is not $B$, which is similar with the case $\lmd(B) = \STP$.
 	% \end{itemize}
 
-\subsection{Semantics of $\AMASS$}
-%To define the semantics of $\AMASS$, we use the same definition of configuration as $\LMAMASS$, and add some auxiliary functions and predicates. 
-
-Let $\Mm$ be an $\AMASS$. For clarity, in the sequel, we restate the aforementioned functions $\mvacttop$ and $\clrtsk$ for the configurations that may contain multiple tasks. 
-%\emph{Auxiliary functions and predicates.} 
-Let $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n))$ be a configuration.
-Then
-\begin{itemize}
-	\item $\mvacttop(\rho, B) = (([B]\cdot S_1'\cdot S_1'',\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$, if $S_1=S_1'\cdot[B]\cdot S_1''$ with $S_1'\in (\act\setminus\{B\})^*$,
-	\item $\clrtsk(\rho, B) = (([B],\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$.
-\end{itemize}
-% In this case, we consider the launch modes, task affinities and intent flags.
-Now we define the semantics of $\AMASS$. 
-
-The semantics of the transition rule $\tau = \back$ is similar to that of $\LMAMASS$.
-
-Let us  assume $\tau = A\xrightarrow[]{\startactivity(\phi)}B$ in the sequel.
-
-Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$. Moreover, let $S_1 = [A_1',\cdots,A_m']$. Evidently, $A = A_1'$.
-
-\medskip
-
-\noindent \fbox{\fbox{$\lmd(B) = \standard$}}
-\begin{itemize}
-	\item If $\lmd(A) \neq \singleinstance$ and $\phi \models \neg \ntkflag$, 
-	\begin{itemize}
-		\item if $\phi \models\ctpflag$ and $B \in \toptsk(\rho)$, then $\rho' =\clrtop(\rho, B)$,
-		\item otherwise,
-		\begin{itemize}
-			\item if $\phi \models \rtfflag$ and $B \in \toptsk(\rho)$, then $\rho'=\mvacttop(\rho, B)$,
-			\item otherwise,
-			\begin{itemize}
-				\item if $\phi \models \stpflag$ and $B = \topact(\rho)$, then $\rho' = \rho$,
-				\item otherwise, $\rho' = \push(\rho, B)$.
-			\end{itemize}
-		\end{itemize}
-	\end{itemize}
-	%
-	\item If $\lmd(A) = \singleinstance$ or $\phi \models \ntkflag$, then
-	\begin{itemize}
-		\item if $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
-		\begin{itemize}
-			\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
-			\item otherwise, 
-			\begin{itemize}
-				\item if $\phi \models \ctpflag$ and $B \in S_i$, then 
-				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
-				\item otherwise,
-				\begin{itemize}
-					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
-					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
-					\item otherwise,
-					\begin{itemize}
-						\item if $\phi \models \stpflag$ and $B = \topact(S_i)$, then 
-						$$\rho' = \mvtsktop(\rho, i),$$
-						\item otherwise, $\rho'=\push(\mvtsktop(\rho, i), B)$,
-					\end{itemize}
-				\end{itemize}
-			\end{itemize}
-		\end{itemize}
-		\item if $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
-	\end{itemize}
-\end{itemize}
-
-\noindent \fbox{\fbox{$\lmd(B) = \STP$}}
-\begin{itemize}
-	\item If $\lmd(A) \neq \singleinstance$ and $\phi \models \neg \ntkflag$, 
-	\begin{itemize}
-		\item if $\phi \models\ctpflag$ and $B \in \toptsk(\rho)$, then $\rho' =\clrtop(\rho, B)$,
-		\item otherwise,
-		\begin{itemize}
-			\item if $\phi \models \rtfflag$ and $B \in \toptsk(\rho)$, then $\rho'=\mvacttop(\rho, B)$,
-			\item otherwise,
-			\begin{itemize}
-				\item if $B = \topact(\rho)$, then $\rho' = \rho$,
-				\item otherwise, $\rho' = \push(\rho, B)$.
-			\end{itemize}
-		\end{itemize}
-	\end{itemize}
-	%
-	\item If $\lmd(A) = \singleinstance$ or $\phi \models \ntkflag$, then
-	\begin{itemize}
-		\item if $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
-		\begin{itemize}
-			\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
-			\item otherwise, 
-			\begin{itemize}
-				\item if $\phi \models\ctpflag$ and $B \in S_i$, then 
-				$$\rho' =\clrtop(\mvtsktop(\rho, i), B),$$
-				\item otherwise,
-				\begin{itemize}
-					\item if $\phi \models \rtfflag$ and $B \in S_i$, then 
-					$$\rho'=\mvacttop(\mvtsktop(\rho, i), B),$$
-					\item otherwise,
-					\begin{itemize}
-						\item if $B = \topact(S_i)$, then $\rho' = \mvtsktop(\rho, i)$,
-						\item otherwise, $\rho'=\push(\mvtsktop(\rho, i), B)$,
-					\end{itemize}
-				\end{itemize}
-			\end{itemize}
-		\end{itemize}
-		\item if $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
-	\end{itemize}
-\end{itemize}
-
-\noindent \fbox{\fbox{$\lmd(B) = \STK$}}
-\begin{itemize}
-	\item If $\gettsk(\rho, B) = S_i$ for some $i\in[n]$,
-	\begin{itemize}
-		\item if $\phi \models\ctkflag$, then $\rho' = \clrtsk(\mvtsktop(\rho, i), B)$,
-		\item otherwise, 
-		\begin{itemize}
-			\item if $B \notin S_i$, then $\rho' = \push(\mvtsktop(\rho, i), B)$,
-			\item if $B \in S_i$, then $\rho' = \clrtop(\mvtsktop(\rho, i), B)$.
-		\end{itemize}
-	\end{itemize}
-	\item If $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
-\end{itemize}
-\noindent \fbox{\fbox{$\lmd(B) = \SIT$}}
-\begin{itemize}
-	\item If $\gettsk(\rho, B) = S_i$ for some $i \in [n]$, then $\rho' = \mvtsktop(\rho, i)$,
-	\item If $\gettsk(\rho, B) = *$, then $\rho' = \newtsk(\rho, B)$.
-\end{itemize}

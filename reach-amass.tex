@@ -1,6 +1,8 @@
 %!TEX root = main.tex
 
+\input{asm_semantics.tex}
 
+\subsection{Configuration reachability of $\STK$-dominating $\LMAMASS$}
 We are ready to state the main result of this paper. 
 
 \begin{theorem}\label{thm:st-amass-reach}
@@ -11,7 +13,7 @@ Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent fl
 
 Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
 
-A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}-\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
+A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}---\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
 Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
 To resolve this problem, we propose a new idea by \emph{focusing on the evolvement of the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. By doing this, we can apply the saturation rules to compute a {\WOTrNFA} from the {\WOTrPDS} for the main task, thus avoiding removing transitions from {\WOTrNFA}s.
 
@@ -102,7 +104,7 @@ $$(([A_0'BA_0],0),([A_1'],1))\xrightarrow[]{\tau_4}(([A_0A_0'B],0),([A_1'],1))\x
 % However, if we do not delete the transitions from $\Aut$, it may recognize some unreachable configurations from the initial configuration. Since the content of $A_0$-task is relevant to the non-$A_0$-tasks. 
 
 
-\subsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:amass-stk}
+\subsubsection{The case $\lmd(A_0) = \STK$ or $\SIT$}\label{sec:amass-stk}
 
 In this case, we compute a finite set of {\WOTrNFA} tuples to represent the set of reachable configurations.
 For this purpose, for each $A \in \act_\singletask \cup \singleinstance$, we define a {\WOTrPDS} $\Pp_A$ to simulate the behaviors of an $A$-task. 
@@ -338,7 +340,7 @@ Let $\AutReach_f$ denote the value of $\AutReach$ when the aforementioned proced
 
 Since Lemma~\ref{lem:amass-recog} can be proved similarly to Lemma~\ref{lem:iff-recog}, its proof is omitted. 
 
-\subsection{The case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$}\label{sec:amass-nostk}
+\subsubsection{The case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$}\label{sec:amass-nostk}
 
 As mentioned before, in this case, we focus on the evolvement of the main task, construct a {\WOTrPDS} $\Pp_{\Mm}$ for it, and abstract the contents of the other tasks into the control states of $\Pp_{\Mm}$. 
 
