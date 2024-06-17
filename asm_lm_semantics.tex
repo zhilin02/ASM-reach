@@ -75,33 +75,33 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
 		%	\endminipage}
 	
 	
-	\noindent {\fbox{$\lmd(B) = \STD$}}
+	\noindent \fbox{\fbox{$\lmd(B) = \STD$}}
 	
 	%\tcbset{width=(\linewidth-2mm)/2,before=,after=\hfill,arc=0mm,
 		%	colframe=blue!75!black,colback=white,fonttitle=\bfseries}
 	%title=Box \thetcbrasternum,
 	%enhanced,size=small] %colframe=red!50!black,colback=red!10!white]
-	\begin{tcolorbox}[width=0.4\linewidth, title={$\lmd(A) = \SIT$}]
-		$\rho'= \push(\rho,B)$
-	\end{tcolorbox} \hfill
-	\begin{tcolorbox}[width=0.6\linewidth, title={$\lmd(A) \neq \SIT$}]
-		\begin{itemize}
-			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
-			$\rho'=\push(\mvtsktop(\rho, i),B),$
-			\item	if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
-		\end{itemize}
-	\end{tcolorbox}	
+%	\begin{tcolorbox}[width=0.4\linewidth, title={$\lmd(A) = \SIT$}]
+%		$\rho'= \push(\rho,B)$
+%	\end{tcolorbox} \hfill
+%	\begin{tcolorbox}[width=0.6\linewidth, title={$\lmd(A) \neq \SIT$}]
+%		\begin{itemize}
+%			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+%			$\rho'=\push(\mvtsktop(\rho, i),B),$
+%			\item	if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
+%		\end{itemize}
+%	\end{tcolorbox}	
 	
-	%	\begin{itemize}
-		%		\item If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
-		%		%
-		%		\item If $\lmd(A) = \SIT$, then
-		%    		\begin{itemize}
-			%    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
-			%			$$\rho'=\push(\mvtsktop(\rho, i),B),$$
-			%    			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
-			%    		\end{itemize}
-		%	\end{itemize}
+		\begin{itemize}
+				\item If $\lmd(A) \neq \SIT$, then $\rho'= \push(\rho,B)$.
+				%
+				\item If $\lmd(A) = \SIT$, then
+		    		\begin{itemize}
+			    			\item if $\gettsk(\rho, B)=S_i$ for some $i\in[n]$,  then 
+						$$\rho'=\push(\mvtsktop(\rho, i),B),$$
+			    			\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
+			    		\end{itemize}
+			\end{itemize}
 	
 	
 	
