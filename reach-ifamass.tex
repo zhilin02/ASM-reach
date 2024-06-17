@@ -4,8 +4,10 @@
 
 
 \subsection{Configuration reachability of $\STK$-dominating $\IFAMASS$}
-Let us assume that $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is an $\STK$-dominating $\IFAMASS$, that is, for all activities $A \in \act$, $\lmd(A) = \standard$ and $\aft(A) = \aft(A_0)$, moreover, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, we have $\phi \models \neg \ntkflag$. As a result, there is only one task in each configuration of $\Mm$.
-Nevertheless, the reachability problem of $\Mm$ is far from trivial, since in a transition $A \xrightarrow{\startactivity(\phi)} B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$, if there is at least one occurrence of $B$ in the task, then $B$ will be moved to the top of the task. In other words, the $\rtfflag$ flag requires modifying not only the top symbol of the task, but also the non-top symbols. 
+%Let us assume that $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is an $\STK$-dominating $\IFAMASS$, that is, for all activities $A \in \act$, $\lmd(A) = \standard$ and $\aft(A) = \aft(A_0)$, moreover, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, we have $\phi \models \neg \ntkflag$. As a result, 
+Recall that for  $\STK$-dominating $\IFAMASS$, there is only one task in each configuration. %of $\Mm$.
+However,, the reachability problem %of $\Mm$ is far from trivial, 
+is highly nontrivial since in a transition $A \xrightarrow{\startactivity(\phi)} B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$, if there is at least one occurrence of $B$ in the task, $B$ will be moved to the top of the task. In other words, the $\rtfflag$ flag requires modifying not only the top symbol of the task, but also the non-top symbols. 
 
 Our main idea to solve the reachability problem of $\STK$-dominating $\IFAMASS$ is to simulate the behavior of the $\rtfflag$ flag as a transduction on the contents of the task. As mentioned before, {\TrPDS} is a model that extends pushdown systems with transductions, where the closure of transductions is required to be finite. Nevertheless, as we shall see later on, the closure of transductions used to simulate $\rtfflag$ is infinite. To tackle this issue, we introduce a new decidable extension of pushdown systems with transductions, called pushdown system with well-partially-ordered transductions (\WOTrPDS), where the transduction closure can be infinite. 
 

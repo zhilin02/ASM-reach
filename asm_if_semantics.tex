@@ -8,28 +8,28 @@
 
 %To define the semantics of $\IFAMASS$, we adapt slightly the notion of configurations and the auxiliary functions and predicates. 
 
-Let $\Mm$ be an $\IFAMASS$, namely, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ for each activity $A$. As a result, there is only one task in each configuration and the task allocation mechanism can be ignored here. Therefore, a configuration here is simply a word $[A_1,\cdots,A_m]\in\act^+$. 
+Recall that in an  $\STK$-dominating  $\IFAMASS$, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ for each activity $A$. As a result, there is only one task in each configuration and the task allocation mechanism can be ignored here. Therefore, a configuration here is simply a word $[A_1,\cdots,A_m]\in\act^+$. 
 % there is only one task in $\IFAMASS$.
 
 %Before formally defining the semantics of $\Mm$, let us first describe the intuitions of the intent flags. 
 %We would like to warn that although the intuitions of these intent flags may help the readers to get some preliminary idea of their meanings, before diving directly into the formal semantics, they are nonetheless inaccurate, especially when different flags may interfere with each other.
 
-\paragraph{Intuitions of the Intent flags}  We explain the intuitions of the five intent flags in the sequel. 
+\paragraph{Intuitions}  We explain the intuitions of the five intent flags. 
 \begin{itemize}
-	\item The $\stpflag$ intent flag:  If it is set,  it has the same effect as starting an activity of the $\STP$ launch mode.
-	\item The $\ctpflag$ intent flag:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then all the activities above the topmost occurrence of the started activity in the task will be removed. Otherwise, the started activity will be pushed into the task.
-	\item The $\rtfflag$ intent flag:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then the topmost occurrence of this activity will be moved to the top of this task. Otherwise, the started activity will be pushed into the task.
-	\item The $\ntkflag$ intent flag:  If it is set, it will look for an existing task to put the started activity according to the task allocation mechanism. If such a task exists, the task will be moved to the top and the started activity is pushed to the task, otherwise a new task is created to put this activity.
-	\item The $\ctkflag$ intent flag:  It is usually used together with $\ntkflag$. If it is set, it will remove all the activities in the task and push the started activity to the task.
+	\item $\stpflag$:  If it is set,  it has the same effect as starting an activity of the $\STP$ launch mode.
+	\item $\ctpflag$:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then all the activities above the topmost occurrence of the started activity in the task will be removed. Otherwise, the started activity will be pushed into the task.
+	\item $\rtfflag$:  If it is set, it will check for the existence of the started activity in the task. If the activity exists, then the topmost occurrence of this activity will be moved to the top of this task. Otherwise, the started activity will be pushed into the task.
+	\item $\ntkflag$:  If it is set, it will look for an existing task to put the started activity according to the task allocation mechanism. If such a task exists, the task will be moved to the top and the started activity is pushed to the task, otherwise a new task is created to put this activity.
+	\item $\ctkflag$: It is usually used together with $\ntkflag$. If it is set, it will remove all the activities in the task and push the started activity to the task.
 \end{itemize}
 %Moreover, $\ntkflag$ will only affect $\ctkflag$ in $\IFAMASS$, since there is only one task in $\IFAMASS$, task allocation mechanism will always allocate the top task.
 
 %To define the semantics of $\IFAMASS$, the concept of configuration is adapted from the definition of configuration for $\LMAMASS$ as follows: A configuration of $\Mm$ is encoded as $[A_1,\cdots,A_m]\in\act^+$.
 
 %Then we introduce some additional and adapted auxiliary functions and predicates that are to be used in the formal semantics of $\IFAMASS$.\\
-We repeat the \textbf{Caveat} in Section~\ref{sect:semlmamass} for the intuition, introduce some additional functions and predicates. 
+We repeat the \textbf{Caveat} in Section~\ref{sect:semlmamass} for the intuition and introduce some additional functions and predicates. 
 %\emph{Auxiliary functions and predicates.} 
-Let $\rho$ be a configuration with $\rho = [A_1,\cdots,A_m]$.  
+For the configuration $\rho = [A_1,\cdots,A_m]$, 
 %We define the following auxiliary functions and predicates.
 \begin{itemize}
 	% \item $\topact(\rho) = A_1$, $\btmact(\rho) = A_m$,
@@ -43,7 +43,7 @@ Let $\rho$ be a configuration with $\rho = [A_1,\cdots,A_m]$.
 
 Intuitively $\mvacttop(\rho, B)$ is used for defining the semantics of $\rtfflag$, and $\clrtsk(\rho, B)$ is used for defining the semantics of $\ctkflag$.
 
-We are ready to define the semantics of $\IFAMASS$, that is, the relation $\rho \xrightarrow[\Mm]{\tau} \rho'$.
+%We are ready to define the semantics of $\IFAMASS$, that is, the relation $\rho \xrightarrow[\Mm]{\tau} \rho'$.
 Let $\rho = [A_1,\cdots,A_m]$ for some $m\ge 1$ be the current configuration and $A_1 = A$. 
 
 If $\tau = \back$ then $\rho' = \pop(\rho)$.
@@ -80,7 +80,7 @@ Let us use the following example to illustrate the semantics.
 	Then the configurations that are reachable from the initial configuration $[A]$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{ifasm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
 	For instance, 
 	\begin{itemize}
-		\item if $A \xrightarrow{\startactivity(\ctkflag)} B$ is applied to the configuration $[A]$, then $B$ is pushed, since $\phi\models\neg\ntkflag \wedge \neg \ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$, resulting to the configuration $[BA]$,
+		\item if $A \xrightarrow{\startactivity(\ctkflag)} B$ is applied to the configuration $[A]$, then $B$ is pushed, since $\phi\models\neg\ntkflag \wedge \neg \ctpflag \wedge \neg \rtfflag \wedge \neg \stpflag$, resulting in the configuration $[BA]$,
 		%
 		\item if $B \xrightarrow{\startactivity(\rtfflag)} C$ is applied to the configuration $[BA]$, then $C$ is pushed, since $\phi\models\rtfflag$ and $C$ does not occur in the task $[BA]$, resulting to the configuration $[CBA]$,
 		%
