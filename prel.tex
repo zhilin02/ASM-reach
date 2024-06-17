@@ -249,14 +249,14 @@ Finally, for a transduction $\tau$, let us use $\overline{\tau}$ to denote the \
 
 \subsubsection{Pushdown systems with transductions}
 
-Let us introduce an extension of pushdown systems, that is, pushdown systems with transductions \cite{UM13,Song18}. 
+%Let us introduce an extension of pushdown systems, that is, pushdown systems with transductions \cite{UM13,Song18}. 
 
-\begin{definition}[\TrPDS] \label{def:trpds}
+\begin{definition}[\TrPDS, \cite{UM13,Song18}] \label{def:trpds}
     A \emph{pushdown system with transductions} (\TrPDS) is a tuple $\Pp = (P, \Gamma, \TranSet, \Delta)$, 
     where $P$ is a finite set of $control\ states$, $\Gamma$ is a finite $stack\ alphabet$, $\TranSet$ is a finite set of letter-to-letter transductions, and $\Delta \subseteq P \times \Gamma \times \Gamma^{\le 2} \times \TranSet \times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\varepsilon\} \cup \Gamma \cup \Gamma \times \Gamma$. In other words, each transition in $\Delta$ is of one of the following forms, $(p, \gamma, \varepsilon, \tau, p')$, $(p, \gamma, \gamma',\tau, p')$, or $(p, \gamma, \gamma'_1 \gamma'_2, \tau, p')$ such that $\gamma, \gamma', \gamma'_1, \gamma'_2 \in \Gamma$ and $\tau \in \TranSet$. 
    Moreover, it is required that the transduction closure $\langle \TranSet \rangle$ is finite.  
 \end{definition}
-For readability, we usually write a transition $(p, \gamma, w, \tau, p') \in \Delta$ as $p \xrightarrow{\gamma/w | \tau} p' \in \Delta$.
+For readability, we write a transition $(p, \gamma, w, \tau, p') \in \Delta$ as $p \xrightarrow{\gamma/w | \tau} p' \in \Delta$.
 
 %Let $\Pp = (P, \Gamma, \TranSet, \Delta)$ be  a {\WOTrPDS}. 
 A \emph{configuration} $c$ of $\Pp$ is a pair $(p, w)$, where $w = \gamma_1 \cdots \gamma_k \in \Gamma^*$ is the  stack content with $\gamma_1$ as the topmost symbol. We define a binary relation $\xrightarrow{\Pp}$ over the set of configurations as follows. Given two configurations $(p_1, w_1)$ and $(p_2, w_2)$, $(p_1, w_1) \xrightarrow{\Pp} (p_2, w_2)$ if $w_1 = \gamma w'_1$, and one of the following conditions holds,

@@ -4,7 +4,7 @@ In this section, we introduce \textbf{A}ndroid \textbf{S}tack \textbf{M}achine (
 %The {\AMASS} model is the same as that in \cite{HC+19} and strictly extends that in \cite{CHS+18}.  
 %is inspired by the previous work~\cite{ChenHSWWY18,HCWWY19}, but the model significantly deviates from the ASM therein. 
 %
-Following the overview of Section~\ref{sec:amm}, we concentrate on the launch mode, the task affinity, and the intent flags when an activity is launched.  
+Following the overview of Section~\ref{sec:amm}, we concentrate on the launch mode, task affinity and intent flags when an activity is launched.  
 
 There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''. Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
 %\cite{intent-flags}, 
@@ -83,7 +83,7 @@ We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rh
 
 It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. %Therefore, in the sequel, 
 To make it more accessible, we %separate the concerns further and 
-shall consider two sub-models of $\AMASS$, namely $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
+shall consider two sub-models of $\AMASS$, namely, $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
 More precisely, 
 \begin{itemize}
 	\item an $\LMAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the transition rules $A \xrightarrow{\alpha(\phi)} B$ (except $\back$) satisfy that $\phi = \bot$, 
@@ -112,14 +112,15 @@ concentrate on $\STK$-dominating {\AMASS} which imposes further constraints on {
 Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
 		\begin{enumerate}
 			\item $\back\in\Delta$,
-			\item the task affinities of $\singletask$-activities (if there is any) are mutually distinct,
+			\item the task affinities of $\singletask$-activities are mutually distinct,
 			%        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A\in\act_{\singleinstance}$, it holds that $B\in\act_{\singleinstance}\cup\act_{\singletask}$,
-			\item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A \in \act_\singleinstance$ or $\phi\models \ntkflag$, we have $B \in \act_{\singleinstance} \cup \act_{\singletask}$.
+			\item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A \in \act_\singleinstance$ or $\phi\models \ntkflag$, $B \in \act_{\singleinstance} \cup \act_{\singletask}$.
 		\end{enumerate}
 \end{definition}
 
-Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode, more precisely,  
-each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
+Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode. More precisely,  
+each task of $\Mm$ contains at most one $\STK$-activity, and  %whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, 
+whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
 	%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 	
 	\begin{example}
@@ -172,7 +173,7 @@ each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a ta
 %
  
 
-Let $\Mm =(\act, A_0, \lmd, \aft, \Delta)$ be an  {\AMASS}. Then we define $\RConfs(\Mm)$ as the set of configurations $\rho$ that are reachable from the initial configuration, that is, 
+Let $\Mm =(\act, A_0, \lmd, \aft, \Delta)$ be an  {\AMASS}. We define $\RConfs(\Mm)$ as the set of configurations $\rho$ that are reachable from the initial configuration, that is, 
 $(A_0, \aft(A_0)) \xRightarrow[\Mm]{} \rho$. 
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We define $\Rel((\Aut_1, \cdots, \Aut_k))$ as $(S_1, \cdots, S_k)$ such that for each $i \in [k]$, $S_i \in \Lang(\Aut_i)$. Moreover, let $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then $\confs((\theta, (\Aut_1,\cdots,\Aut_k)))$, \emph{the set of configurations accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$}, is defined as as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that $(S_1, \cdots, S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$, and for each $i \in [k]$, $\aname_i=\aname_i'$.
 %
@@ -183,7 +184,7 @@ Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We def
 	Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
 \end{quote}
 
-The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$, which will stated in Theorem~\ref{thm:st-amass-reach}. 
+The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$, which is stated in Theorem~\ref{thm:st-amass-reach}. 
 
 For technical convenience, we assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct and are different from those of the other activities}, that is, for $A, B \in \act_\singleinstance$ with $A \neq B$, we assume that  $\aft(A) \neq \aft(B)$ and $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
 
