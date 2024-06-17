@@ -1,7 +1,7 @@
 
 %!TEX root = main.tex
 
-\subsection{Semantics of $\LMAMASS$}
+\subsection{Semantics of $\LMAMASS$} \label{sect:semlmamass}
 
 %We start with the semantics of $\LMAMASS$ and assume that $\Mm$ is an $\LMAMASS$. 
 
@@ -21,8 +21,7 @@ We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly f
 	Similar to $\STK$, but if such an activity already exists, it will reuse this activity, moreover, there is only one activity in the task which was created by starting the same activity.
 \end{itemize}
 
-The intuitions of the launch modes are actually not that precise. For instance, when a new $\STD$-activity is stated by an $\SIT$-activity, the $\STD$-activity will not necessarily be pushed to the top task. 
-%Task allocation mechanism is to specify to which task will it be allocated when an activity is launched. 
+
 
 
 %Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
@@ -35,6 +34,10 @@ the following rules are used to determine which task will it be allocated.
 	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\noindent\textbf{Caveat.} The intuition is stated to facilitate readers to under the transitions rules at a high level. They are not necessarily precise at a formal level. For instance, when a new $\STD$-activity is stated by an $\SIT$-activity, the $\STD$-activity will not necessarily be pushed to the top task. 
+%Task allocation mechanism is to specify to which task will it be allocated when an activity is launched. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{auxdef.tex}
 
 \smallskip
@@ -218,7 +221,7 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 			% \vspace{-3mm}
 			\centering
 			\includegraphics[scale = 0.75]{lmasm-example.pdf}
-			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in the $\LMAMASS$ $\Mm$}
+			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in $\LMAMASS$}
 			%in $\phi$
 			% \vspace{-6mm}	
 			\label{lmasm-example}
