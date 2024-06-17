@@ -3,8 +3,10 @@
 In this section, we introduce \textbf{A}ndroid \textbf{S}tack \textbf{M}achine (\AMASS), a formal model to capture the Android multitasking mechanism. 
 %The {\AMASS} model is the same as that in \cite{HC+19} and strictly extends that in \cite{CHS+18}.  
 %is inspired by the previous work~\cite{ChenHSWWY18,HCWWY19}, but the model significantly deviates from the ASM therein. 
+%
+Following the overview of Section~\ref{sec:amm}, we concentrate on the launch mode, the task affinity, and the intent flags when an activity is launched.  
 
-Following the overview of Section~\ref{sec:amm}, we shall concentrate on the launch mode, the task affinity, and the intent flags when an activity is launched.  There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''.  
+There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''.  
 Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
 %\cite{intent-flags}, 
 namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. %among which 19 flags contain ACTIVITY in their
