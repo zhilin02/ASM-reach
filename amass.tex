@@ -93,47 +93,7 @@ More precisely,
 To ease the understanding, in the sequel, we shall define the semantics of the two sub-models $\LMAMASS$ and $\IFAMASS$ first, then define the semantics of $\AMASS$. 
 
 
-We introduce some auxiliary functions and predicates to be used in the formal semantics of $\LMAMASS$.
 
-%\begin{figure}
-%	\begin{center}
-	%\begin{tabular}{l}
-	%\hline\\
-	% $\topact(S) = A_1$, $\btmact(S) = A_m$\\
-	%$\toptsk(\rho) = S_1$, $\topact(\rho) = \topact(\toptsk(\rho))$\\
-	%$\push(\rho, B) = (([B]\cdot S_1,\aname_1),(S_2,\aname_2),\cdots,(S_n,\aname_n))$\\
-	%\end{tabular}	
-	%\caption{Auxiliary functions and predicates} \label{fig:syntax}
-	%\end{center}
-	%\end{figure}
-	
-\paragraph{Auxiliary functions and predicates} 
-	%To specify the transition relation precisely and concisely, we define the following functions and predicates. 
-	Let $\rho= ((S_1,\aname_1),\cdots, (S_n,\aname_n))$ be a configuration and $S=[A_1, \cdots, A_m]$ be a task. 
-	\begin{itemize}
-		\item $\topact(S) = A_1$, $\btmact(S) = A_m$,
-		\item $\toptsk(\rho) = S_1$, $\topact(\rho) = \topact(\toptsk(\rho))$, 
-		\item $\push(\rho, B) = (([B]\cdot S_1,\aname_1),(S_2,\aname_2),\cdots,(S_n,\aname_n))$,
-		\item $\Pop(\rho) = ((S_1',\aname_1),(S_2,\aname_2), \cdots, (S_n,\aname_n))$ if $S_1=[B]\cdot S_1'$ for some $B\in\act$ and $S_1'\in\act^+$,\\ $\Pop(\rho) = ((S_2,\aname_2),\cdots,(S_n,\aname_n))$ otherwise,
-		% \item $\mvacttop(\rho, B) = ([B]\cdot S_1'\cdot S_1'', S_2, \cdots, S_n)$, if $S_1=S_1'\cdot[B]\cdot S_1''$ with $S_1'\in (\act\setminus\{B\})^*$,
-		\item $\clrtop(\rho, B) = (([B]\cdot S_1'',\aname_1), (S_2,\aname_2), \cdots, (S_n,\aname_n))$, if $S_1=S_1'\cdot[B]\cdot S_1''$ with $S_1'\in (\act\setminus\{B\})^*$,
-		% \item $\clrtsk(\rho, B) = ([B], S_2, \cdots, S_n)$,
-		\item $\newtsk(\rho, B) = (([B],\aft(B)), S_1, \cdots, S_n)$,
-		\item $\mvtsktop(\rho, i)$ is defined as 
-		$$((S_i,\aname_i), (S_1,\aname_1), \cdots, (S_{i-1},\aname_{i-1}), (S_{i+1},\aname_{i+1}), \cdots, (S_n,\aname_n)),$$
-		% \item $\gettsk(\rho, B) = S_i$ such that $i \in [n]$ is the \emph{minimum} index satisfying $\aft(A_i)=\aft(B)$, if such an index $i$ exists; $\gettsk(\rho, B) = *$ otherwise.
-		%
-		\item $\gettsk(\rho, B)$ is defined as follows,
-		\begin{itemize}
-			\item if $\lmd(B)\neq\singleinstance$, $\aname_i=\aft(B)$ and $\lmd(\btmact(S_i)) \neq \singleinstance$ for some $i \in [n]$,  then $\gettsk(\rho, B) = S_i$, otherwise, $\gettsk(\rho, B) = *$.
-			\item if $\lmd(B) = \singleinstance$, $\btmact(S_i)=B$ for some $i \in [n]$, then $\gettsk(\rho, B) = S_i$, otherwise, $\gettsk(\rho, B) = *$.
-		\end{itemize}
-	\end{itemize}
-	Note that $\gettsk(\rho, B)$ formalizes the aforementioned task allocation mechanism and the fact that the task affinities of two different non-$\SIT$ tasks are distinct guarantees that the function $\gettsk(\rho, B)$ is well-defined. 
-	
-	%We are ready to define the semantics of $\LMAMASS$ as the transition relation $\xrightarrow[\Mm]{}$ in the sequel. 
-	
-	
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
