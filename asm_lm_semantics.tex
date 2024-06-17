@@ -5,19 +5,19 @@
 
 %We start with the semantics of $\LMAMASS$ and assume that $\Mm$ is an $\LMAMASS$. 
 
-Before presenting the formal semantics of $\LMAMASS$, let us describe the intuitions behind it.
+%Before presenting the formal semantics of $\LMAMASS$, let us describe the intuitions behind it.
 
 %
-\noindent\emph{Intuitions.}  %Let us explain the intuitions of the four launch modes in the sequel. 
-We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly for $\STP$, $\STK$, and $\SIT$. 
+\noindent\emph{Intuitions.}  We first explain the intuitions of the four launch modes. 
+
 \begin{itemize}
-	\item The $\STD$ mode: When a new $\STD$-activity is started, it will be pushed into the top task. 
+	\item  $\STD$: When a new $\STD$-activity is started, it is pushed to the top task. 
 	%
-	\item The $\STP$ mode: When a new $\STP$-activity is started, if the activity is already at the top of the top task, it will reuse this activity. Otherwise, a new activity will be pushed into the top task.
+	\item $\STP$: When a new $\STP$-activity is started, if the activity is already at the top of the top task, it will reuse this activity. Otherwise, a new activity will be pushed into the top task.
 	%
-	\item The $\STK$ mode: When a new $\STK$-activity is started, it will create the activity at the root of a new task or locate the activity on an existing task with the same affinity. If the activity already exists, then all the activities above it are removed from the task. Otherwise, a new activity will be pushed into the task.
+	\item $\STK$: When a new $\STK$-activity is started, it will create the activity at the root of a new task or locate the activity on an existing task with the same affinity. If the activity already exists, then all the activities above it are removed from the task. Otherwise, a new activity will be pushed into the task.
 	%
-	\item The $\SIT$ mode: 
+	\item $\SIT$: 
 	Similar to $\STK$, but if such an activity already exists, it will reuse this activity, moreover, there is only one activity in the task which was created by starting the same activity.
 \end{itemize}
 

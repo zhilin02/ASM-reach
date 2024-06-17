@@ -43,6 +43,7 @@ We use $\act_{\star}$ to denote $\{B\in\act\mid \lmd(B)= \star\}$ for $\star\in\
 For readability, we write a transition rule $(A, \startactivity(B, \phi))\in \Delta$ as $A \xrightarrow{\startactivity(\phi)} B$
 
 
+We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly for $\STP$, $\STK$, and $\SIT$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{Semantics of \AMASS}\label{sec:semantics-amass}
 
@@ -118,13 +119,13 @@ Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said 
 		\end{enumerate}
 \end{definition}
 
-Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode. More precisely,  
+Intuitively, in an $\STK$-dominating $\AMASS$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode. More precisely,  
 each task of $\Mm$ contains at most one $\STK$-activity, and  %whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, 
 whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
 	%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 	
-	\begin{example}
-		We will use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
+\begin{example}
+		We  use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
 		Let $\Mm=(\act,A,\lmd,\aft,\Delta)$, where 
 		\begin{itemize}
 			\item $\act = \{A, B, C, D, E\}$, 
@@ -155,11 +156,11 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 		\end{itemize}
 		The configurations that are reachable from the initial configuration $(([A_0], 0))$ are illustrated in Figure~\ref{stk-asm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
 		Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration.  
-		\begin{figure}[htbp]
+\begin{figure}[htbp]
 			% \vspace{-3mm}
 			\centering
 			\includegraphics[scale = 0.5]{stk-asm-example.pdf}
-			\caption{Configurations that are reachable from the initial configuration $(([A_0], 0))$ in the $\STK$-dominating $\AMASS$ $\Mm$}
+			\caption{Configurations that are reachable from the initial configuration $(([A_0], 0))$.} % in the $\STK$-dominating $\AMASS$ $\Mm$}
 			%in $\phi$
 			% \vspace{-6mm}	
 			\label{stk-asm-example}
@@ -169,9 +170,7 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- \subsection{Configuration reachability problem of $\AMASS$} \label{sec-conf-reach}
-%
- 
+\subsection{Configuration reachability of $\AMASS$} \label{sec-conf-reach}
 
 Let $\Mm =(\act, A_0, \lmd, \aft, \Delta)$ be an  {\AMASS}. We define $\RConfs(\Mm)$ as the set of configurations $\rho$ that are reachable from the initial configuration, that is, 
 $(A_0, \aft(A_0)) \xRightarrow[\Mm]{} \rho$. 
@@ -184,10 +183,14 @@ Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We def
 	Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
 \end{quote}
 
-The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$, which is stated in Theorem~\ref{thm:st-amass-reach}. 
+The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$  stated in Theorem~\ref{thm:st-amass-reach}. However, we shall proceed in multiple steps given in Section~\ref{sec:reach-lmamass}--\ref{sec:reach-amass}.
 
 For technical convenience, we assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct and are different from those of the other activities}, that is, for $A, B \in \act_\singleinstance$ with $A \neq B$, we assume that  $\aft(A) \neq \aft(B)$ and $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
+%
+Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. 
 
-Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
+%With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. 
+
+%Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
