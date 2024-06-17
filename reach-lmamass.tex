@@ -46,6 +46,18 @@ $$
 Since each task $S_i$ can be seen as a string from $\act^+$, $\RLang(\Mm, \theta)$ can be seen as a $k$-ary string relation over $\act^+$. 
 
 
+
+
+\begin{proposition}\label{prop-stk}
+	Let $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ be an $\STK$-dominating $\AMASS$. Then each configuration $\rho$ that is reachable from the initial configuration $(([A_0],\aft(A_0)))$ in $\Mm$ satisfies the following constraints:
+	\begin{enumerate}
+		\item for each $\STK$-activity $A\in\act$ with $\aft(A)\neq\aft(A_0)$, $A$ can only occur at the bottom of some task in $\rho$, 
+		\item $\rho$ contains at most one $\standard/\singletop$-task, which, when it exists, has the same affinity as $A_0$.
+		% \item $\SIT$ activity has the same effects with $\STK$ activity.
+	\end{enumerate}
+\end{proposition}
+
+
 \begin{lemma}\label{lem:iff-recog}
     For each $\theta \in \Theta_\Mm$, $\RLang(\Mm, \theta)$ is a recognizable relation and its $\NFA$-representation can be effectively computed.
 \end{lemma} 

@@ -6,12 +6,9 @@ In this section, we introduce \textbf{A}ndroid \textbf{S}tack \textbf{M}achine (
 %
 Following the overview of Section~\ref{sec:amm}, we concentrate on the launch mode, the task affinity, and the intent flags when an activity is launched.  
 
-There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''.  
-Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
+There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''. Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
 %\cite{intent-flags}, 
-namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. %among which 19 flags contain ACTIVITY in their
-%names  
-Among these 23 intent flags, we consider the following five that are commonly used in Android apps, namely,
+namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. Among these 23 intent flags, we consider the following five that are commonly used in Android apps, namely,
 \begin{itemize}
 	\item $\rm FLAG\_ACTIVITY\_NEW\_TASK$ ($\ntkflag$),
 	\item $\rm FLAG\_ACTIVITY\_CLEAR\_TOP$ ($\ctpflag$),
@@ -69,30 +66,37 @@ Let $\confs(\Mm)$ denote the set of configurations of $\Mm$.
 The initial configuration is $(([A_0],\aft(A_0)))$ which contains one task $([A_0], \aft(A_0))$ only. 
 % Let $\confs(\Mm)$ denote the set of configurations $\rho$ such that $([A_0])\rightarrow_{\Mm}^*\rho$.
 
-We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rho \xrightarrow[\Mm]{\tau} \rho'$, where $\tau \in \Delta$ is a transition rule, $\rho \in \confs(\Mm)$, and $\rho' \in \confs(\Mm)$ is obtained by applying $\tau$ to $\rho$. Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
+%We define the relation $\xrightarrow[\Mm]{}$ which comprises the quadruples $(\rho, \tau, \rho') \in \conf_\Mm \times \Delta  \times \conf_\Mm$ to formalise the semantics of $\Mm$. For readability, we write $(\rho, \tau, \rho')\in\ \xrightarrow[\Mm]{}$  as $\rho \xrightarrow[\Mm]{\tau} \rho'$.
 
-%\paragraph{Transition relation} 
-We define the relation $\xrightarrow[\Mm]{}$ which comprises the quadruples $(\rho, \tau, \rho') \in \conf_\Mm \times \Delta  \times \conf_\Mm$ to formalise the semantics of $\Mm$. For readability, we write $(\rho, \tau, \rho')\in\ \xrightarrow[\Mm]{}$  as $\rho \xrightarrow[\Mm]{\tau} \rho'$. 
-Let $\xRightarrow[\Mm]{}$ denote the reflexive and transitive closure of $\xrightarrow[\Mm]{}$.
+We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rho \xrightarrow[\Mm]{\tau} \rho'$, where $\tau \in \Delta$ is a transition rule, $\rho, \rho' \in \confs(\Mm)$ and $\rho'$ is obtained by applying $\tau$ to $\rho$. As usual, $\xRightarrow[\Mm]{}$ denotes the reflexive and transitive closure of $\xrightarrow[\Mm]{}$.
+
+%%%%%%%%%%%%%%%%
+\tl{to see where to put this.} Moreover, it is not hard to verify that the transition relation $\xrightarrow[\Mm]{\tau}$ preserves the invariant of configurations, that is, if $\rho$ satisfies that the task affinities of every two non-$\singleinstance$ tasks are different, and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then $\rho'$ satisfies this invariant as well. 
+%%%%%%%%%%%%%%%%%%%%%%
 
 \paragraph{Task allocation mechanism} 
 %Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
-When an activity is launched, it may not be put in the top task. 
-When an activity $B$ is launched and not going to be put in the top task, the following rules are used to determine which task will it be allocated. 
+When an activity is launched, it may not be put in the top task, in which case  
+%When an activity $B$ is launched and not going to be put in the top task, 
+the following rules are used to determine which task will it be allocated. 
 \begin{itemize}
 	\item In case $\lmd(B) \neq \SIT$, if there is a non-$\SIT$-task whose task affinity is the same as $B$, then $B$ will be put on the task; otherwise, a new task will be created to hold $B$.
  
 	\item In case $\lmd(B) = \SIT$,    if there is any task whose bottom activity is $B$ (actually $B$ is the only activity in the task), then the task will be moved to the top; otherwise, a new task is created to hold $B$.
 \end{itemize}
 
+\tl{end of comments: to see where to put this.} 
 
-It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. Therefore, in the sequel, we separate the concerns further and consider the two sub-models of $\AMASS$, namely $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
+
+It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. %Therefore, in the sequel, 
+To make it more accessible, we %separate the concerns further and 
+shall consider two sub-models of $\AMASS$, namely $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
 More precisely, 
 \begin{itemize}
 	\item an $\LMAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the transition rules $A \xrightarrow{\alpha(\phi)} B$ (except $\back$) satisfy that $\phi = \bot$, 
 	\item an $\IFAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the activities $A\in\act$ satisfy that $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$.
 \end{itemize}
-To ease the understanding, in the sequel, we shall define the semantics of the two sub-models $\LMAMASS$ and $\IFAMASS$ first, then define the semantics of $\AMASS$. 
+%To ease the understanding, in the sequel, we shall define the semantics of the two sub-models $\LMAMASS$ and $\IFAMASS$ first, then define the semantics of $\AMASS$. 
 
 
 
@@ -102,26 +106,27 @@ To ease the understanding, in the sequel, we shall define the semantics of the t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %As we have seen, 
-The semantics of {\AMASS} %in Section~\ref{sec:amass} 
-is rather complicated and it is highly challenging to achieve a decision procedure for the configuration reachability problem of {\AMASS}. 
+%The semantics of {\AMASS} %in Section~\ref{sec:amass} 
+%is rather complicated and it is highly challenging to achieve a decision procedure for the %configuration reachability problem of {\AMASS}. 
 %
-In this paper, we restrict our attention to a sub-model of {\AMASS}, called $\STK$-dominating {\AMASS}, and design a decision procedure for it. 
+In this paper, to study the configuration reachability, we %restrict our attention to a sub-model of {\AMASS}, called 
+concentrate on $\STK$-dominating {\AMASS} which imposes further constraints on {\AMASS}. %, and design a decision procedure for it. 
 %We shall see later on that the decision procedure for the sub-model is already quite involved and requires nontrivial novel ideas.  
 	
 	%Due to the semantics of {\AMASS} defined in Section~\ref{sec:semantics-amass} is highly complicated, it is difficult to provide a decision algorithm for solving the configuration reachability problem of {\AMASS}. To this end, we introduce a fragment of {\AMASS} called STK-dominating {\AMASS}, which accommodates all launch mdoes and intent flags. 
 	
-	\begin{definition}[$\STK$-dominating \AMASS] \label{def:stk-amass}
-		Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
+\begin{definition}[$\STK$-dominating \AMASS] \label{def:stk-amass}
+Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
 		\begin{enumerate}
 			\item $\back\in\Delta$,
 			\item the task affinities of $\singletask$-activities (if there is any) are mutually distinct,
 			%        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A\in\act_{\singleinstance}$, it holds that $B\in\act_{\singleinstance}\cup\act_{\singletask}$,
 			\item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A \in \act_\singleinstance$ or $\phi\models \ntkflag$, we have $B \in \act_{\singleinstance} \cup \act_{\singletask}$.
 		\end{enumerate}
-	\end{definition}
-	Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode, more precisely,  
-	each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, 
-	whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
+\end{definition}
+
+Intuitively, in an $\STK$-dominating $\AMASS$ $\Mm$, the task creation or task switching actions are all triggered by the $\singleinstance$ or $\singletask$ launch mode, more precisely,  
+each task of $\Mm$ contains at most one $\STK$-activity, moreover, whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
 	%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 	
 	\begin{example}
@@ -164,30 +169,8 @@ In this paper, we restrict our attention to a sub-model of {\AMASS}, called $\ST
 			%in $\phi$
 			% \vspace{-6mm}	
 			\label{stk-asm-example}
-		\end{figure}
-		
-		%\begin{table}[htbp]
-		%	\begin{center}
-			%	\begin{tabular}{|c|c|c|c|c|c|}
-				%	\hline
-				%	Activity & $\lmd$ & $\aft$\\
-				%	\hline
-				%	$A$ & $\STD$ & 0\\
-				%	\hline
-				%	$B$ & $\STP$ & 1 \\
-				%	\hline
-				%	$C$ & $\SIT$ & 1 \\
-				%	\hline
-				%	$D$ & $\STK$ & 2 \\
-				%	\hline
-				%	$E$ & $\STK$ & 3 \\
-				%	\hline
-				%	\end{tabular}
-			%	\caption{Attributes of activities}
-			%	\label{tab-attribute-stk}
-			%	\end{center}
-		%\end{table} 
-	\end{example}
+\end{figure}
+\end{example}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -195,19 +178,25 @@ In this paper, we restrict our attention to a sub-model of {\AMASS}, called $\ST
 
 \smallskip
 \noindent\textbf{Configuration reachability problem of $\AMASS$} %\label{sec-conf-reach}
-
-In this paper, we focus on the configuration reachability problem of $\AMASS$. This problem is fundamental to the formal (static) analysis and verification of the behaviors of Android apps with respect to the multitasking mechanism.  
+%
+%In this paper, we focus on the configuration reachability problem of $\AMASS$. This problem is fundamental to the formal (static) analysis and verification of the behaviors of Android apps with respect to the multitasking mechanism.  
 
 Let $\Mm =(\act, A_0, \lmd, \aft, \Delta)$ be an  {\AMASS}. Then we define $\RConfs(\Mm)$ as the set of configurations $\rho$ that are reachable from the initial configuration, that is, 
 $(A_0, \aft(A_0)) \xRightarrow[\Mm]{} \rho$. 
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We define $\Rel((\Aut_1, \cdots, \Aut_k))$ as $(S_1, \cdots, S_k)$ such that for each $i \in [k]$, $S_i \in \Lang(\Aut_i)$. Moreover, let $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. Then $\confs((\theta, (\Aut_1,\cdots,\Aut_k)))$, \emph{the set of configurations accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$}, is defined as as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that $(S_1, \cdots, S_k) \in \Rel((\Aut_1, \cdots, \Aut_k))$, and for each $i \in [k]$, $\aname_i=\aname_i'$.
 %
 % $\confs((\theta, (\Aut_1,\cdots,\Aut_k)))$, \emph{the set of configurations accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$}, as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that for each $i \in [k]$, $\aname_i=\aname_i'$ and $S_i \in \Lang(\Aut_i)$. 
-Then \emph{the configuration reachability problem} of {\AMASS} is defined as follows. 
+
+\emph{The configuration reachability problem} of {\AMASS} is defined as follows. 
 \begin{quote}
 	Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
 \end{quote}
 
+The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$, which will stated in Theorem~\ref{thm:st-amass-reach}. 
 
+For technical convenience, we assume that 
+\begin{itemize}
+	\item \emph{the affinities of $\singleinstance$-activities are mutually distinct, moreover, they are different from those of the other activities}, that is, for each $A, B \in \act_\singleinstance$ with $A \neq B$, we have $\aft(A) \neq \aft(B)$, moreover, $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
+\end{itemize} Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

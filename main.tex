@@ -261,7 +261,7 @@ Android, multitasking mechanism, stack, configuration reachability, pushdown sys
 %======================================================================
 
  
-\section{Android Multitasking mechanism} \label{sec:amm}
+\section{Android Multitasking Mechanism} \label{sec:amm}
 \input{amm.tex}
 
 
@@ -273,29 +273,36 @@ Android, multitasking mechanism, stack, configuration reachability, pushdown sys
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Android stack machine} \label{sec:amass}
+\section{Android Stack Machine and Configuration Reachability} \label{sec:amass}
 
 \input{amass.tex}
 
-%===================================================================================================
-% \section{Doubly-Nested Stack Systems} \label{sec:dnss}
 
-% \input{dnss.tex}
-
-%===================================================================================================
-% \section{Pushdown systems with well-partially-ordered transductions} \label{sec:wpotrpds}
-
-% \input{wpotrpds.tex}
-
-%===================================================================================================
-%\section{Configuration reachability problem of $\STK$-dominating $\AMASS$} \label{sec:reach}
 
 \input{reach_new.tex}
 
+\section{Configuration reachability problem of $\STK$-dominating $\LMAMASS$}\label{sec:reach-lmamass}
+\input{reach-lmamass.tex}
+
+\section{Configuration reachability problem of $\STK$-dominating $\IFAMASS$}\label{sec:reach-ifamass}
+\input{reach-ifamass.tex}
+% \subsection{Complete case}\label{sec:complete-case}
+
+
+\section{Configuration reachability problem of $\STK$-dominating $\AMASS$}\label{sec:reach-amass}
+
+We are ready to state the main result of this paper. 
+
+\begin{theorem}\label{thm:st-amass-reach}
+	The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
+\end{theorem}
+
+\input{reach-amass.tex}
+
 %===================================================================================================
 
 
-\section{Related work}
+\section{Related Work}
 %
 \input{related.tex}
 

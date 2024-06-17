@@ -24,19 +24,9 @@
 %Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
 %\end{quote}
 
-\section{TBA}
+ 
 
 
-
-
-\begin{proposition}\label{prop-stk}
-    Let $\Mm=(\act,A_0,\lmd,\aft,\Delta)$ be an $\STK$-dominating $\AMASS$. Then each configuration $\rho$ that is reachable from the initial configuration $(([A_0],\aft(A_0)))$ in $\Mm$ satisfies the following constraints:
-    \begin{enumerate}
-        \item for each $\STK$-activity $A\in\act$ with $\aft(A)\neq\aft(A_0)$, $A$ can only occur at the bottom of some task in $\rho$, 
-        \item $\rho$ contains at most one $\standard/\singletop$-task, which, when it exists, has the same affinity as $A_0$.
-		% \item $\SIT$ activity has the same effects with $\STK$ activity.
-    \end{enumerate}
-\end{proposition}
 
 
 
@@ -44,10 +34,7 @@
 
 %Since the decision procedure is involved, to ease the understanding, we present the decision procedure for $\singletask$-dominating $\LMAMASS$ first (Section~\ref{sec:reach-lmamass}), then $\singletask$-dominating $\IFAMASS$ (Section~\ref{sec:reach-ifamass}), and finally consider $\singletask$-dominating $\AMASS$ in its most general case (Section~\ref{sec:reach-amass}). 
 
-For technical convenience, we assume that 
-\begin{itemize}
-	\item \emph{the affinities of $\singleinstance$-activities are mutually distinct, moreover, they are different from those of the other activities}, that is, for each $A, B \in \act_\singleinstance$ with $A \neq B$, we have $\aft(A) \neq \aft(B)$, moreover, $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
-\end{itemize} Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. Note that the invariant of configurations, that is, the task affinities of every two non-$\singleinstance$ tasks are mutually distinct, guarantees the well-definedness of $\namefun_B(\theta)$.
+
 
 %For simplicity, we assume that $\Mm$ contains $\standard$ and $\singletask$ activities only. 
 %The proof of Theorem~\ref{thm:st-amass-reach} is technically the most challenging part of this paper. 
@@ -55,20 +42,3 @@ For technical convenience, we assume that
 
 
 
-\section{Configuration reachability problem of $\STK$-dominating $\LMAMASS$}\label{sec:reach-lmamass}
-\input{reach-lmamass.tex}
-
-\section{Configuration reachability problem of $\STK$-dominating $\IFAMASS$}\label{sec:reach-ifamass}
-\input{reach-ifamass.tex}
-% \subsection{Complete case}\label{sec:complete-case}
-
-
-\section{Configuration reachability problem of $\STK$-dominating $\AMASS$}\label{sec:reach-amass}
-
-We are ready to state the main result of this paper. 
-
-\begin{theorem}\label{thm:st-amass-reach}
-	The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
-\end{theorem}
-
-\input{reach-amass.tex}
