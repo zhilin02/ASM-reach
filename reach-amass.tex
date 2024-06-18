@@ -1,23 +1,29 @@
 %!TEX root = main.tex
 
+After tackling the two fragments of  $\AMASS$, in this section, we synthesize the previous results (including both the transitions rules and decision procedures). 
+
 \input{asm_semantics.tex}
 
 \subsection{Configuration reachability of $\STK$-dominating $\LMAMASS$}
-We are ready to state the main result of this paper. 
+%We are ready to state the main result of this paper. 
+
+As mentioned before, the ultimate goal of the paper is to show 
 
 \begin{theorem}\label{thm:st-amass-reach}
 	The configuration reachability problem of $\STK$-dominating $\AMASS$ is decidable.
 \end{theorem}
 
 Intuitively, $\STK$-dominating $\AMASS$ contains both launch modes and intent flags, thus can be seen as an integration of $\STK$-dominating $\LMAMASS$ and $\STK$-dominating $\IFAMASS$. 
-
-Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
+%
+%Let us assume that $\Mm = (\act,A_0,\lmd,\aft,\Delta)$ is an $\STK$-dominating $\AMASS$. 
+Recall that according to the definition of $\singletask$-dominating $\AMASS$, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, if $A \in \act_\singleinstance$ or $\phi \models \ntkflag$, then $B \in \act_\singletask \cup \act_\singleinstance$.
 
 A natural idea for solving the reachability problem of $\STK$-dominating $\AMASS$ is to combine the two procedures in Section~\ref{sec:reach-lmamass}---\ref{sec:reach-ifamass} into a procedure where the {\NFA} tuples are replaced by the {\WOTrNFA} tuples.  
-Nevertheless, such a procedure is problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
+Such a procedure is unfortunately problematic, since in the construction of the {\WOTrNFA} tuples for the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, it is necessary to remove the transitions from the {\WOTrNFA} corresponding to the main task. As a result, it is hard, if not impossible, to show the termination of the procedure, since the termination arguments in Section~\ref{sect:decidability} rely on the fact that transitions in {\WOTrNFA}s are only added, but not removed. 
+
 To resolve this problem, we propose a new idea by \emph{focusing on the evolvement of the main task (namely, the task with the main activity $A_0$ as the bottom activity), constructing a {\WOTrPDS} for the main task, and abstracting the contents of the other tasks into the control states of the {\WOTrPDS}}. By doing this, we can apply the saturation rules to compute a {\WOTrNFA} from the {\WOTrPDS} for the main task, thus avoiding removing transitions from {\WOTrNFA}s.
 
-In the sequel, we first consider the simpler case $\lmd(A_0) = \STK$ or $\SIT$, then consider the case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$.
+We shall first consider the simpler case $\lmd(A_0) = \STK$ or $\SIT$ (Section~\ref{sec:amass-stk}), then consider the case $\lmd(A_0) \neq \STK$ or $\SIT$ (Section~\ref{sec:amass-nostk}).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -335,10 +341,15 @@ Then it adds pairs to $\AutReach$, according to the following saturation rules, 
 
 \medskip
 
-The aforementioned procedure terminates since $\Theta_\Mm$ is finite and the set of {\NFA}s $\Aut_{A\rightsquigarrow B}$ occurring in $\AutReach$ is finite.
+The procedure terminates since $\Theta_\Mm$ is finite and the set of {\NFA}s $\Aut_{A\rightsquigarrow B}$ occurring in $\AutReach$ is finite.
 Let $\AutReach_f$ denote the value of $\AutReach$ when the aforementioned procedure terminates. 
 
 Since Lemma~\ref{lem:amass-recog} can be proved similarly to Lemma~\ref{lem:iff-recog}, its proof is omitted. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{The case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$}\label{sec:amass-nostk}
 

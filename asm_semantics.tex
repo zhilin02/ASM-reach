@@ -2,7 +2,7 @@
 %To define the semantics of $\AMASS$, we use the same definition of configuration as $\LMAMASS$, and add some auxiliary functions and predicates. 
 
 %Let $\Mm$ be an $\AMASS$. 
-For clarity,  we recall $\mvacttop$ and $\clrtsk$ for the configurations that may contain multiple tasks. 
+For clarity,  we recall $\mvacttop$ and $\clrtsk$ from Section~\ref{subsect:semifamass} for the configurations that may contain multiple tasks. 
 %\emph{Auxiliary functions and predicates.} 
 Let $\rho = ((S_1,\aname_1),\cdots, (S_n,\aname_n))$ be a configuration.
 Then
@@ -15,8 +15,8 @@ Now we define the semantics of $\AMASS$.
 
 The semantics of the transition rule $\tau = \back$ is similar to that of $\LMAMASS$.
 
-Let us  assume $\tau = A\xrightarrow[]{\startactivity(\phi)}B$ in the sequel.
-
+Assume $\tau = A\xrightarrow[]{\startactivity(\phi)}B$.
+%
 Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration for some $n \ge 1$ and $\topact(\rho) = A$. Moreover, let $S_1 = [A_1',\cdots,A_m']$. Evidently, $A = A_1'$.
 
 \medskip
