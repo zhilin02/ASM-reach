@@ -27,7 +27,7 @@ Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$, and $\
 Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$.
 % satisfying that for each $i\in[k]$, $\aname_i=\aname_i'$, $S_i\in\ConfSet(\Aut_i)$, moreover, $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$.
 
-The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as recognizable relations defined in the sequel. 
+The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as recognizable relations defined below. 
 
 \begin{definition}[Recognizable relations]
 A string relation $R \subseteq (\act^*)^k$ is \emph{recognizable}  if it is a finite union of products of regular languages, that is, $R=\bigcup \limits_{i =1 }^n L_{i,1} \times \cdots \times L_{i, k}$, where each $L_{i,j}$ is a regular language. An {\NFA}-representation of $R$ is $\{(\Aut_{i,1},\cdots,\Aut_{i,k})\}_{i\in[n]}$, where each $\Aut_{i,j}$ is an {\NFA} defining $L_{i,j}$, that is, $\Lang(\Aut_{i,j}) = L_{i,j}$.
@@ -36,7 +36,7 @@ A string relation $R \subseteq (\act^*)^k$ is \emph{recognizable}  if it is a fi
 %Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS}, and use a set of {\NFA} tuples to represent the configurations of {\AMASS} $\Mm$.
 %Theorem~\ref{thm:iff-recog} shows the reachability problem of $\STK$-dominating $\LMAMASS$ is decidable, and we prove Theorem~\ref{thm:iff-recog} by Lemma~\ref{lem:iff-forward} and Lemma~\ref{lem:iff-backward}.
 
-Let $\Theta_\Mm = \left \{ \aname_1 \cdots \aname_k \in (\aft(\act))^+ \mid k \le |\act_{\singleinstance}| + |\aft(\act)| \right\}$. Intuitively, $\Theta_\Mm$ denotes the set of affinity sequences  in the configurations of $\Mm$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, we define 
+Let $\Theta_\Mm = \left \{ \aname_1 \cdots \aname_k \in (\aft(\act))^+ \mid k \le |\act_{\singleinstance}| + |\aft(\act)| \right\}$. Intuitively, $\Theta_\Mm$ denotes the set of affinity sequences  in the configurations of $\Mm$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, let
 %
 $$
 \begin{array}{l}
@@ -46,8 +46,6 @@ $$
 $$ 
 %
 Since each task $S_i$ can be seen as a string from $\act^+$, $\RLang(\Mm, \theta)$ can be seen as a $k$-ary string relation over $\act^+$. 
-
-
 
 
 \begin{proposition}\label{prop-stk}
@@ -65,11 +63,11 @@ Since each task $S_i$ can be seen as a string from $\act^+$, $\RLang(\Mm, \theta
 \end{lemma} 
 % We solve the reachability problem in this case by deciding whether there is a {\WOTrNFA}-representation $(\theta,(\Aut_1,\cdots,\Aut_k))$ of $\conf_{\theta}$ for $\theta\in\Theta_{\Mm}$, satisfying $\Aut_i\cap\Aut_i\neq\emptyset$ for each $i\in[k]$ with $\ConfSet(\Aut_i) = \ConfSet_i$.
 
-According to Lemma~\ref{lem:iff-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\NFA}-representation of $\RLang(\Mm, \theta)$, say $(\Aut_{\theta, i,1},\cdots,\Aut_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
+By Lemma~\ref{lem:iff-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \Theta_\Mm$, an {\NFA}-representation of $\RLang(\Mm, \theta)$, say $(\Aut_{\theta, i,1},\cdots,\Aut_{\theta, i,k})_{i \in [n_\theta]}$, can be effectively computed. 
 Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\Aut_{\theta, i, j}) \cap \Lang(\Aut_j) \neq \emptyset$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
 
 % The rest of this section is devoted to the proof of Theorem~\ref{thm:iff-recog}.
-The rest of this section is devoted to the proof of Lemma~\ref{lem:iff-recog}. We shall distinguish whether $\lmd(A_0) = \STK$ or not. 
+The rest of this section is devoted to the proof of Lemma~\ref{lem:iff-recog}. We shall distinguish whether $\lmd(A_0) = \STK$. 
 The former case is simpler because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the latter, the more general case, the back stack may contain, apart from the tasks rooted at $\STK$ activities, one single task rooted at $A_0$. 
 We shall consider the two cases in Section~\ref{sec:lmamass-stk} and Section~\ref{sec:lmamass-nostk} respectively.
 
@@ -80,9 +78,7 @@ We shall consider the two cases in Section~\ref{sec:lmamass-stk} and Section~\re
 
 In this case, we prove Lemma~\ref{lem:iff-recog} by showing that the set of configurations that are reachable from the initial configuration can be \emph{saturated by repeatedly applying a finite set of rules}. 
 
-Before presenting the rules, let us introduce several notations. 
-
-Let $A \in \act_\singletask$. 
+Before presenting the rules, let us introduce several notations. Let $A \in \act_\singletask$. 
 We define a {\PDS} $\Pp_{A} = (P_A, \Gamma_{A}, \Delta_{A})$, where 
 \begin{itemize}
 \item $P_A = \{p_0, p_{\pop}\}$, 
@@ -1023,11 +1019,10 @@ Let us assume $\theta \neq \theta'$ in the sequel. We distinguish between the fo
 %%%%%%%%%%%%%%%%% the original proof removed
 %%%%%%%%%%%%%%%%% the original proof removed
 %
-\qed
     \end{proof}
 
 
-    \paragraph*{The proof of $\bigcup \limits_{(\theta, (\Aut_1, \cdots, \Aut_k)) \in \AutReach_f}  \Rel((\Aut_1, \cdots, \Aut_k)) \subseteq \RRel(\Mm, \theta)$}
+\paragraph*{The proof of $\bigcup \limits_{(\theta, (\Aut_1, \cdots, \Aut_k)) \in \AutReach_f}  \Rel((\Aut_1, \cdots, \Aut_k)) \subseteq \RRel(\Mm, \theta)$}
 
 %\begin{lemma}\label{lem:iff-backward}
 %    Let $\AutReach$ be the set computed by the aforementioned saturation procedure. Then for each $\theta = \aname_1 \dots \aname_k \in \Theta_\Mm$, we have 
@@ -1276,5 +1271,5 @@ We conclude that the claim holds for $n$ in this case.
 }
  %%%%%%%%% the original texts removed
   %%%%%%%%% the original texts removed
-\qed
+ 
 \end{proof}
