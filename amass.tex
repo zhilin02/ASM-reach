@@ -126,7 +126,7 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 	%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
 	
 \begin{example}
-		We  use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
+ We  use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
 		Let $\Mm=(\act,A,\lmd,\aft,\Delta)$, where 
 		\begin{itemize}
 			\item $\act = \{A, B, C, D, E\}$, 
@@ -180,11 +180,17 @@ Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$. We def
 % $\confs((\theta, (\Aut_1,\cdots,\Aut_k)))$, \emph{the set of configurations accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$}, as the set of configurations $\rho = ((S_1,\aname'_1),\cdots,(S_k,\aname'_k))$  such that for each $i \in [k]$, $\aname_i=\aname_i'$ and $S_i \in \Lang(\Aut_i)$. 
 
 \emph{The configuration reachability problem} of {\AMASS} is defined as follows. 
-\begin{quote}
-	Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
-\end{quote}
+\smallskip
 
-The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$  stated in Theorem~\ref{thm:st-amass-reach}. However, we shall proceed in multiple steps given in Section~\ref{sec:reach-lmamass}--\ref{sec:reach-amass}.
+\fbox
+{
+	\begin{minipage}{0.9\textwidth} 
+ 	Given an {\AMASS} $\Mm= (\act, A_0, \lmd, \aft, \Delta)$, an affinity sequence $\theta = \aname_1\cdots\aname_k$, and an {\NFA} tuple $(\Aut_1,\cdots,\Aut_k)$ over the alphabet $\act$, decide whether $ \confs({(\theta, (\Aut_1,\cdots,\Aut_k))}) \cap \RConfs(\Mm) \neq \emptyset$.
+ \end{minipage}
+}
+\smallskip
+
+The ultimate goal of the paper is to show the decidability of the configuration reachability problem of $\STK$-dominating $\AMASS$  stated in Theorem~\ref{thm:st-amass-reach}. However, we shall proceed in multiple steps given in Section~\ref{sec:reach-lmamass}---\ref{sec:reach-amass}.
 
 For technical convenience, we assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct and are different from those of the other activities}, that is, for $A, B \in \act_\singleinstance$ with $A \neq B$, we assume that  $\aft(A) \neq \aft(B)$ and $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
 %
