@@ -5,56 +5,10 @@
 
 \subsection{Basic Automata Models}
 
-Let $\natnum$ be the set of natural numbers. For $k \in \natnum$, let $[k]=\{1,\cdots, k\}$. %$\Nn_+$ denotes the set of positive integers.  
+Let $\natnum$ be the set of natural numbers. For $k \in \natnum$, let $[k]=\{1,\cdots, k\}$. 
 %
-Let $S$ be a partially ordered set endowed with a partial order $\leq$. Recall that two elements $a,b\in S$ are said to be \emph{comparable} if $a\leq b$ or $b\leq a$; otherwise, they are \emph{incomparable}.
-%, denoted as $a \incomp b$.
-%\jl{\incomp is not used in this paper}
-Moreover, we use $a < b$ to denote that $a \leq b$ and $a \neq b$. Likewise, $a \geq b$ if $b \leq a$ and $a > b$ if $a \geq b$ and $a \neq b$.
-% they are called ; that is, $a\eqcirc b$ if neither $a\le b$ nor $b\le a$.
-%
-%An \emph{antichain} in $S$ is a subset $A\subseteq S$ in which every two different elements are incomparable. 
-An \emph{antichain} in $S$ is a sequence $a_1, a_2, \cdots$ of elements from $S$ where $a_i$ and $a_j$ are incomparable for every $ i < j$.
-%every pair of distinct elements are incomparable, i.e. 
-%$a_i \incomp a_j$ for $i \neq j$. 
-%\jl{\incomp is not used in this paper}
-%; that is, there is no order relation between any two different elements in $A$. 
-A \emph{descending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \geq a_2 \geq \cdots$. It is \emph{strictly descending} if $a_1 > a_2 > \cdots$. 
-%An \emph{ascending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \leq a_2 \leq \cdots$. It is \emph{strictly ascending} if $a_1 < a_2 < \cdots$. 
-A (strictly) \emph{ascending} chain can be defined accordingly.  
-%
-The partial order $\leq$ is said to satisfy %the \emph{ascending chain condition} (ACC) \tl{if not used, remove it?} if it contains \emph{no infinite} strictly ascending chains. Similarly, $S$ is said to 
-the \emph{descending chain condition} (DCC) if $(S, \leq)$ contains \emph{no infinite} strictly descending chains.
-%
-%A partially ordered set 
-The partial order $\leq$ is a \emph{well-partial-order} (abbreviated as wpo) on $S$ if it satisfies DCC and contains no infinite antichains. 
-%
-%\zhilin{I changed to well-partially-ordered since well-ordered normally means a total order.}
-%
-%A partially ordered set $S$ is said to be \emph{dually well-ordered} if it satisfies ACC and contains no infinite antichains. 
-%
-For instance, the standard ``less than or equal to'' relation $\leq$ is a well-partial-order on $\Nat$; it is not a well-partial-order on $\Int$, since $(\Int, \leq)$ contains a strictly descending chain $-1, -2, -3, \cdots$. 
-% since it contains neither infinite strictly descending chains nor infinite antichains. 
-%But it is not dually well-ordered as it contains an infinite strictly ascending chain $0<1<2<\cdots$. On the other hand, %$(-\Nat, \le)$ is 
-%the set of negative numbers is dually well-ordered, but not well-ordered. %, where $-\Nat$ is the set of non-positive integers.
-%A partial order $\leq$ on $S$ is called a \emph{well-order} if $\leq$ is a wpo and meanwhile a total order on $S$. 
-
-
-
-%An infinite sequence $a_1, a_2, \cdots$ of elements of $S$ is \emph{``good''} if there are $i < j$ such that $a_i \le a_j$. An infinite sequence is \emph{``bad''} if it is not good.
-%
-%\begin{lemma}[\cite{SS12}]\label{lem-wpo}
-%Let $(S, \leq)$ be a partially ordered set. Then the following three conditions are equivalent: 
-%\begin{itemize}
-%\item $\leq$ is a wpo on $S$,
-%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ is good,
-%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ contains an infinite increasing subsequence, namely, there are  $n_1 < n_2 < \cdots$ such that $a_{n_1} \le a_{n_2} \le \cdots$.
-%\end{itemize}
-%\end{lemma}
-
-
-An alphabet $\Gamma$ is a finite set of letters.  A \emph{string} over $\Gamma$ is a finite sequence of letters from $\Gamma$. In particular, $\varepsilon$ denotes %the empty sequence is called 
-the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (resp. nonempty) strings over $\Gamma$. A \emph{language} $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$. Let $w$ be a string over $\Gamma$ and $\Gamma' \subseteq \Gamma$. We use $w |_{\Gamma'}$ to denote the string obtained from $w$ by removing the symbols not in $\Gamma'$. For instance, let $w = a  c b c$ and $\Gamma' = \{a,b\}$, then $w|_{\Gamma'} = ab$. Moreover, for a language $L \subseteq \Gamma^*$ and $\Gamma' \subseteq \Gamma$, we use $L|_{\Gamma'}$ to denote the set of strings $w |_{\Gamma'}$ for $w \in L$. 
+An alphabet $\Gamma$ is a finite set of letters.  A string over $\Gamma$ is a finite sequence of letters from $\Gamma$. In particular, $\varepsilon$ denotes %the empty sequence is called 
+the empty string. We use $\Gamma^*$ (resp.\ $\Gamma^+$) to denote the set of (resp.\ nonempty) strings over $\Gamma$. A language $L$ over $\Gamma$ is a  subset of $\Gamma^*$. We write $\Gamma_\varepsilon: = \Gamma \cup \{\varepsilon\}$. Let $w$ be a string over $\Gamma$ and $\Gamma' \subseteq \Gamma$. We use $w |_{\Gamma'}$ to denote the string obtained from $w$ by removing the symbols not in $\Gamma'$. For instance, let $w = a  c b c$ and $\Gamma' = \{a,b\}$, then $w|_{\Gamma'} = ab$. Moreover, for a language $L \subseteq \Gamma^*$ and $\Gamma' \subseteq \Gamma$, we use $L|_{\Gamma'}$ to denote the set of strings $w |_{\Gamma'}$ for $w \in L$. 
  
 \subsubsection{Nondeterministic finite automata}
 %Fix a finite \emph{alphabet} $\Gamma$. Elements in $\Gamma^*$ are called \emph{strings}. Let $\varepsilon$ denote the empty string and  $\Gamma^+ = \Gamma^* \setminus \{\varepsilon\}$. A \emph{language} is a subset of $\Gamma^*$. Moreover, we also use $\Gamma_\varepsilon$ to denote $\Gamma \cup \{\varepsilon\}$.
@@ -63,48 +17,32 @@ the empty string. We use $\Gamma^*$ (resp. $\Gamma^+$) to denote the set of (res
 
 %For two strings $u_1, u_2$, we use $u_1 \cdot u_2$ to denote the \emph{concatenation} of $u_1$ and $u_2$, that is, the string $v$ such that $|v|= |u_1| + |u_2|$ and for each $i \in [|u_1|]$, $v[i]= u_1[i]$ and for each $i \in |u_2|$, $v[|u_1|+i]=u_2[i]$. Let $u, v$ be two strings. If $v = u \cdot v'$ for some string $v'$, then $u$ is said to be a \emph{prefix} of $v$. In addition, if $u \neq v$, then $u$ is said to be a \emph{strict} prefix of $v$. If $u$ is a prefix of $v$, that is, $v = u \cdot v'$ for some string $v'$, then  we use $u^{-1} v$ to denote $v'$. In particular, $\varepsilon^{-1} v = v$.
 
-A \emph{nondeterministic finite automaton} (\NFA) $\Aut$ is a tuple $(Q, \Gamma, \delta, I, F)$, where $Q$ is a finite set of \emph{states}, $\Gamma$ is a finite alphabet, $I \subseteq Q$ is the set of \emph{initial} states, $F \subseteq Q$ is the set of \emph{final} states, and $\delta \subseteq Q \times \Gamma_\varepsilon \times Q$ is the \emph{transition relation}. Note that {\NFA}s defined here allow $\varepsilon$-transitions.
+A nondeterministic finite automaton (\NFA) $\Aut$ is a tuple $(Q, \Gamma, \delta, I, F)$, where $Q$ is a finite set of states, $\Gamma$ is a finite alphabet, $I \subseteq Q$ is the set of initial states, $F \subseteq Q$ is the set of final states, and $\delta \subseteq Q \times \Gamma_\varepsilon \times Q$ is the transition relation. Note that {\NFA}s defined here allow $\varepsilon$-transitions.
 %
-For a string $w = a_1 \dots a_n$, a \emph{run} of $\Aut$ on $w$ is a sequence $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ such that $q_0 \in I$,  $(q_{i-1}, b_i, q_i) \in \delta$ for each $i \in [m]$ and $b_1 \cdots b_m = w$ (note that $b_i$ may be $\varepsilon$ for some $i$). In this case, we normally write $q \xRightarrow[\Aut]{w} q_m$ 
+For a string $w = a_1 \dots a_n$, a run of $\Aut$ on $w$ is a sequence $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ such that $q_0 \in I$,  $(q_{i-1}, b_i, q_i) \in \delta$ for each $i \in [m]$ and $b_1 \cdots b_m = w$ (note that $b_i$ may be $\varepsilon$ for some $i$). In this case, we normally write $q \xRightarrow[\Aut]{w} q_m$ 
 %to denote that there is a path from $q$ to $q'$ where the transitions are labeled by $b_1, \cdots, b_m$ with $b_1 \cdots b_m = w$. 
 %respectively such that $b_1 \dots b_m = a_1 \dots a_n$ in $\Aa$. 
 (where $\Aut$ is usually omitted %in $\xRightarrow[\Aa]{w}$ 
 for brevity).
 %
-A run $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ is \emph{accepting} if $q_m \in F$. A string $w$ is \emph{accepted} by $\Aut$ if there is an accepting run of $\Aut$ on $w$. 
+A run $q_0 b_1q_1 \dots q_{m-1} b_m q_m$ is accepting if $q_m \in F$. A string $w$ is accepted by $\Aut$ if there is an accepting run of $\Aut$ on $w$. 
 
 Let $\Lang(\Aut)$ denote the language defined by $\Aut$, namely, the set of strings accepted by $\Aut$. 
-%
-%For $w = a_1 \dots a_n$, we use $q \xRightarrow[\Aa]{w} q'$ to denote that there is a path from $q$ to $q'$ where the transitions are labeled by $b_1, \cdots, b_m$ with $b_1 \cdots b_m = w$. 
-%respectively such that $b_1 \dots b_m = a_1 \dots a_n$ in $\Aa$. Moreover, 
-%We usually omit $\Aut$ in $\xRightarrow[\Aa]{w}$ for brevity.
-%
-A language over $\Gamma$ is \emph{regular} if it can be defined by an \NFA.
-%
-%For an {\NFA} $\Aut = (Q, \Gamma, \delta, I, F)$, 
-%Furthermore, we define $\suffix(\Lang(\Aut))$ as the set of suffices of strings in $\Lang(\Aut)$.
-%
-%It is easy to observe that $\suffix(\Lang(\Aut))$ is regular and can be actually defined by an {\NFA}  $\suffix(\Aut)$, which can be constructed from $\Aut$ by iterating the following procedure until it stabilizes: %no more transitions can be added: 
-%select a transition $(q_0, a, q)$ %out of some $q_0 \in I$ 
-%and a transition $(q, a', q')$ %out of $q$, 
-%add the transition $(q_0, a', q')$.  
+A language over $\Gamma$ is regular if it can be defined by an \NFA.
+ 
 
-%We use $\Ll(\cA)$ to denote the language defined by $A$, that is, the set of strings accepted by $A$. 
-%We will use $\cA, \cB, \cdots$ to denote \NFAs. 
-%An \NFA $\cA$ is \emph{deterministic} if for each $(q, \sigma) \in Q \times \Gamma$, there is at most one $q' \in Q$ such that $(q, a, q') \in \delta$. An \NFA $\cA$ is \emph{complete} if for each $(q, \sigma) \in Q \times \Gamma$, there is at least one $q' \in Q$ such that $(q, a, q') \in \delta$. We assume that all \NFA considered in this paper are complete.  An \NFA $\cA$ is \emph{unambiguous} if for each word $w$, there is \emph{at most one accepting} run of $\cA$ on $w$.
-%
-%For a string $w= a_1 \dots a_n$, we also use the notation $q_1 \xrightarrow[\cA]{w} q_{n+1}$ to denote the fact that there are $q_2,\dots, q_n \in Q$ such that for each $i \in [n]$, $(q_i, a_i, q_{i+1}) \in \delta$.  For an \NFA $\cA=(Q, \delta, q_0, F)$ and $q, q' \in Q$, we use $\cA(q,q')$ to denote the \NFA obtained from $\cA$ by changing the initial state to $q$ and the set of final states to $\{q'\}$. The \emph{size} of an \NFA $\cA=(Q, \delta, q_0, F)$, denoted by $|\cA|$, is defined as $|Q|$, the number of states. For convenience, we will also call an \NFA without initial and final states, that is, a pair $(Q, \delta)$, as a \emph{transition graph}. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsubsection{Pushdown systems}
-A \emph{pushdown system} ({\PDS}) $\Pp$ is a tuple $(P,\Gamma,\Delta)$, where $P$ is a finite set of control states, $\Gamma$ is a finite stack alphabet, and $\Delta\subseteq P\times\Gamma\times\Gamma^{\le 2}\times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\epsilon\}\cup\Gamma\cup\Gamma\times\Gamma$.
-Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A \emph{configuration} of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the \emph{content} of the stack (with the leftmost symbol being the top of the stack). Let $\confs(\Pp)$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\confs(\Pp)$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the \emph{reflexive and transitive closure} of $\xrightarrow{\Pp}$.
+A pushdown system ({\PDS}) $\Pp$ is a tuple $(P,\Gamma,\Delta)$, where $P$ is a finite set of control states, $\Gamma$ is a finite stack alphabet, and $\Delta\subseteq P\times\Gamma\times\Gamma^{\le 2}\times P$ is a finite set of transition rules, where $\Gamma^{\le 2} = \{\epsilon\}\cup\Gamma\cup\Gamma\times\Gamma$.
+Let $\Pp=(P,\Gamma,\Delta)$ be a {\PDS}. A configuration of $\Pp$ is a pair $(p,w)\in P\times\Gamma^*$, where $w$ denotes the content of the stack (with the leftmost symbol being the top of the stack). Let $\confs(\Pp)$ denote the set of configurations of $\Pp$. we define a binary relation $\xrightarrow{\Pp}$ over $\confs(\Pp)$ as follows: $(p,w)\xrightarrow{\Pp}(p',w')$ iff $w = \gamma w_1$ and there exists $w''\in\Gamma^*$ such that $(p,\gamma,w'',p')\in\Delta$ and $w'=w''w_1$. We use $\xRightarrow{\Pp}$ to denote the reflexive and transitive closure of $\xrightarrow{\Pp}$.
 
-A configuration $(p',w')$ is reachable from $(p,w)$ if $(p,w)\xRightarrow{\Pp}(p',w')$. For $C \subseteq \confs(\Pp)$, let $\pre^*_\Pp(C)$ (resp. $\post^*_\Pp(C)$) denote the set of \emph{predecessors} (resp. \emph{successors}) of elements of $C$, that is, $\{(p',w')\mid \exists (p,w)\in C,(p',w')\xRightarrow{\Pp}(p,w)\}$ (resp. $\{(p',w')\mid \exists (p,w)\in C,(p,w)\xRightarrow{\Pp}(p',w')\}$).
+A configuration $(p',w')$ is reachable from $(p,w)$ if $(p,w)\xRightarrow{\Pp}(p',w')$. For $C \subseteq \confs(\Pp)$, let $\pre^*_\Pp(C)$ (resp.\ $\post^*_\Pp(C)$) denote the set of predecessors (resp.\ successors) of elements of $C$, that is, $\{(p',w')\mid \exists (p,w)\in C,(p',w')\xRightarrow{\Pp}(p,w)\}$ (resp.\ $\{(p',w')\mid \exists (p,w)\in C,(p,w)\xRightarrow{\Pp}(p',w')\}$).
 
 %As a standard machinery to solve the reachability of {\PDS}, a $\Pp$-\emph{nondeterministic-finite-automaton} ($\Pp$-{\NFA}) is an {\NFA} $\Aut = (P',\Gamma,\delta,I,F)$ such that $I\subseteq P\subseteq P'$. 
 %Let $(p,w)\in\conf_{\Pp}$, $(p,w)$ is accepted by $\Aut$ if $p\in I$ and $p\xRightarrow[\Aut]{w}p_f$ and $p_f\in F$. We use $\Aut(p)$ to denote the $\Pp$-{\NFA} obtained from $\Aut$ by replacing $I$ with $\{p\}$.
 
-As a standard machinery to solve reachability for PDS, a \emph{$\Pp$-nondeterministic-finite-automaton} ($\Pp$-NFA) is an NFA $\Aut=(P', \Gamma, \delta, I, F)$ such that $I \subseteq P \subseteq P'$ \cite{BEM97}.
+As a standard machinery to solve reachability for PDS, a $\Pp$-nondeterministic finite automaton ($\Pp$-NFA) is an NFA $\Aut=(P', \Gamma, \delta, I, F)$ such that $I \subseteq P \subseteq P'$ \cite{BEM97}.
 Evidently, $\Pp$-NFA are a special class of NFA. 
 Let $\Aut = (P', \Gamma, \delta, I, F)$ be a  $\Pp$-NFA and  $(p, w) \in \confs(\Pp)$. Then $(p, w)$ is \emph{accepted} by $\Aut$ if $p \in I$ and there is an accepting run $p_0 p_1 \cdots p_n$ of $\Aut$ on $w$ with $p_0 = p$. Let $\confs(\Aut)$ denote the set of configurations accepted by $\Aut$. Moreover, let $\Lang(\Aut)$ denote the set of words $w$ such that $(p, w) \in \confs(\Aut)$ for some $p \in I$. 
 %For brevity, we usually write NFA instead of $\Pp$-NFA when $\Pp$ is clear from the context. 
@@ -146,7 +84,7 @@ Moreover, we use $\tau_\varepsilon$ to denote the transduction $\{\varepsilon, \
 For a transduction $\tau$ and a string $w$, we write $\tau(w):= \{w' \mid (w, w') \in \tau \}$.
 
 %\tl{why not just define l2l transducers as we only use them?}
-A \emph{nondeterministic finite transducer} (\NFT) $\Tran$ is a tuple $(Q, \Gamma, \delta, I, F)$, 
+A nondeterministic finite transducer  (\NFT) $\Tran$ is a tuple $(Q, \Gamma, \delta, I, F)$, 
 where $Q, \Gamma, I, F$ are the same as \NFA, %is a finite set of states,
 %$q_0 \in Q$ is the initial state, $F \subseteq Q$ is a finite set of final states, 
 %$\Gamma$ and $\Gamma$ are the input and output alphabets respectively, 
@@ -216,7 +154,7 @@ $$\langle \TranSet \rangle = \{\tau_1, \tau_2, \emptyset, \tau_{id}, \tau_\varep
 where $\tau_3 := \tau_1 \circ \tau_2 = \{(aw, cw) \mid w \in \Gamma^*\}$ and $\tau_S = \bigcup \limits_{\tau' \in S} \tau'$. 
 \end{example}
 
-Finally, for a transduction $\tau$, let us use $\overline{\tau}$ to denote the \emph{inversion} of $\tau$, that is, $\overline{\tau} = \{(w_2, w_1) \mid (w_1, w_2) \in \tau\}$. Moreover, for a set of transductions, say $\TranSet$, let $\overline{\TranSet}$ to denote the set of $\overline{\tau}$ for $\tau \in \TranSet$.  
+Finally, for a transduction $\tau$, $\overline{\tau}$ denotes the \emph{inversion} of $\tau$, that is, $\overline{\tau} = \{(w_2, w_1) \mid (w_1, w_2) \in \tau\}$. Moreover, for a set of transductions, say $\TranSet$, let $\overline{\TranSet}$  denote the set of $\overline{\tau}$ for $\tau \in \TranSet$.  
 
 %\begin{itemize}
 %\item from the first constraint, we deduce that $\{\tau_1, \tau_2, \emptyset, \tau_{id}\} \subseteq \tau_{id}$, 
@@ -298,15 +236,14 @@ defined inductively as follows:
 Intuitively, $q \xRightarrow[\Aut]{w | \tau} q'$ means that in $\Aut$,  $q'$ is reached starting from $q$ after reading $w$. Moreover, the transduction $\tau$, which is  to be applied to the remaining suffix of the input string, is produced. If $\Aut$ is clear from the context, then we may omit $\Aut$ and write $q \xRightarrow{w | \tau} q'$.
 
 A configuration $(p, w)$ of $\Pp$ is accepted by $\Aut$ if $p \xRightarrow[\Aut]{w | \tau} q$ for some $q \in F$ and $\tau \in \langle \TranSet \rangle$ such that $(\varepsilon, \varepsilon) \in \tau$.
-%
-Let us use $\confs(\Aut)$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
+We use $\confs(\Aut)$ to denote the set of configurations of $\Pp$ accepted by $\Aut$.
 
 
 \begin{theorem}[\cite{Song18}]\label{thm-trpds}
 	Given  a {\TrPDS} $\Pp$ and a set of configurations accepted by a $\Pp$-{\TrNFA} $\Aut$, we can compute two $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$  and $\Aut^{\post^*}_{\Pp}$ that recognize $\pre^*_\Pp(\confs(\Aut))$ and $\post^*_\Pp(\confs(\Aut))$ respectively.
 \end{theorem}
 
-The $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-trpds} are constructed by applying the saturation procedures. Let us recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ in the sequel, since later on, we focus on the computation of $\post^*$.
+The $\Pp$-{\TrNFA}s $\Aut^{\pre^*}_{\Pp}$ and $\Aut^{\post^*}_{\Pp}$ in Theorem~\ref{thm-trpds} are constructed by applying the saturation procedures. We recall the saturation procedure for $\Aut^{\post^*}_{\Pp}$ since we shall focus on the computation of $\post^*$  later.
 
 Let $\Aut'$ be the current $\Pp$-\TrNFA. Then there are the following three saturation rules for computing $\post^*$. 
 
@@ -334,6 +271,44 @@ Therefore, for a {\TrPDS} $\Pp=(P,\Gamma,\Delta)$ and a $\Pp$-{\TrNFA} $\Aut = (
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsubsection{Downward well-structured transition systems}
+
+
+Let $S$ be a partially ordered set endowed with a partial order $\leq$. Recall that two elements $a,b\in S$ are said to be \emph{comparable} if $a\leq b$ or $b\leq a$; otherwise, they are \emph{incomparable}.
+%, denoted as $a \incomp b$.
+%\jl{\incomp is not used in this paper}
+Moreover, we use $a < b$ to denote that $a \leq b$ and $a \neq b$. Likewise, $a \geq b$ if $b \leq a$ and $a > b$ if $a \geq b$ and $a \neq b$.
+% they are called ; that is, $a\eqcirc b$ if neither $a\le b$ nor $b\le a$.
+%
+%An \emph{antichain} in $S$ is a subset $A\subseteq S$ in which every two different elements are incomparable. 
+An \emph{antichain} in $S$ is a sequence $a_1, a_2, \cdots$ of elements from $S$ where $a_i$ and $a_j$ are incomparable for every $ i < j$.
+%every pair of distinct elements are incomparable, i.e. 
+%$a_i \incomp a_j$ for $i \neq j$. 
+%\jl{\incomp is not used in this paper}
+%; that is, there is no order relation between any two different elements in $A$. 
+A \emph{descending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \geq a_2 \geq \cdots$. It is \emph{strictly descending} if $a_1 > a_2 > \cdots$. 
+%An \emph{ascending chain} in $S$ is a sequence $a_1, a_2, \cdots$ where $a_1 \leq a_2 \leq \cdots$. It is \emph{strictly ascending} if $a_1 < a_2 < \cdots$. 
+A (strictly) \emph{ascending} chain can be defined accordingly.  
+%
+The partial order $\leq$ is said to satisfy %the \emph{ascending chain condition} (ACC) \tl{if not used, remove it?} if it contains \emph{no infinite} strictly ascending chains. Similarly, $S$ is said to 
+the \emph{descending chain condition} (DCC) if $(S, \leq)$ contains \emph{no infinite} strictly descending chains.
+The partial order $\leq$ is a \emph{well-partial-order} (abbreviated as wpo) on $S$ if it satisfies DCC and contains no infinite antichains.  For instance, the standard ``less than or equal to'' relation $\leq$ is a well-partial-order on $\Nat$; it is not a well-partial-order on $\Int$, since $(\Int, \leq)$ contains a strictly descending chain $-1, -2, -3, \cdots$. 
+% since it contains neither infinite strictly descending chains nor infinite antichains. 
+%But it is not dually well-ordered as it contains an infinite strictly ascending chain $0<1<2<\cdots$. On the other hand, %$(-\Nat, \le)$ is 
+%the set of negative numbers is dually well-ordered, but not well-ordered. %, where $-\Nat$ is the set of non-positive integers.
+%A partial order $\leq$ on $S$ is called a \emph{well-order} if $\leq$ is a wpo and meanwhile a total order on $S$. 
+
+
+
+%An infinite sequence $a_1, a_2, \cdots$ of elements of $S$ is \emph{``good''} if there are $i < j$ such that $a_i \le a_j$. An infinite sequence is \emph{``bad''} if it is not good.
+%
+%\begin{lemma}[\cite{SS12}]\label{lem-wpo}
+%Let $(S, \leq)$ be a partially ordered set. Then the following three conditions are equivalent: 
+%\begin{itemize}
+%\item $\leq$ is a wpo on $S$,
+%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ is good,
+%\item each infinite sequence $a_1, a_2, \cdots$ of elements in $S$ contains an infinite increasing subsequence, namely, there are  $n_1 < n_2 < \cdots$ such that $a_{n_1} \le a_{n_2} \le \cdots$.
+%\end{itemize}
+%\end{lemma}
 
 \begin{definition}[Downward-WSTS]
 A downward well-structured transition system (downward-WSTS) $\dwsts$ is a triple $(S, \rightarrow, \le)$ such that 1) $\le$ is a wpo\footnote{A more general notion than wpo, i.e. well-quasi-order, was used to define WSTS \cite{FS01}. } over $S$, 2) $\rightarrow \subseteq S \times S$ is downward-compatible wrt $\le$, namely, for all $s \ge s'$ and $s \rightarrow t$, there is $t' \in S$ such that $s' \rightarrow^* t'$ and $t \ge t'$ (where $ \rightarrow^*$ denote the reflexive and transitive closure of $\rightarrow$).

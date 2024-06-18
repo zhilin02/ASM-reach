@@ -746,7 +746,7 @@ We can utilize $\Pp_\Mm$ to compute a finite set of pairs $(\aname_1 \cdots \ana
 
 For technical convenience, we adapt the definitions of the {\WOTrPDS} $\Pp'_{A_0}$ and $\Pp_\Mm$ by incorporating the top stack symbol into the control states. Specifically, in $\Pp'_{A_0}$, $P_{A_0}$ is changed to $P_{A_0} \times \Gamma_{A_0}$, and in $\Pp_\Mm$, $P_\Mm = P_{A_0} \times \abs_{\mhcancel{A_0}}$ is changed to $P_{A_0} \times \Gamma_{A_0} \times \abs_{\mhcancel{A_0}}$.  Moreover, the transitions of $\Pp'_{A_0}$ and $\Pp_{\Mm}$ are adapted accordingly. By slightly abusing the notations, we still use $\Pp'_{A_0}$ and $\Pp_\Mm$ to denote the adapted {\WOTrPDS}'s.
 
-We define the $\Pp_\Mm$-{\WOTrNFA}'s $\AutB_{A_0}$ and $\AutB_{A, \alpha}$, to be used in the computation of $\AutReach_\Mm$. 
+We define the $\Pp_\Mm$-{\WOTrNFA}'s $\AutB_{A_0}$ and $\AutB_{A, \alpha}$ to be used in the computation of $\AutReach_\Mm$. 
 \begin{itemize}
 \item $\AutB_{A_0} = (P_\Mm \cup \{p', p_f\}, \Gamma_{A_0}, \delta, \{(p_0, A_0, \bot)\}, \{p_f\})$, where $p', p_f \not \in P_\Mm$ are two fresh states and $\delta = \{((p_0, A_0, \bot), A_0, \tau_{\id}, p'), (p', \triangleleft, \tau_{\id}, p_f)\}$. (Note that $\Lang(\AutB_{A_0}) = \{A_0 \triangleleft\}$.)
 %
@@ -767,7 +767,7 @@ For each $A \in \act_\standard \cup \act_\singletop \cup \{A'_0\}$ and $\alpha \
     \item if $\alpha = (\aname_1 \cdots \aname_k, (\AutB_1,\cdots,\AutB_k))$, $A \xrightarrow{\startactivity(\phi)} B$ is a transition in $\Mm$, $B \in (\act_\singletask \cup \act_\singleinstance) \setminus \{A'_0\}$,  and $\beta = (\aname'_1 \cdots  \aname'_l, (\AutC_1, \cdots, \AutC_l)) \in \AutReach_B$, then 
     $$(\aname'_1 \cdots  \aname'_l \aft(A_0) \aname''_1 \cdots \aname''_m, (\AutC_1, \cdots, \AutC_l, \AutB_{A, \alpha}, \AutD_1, \cdots, \AutD_m)) \in \AutReach_\Mm,$$ 
     %
-    where $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing the affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$ and $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing the {\WOTrNFA}'s for these affinities.  
+    where $\aname''_1 \cdots \aname''_m$ is obtained from $\aname_1 \cdots \aname_k$ by removing the affinities from the set $\{\aname'_1, \cdots, \aname'_l\}$ and $(\AutD_1, \cdots, \AutD_m)$ is obtained from $(\AutB_1, \cdots, \AutB_k)$ by removing {\WOTrNFA}'s for these affinities.  
 \end{itemize}
 
 
