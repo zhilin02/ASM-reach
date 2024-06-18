@@ -9,9 +9,9 @@ Recall that for  $\STK$-dominating $\IFAMASS$, there is only one task in each co
 However,, the reachability problem %of $\Mm$ is far from trivial, 
 is highly nontrivial since in a transition $A \xrightarrow{\startactivity(\phi)} B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$, if there is at least one occurrence of $B$ in the task, $B$ will be moved to the top of the task. In other words, the $\rtfflag$ flag requires modifying not only the top symbol of the task, but also the non-top symbols. 
 
-Our main idea to solve the reachability problem of $\STK$-dominating $\IFAMASS$ is to simulate the behavior of the $\rtfflag$ flag as a transduction on the contents of the task. As mentioned before, {\TrPDS} is a model that extends pushdown systems with transductions, where the closure of transductions is required to be finite. Nevertheless, as we shall see later on, the closure of transductions used to simulate $\rtfflag$ is infinite. To tackle this issue, we introduce a new decidable extension of pushdown systems with transductions, called pushdown system with well-partially-ordered transductions (\WOTrPDS), where the transduction closure can be infinite. 
+Our main idea to solve the reachability problem of $\STK$-dominating $\IFAMASS$ is to simulate the behavior of the $\rtfflag$ flag as a transduction on the contents of the task. As reviewed in Section~\ref{subsect:pushtrans}, {\TrPDS} is a model that extends pushdown systems with transductions, where the closure of transductions is required to be finite. Nevertheless, as we shall see later on, the closure of transductions used to simulate $\rtfflag$ is infinite. To tackle this issue, we introduce a new decidable extension of pushdown systems with transductions, called \emph{pushdown system with well-partially-ordered transductions} (\WOTrPDS), where the transduction closure can be infinite. 
 
-In the sequel, we first define {\WOTrPDS} and prove the decidability of its reachability problem (Section~\ref{sec-wpotrpds}). Then we show how to utilize {\WOTrPDS} to solve the reachability problem of $\Mm$ (Section~\ref{sec-ifamass-reach}). 
+We first define {\WOTrPDS} and prove the decidability of its reachability problem (Section~\ref{sec-wpotrpds}). Then we show how to utilize {\WOTrPDS} to solve the reachability problem of $\Mm$ (Section~\ref{sec-ifamass-reach}). 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -408,9 +408,9 @@ We conclude from Theorem~\ref{thm-dwsts} that the {\WOTrNFA}-{\NFA} intersection
 \end{proof}
 
 
-\subsubsection{Solving the configuration reachability problem of $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
+\subsubsection{Settling configuration reachability for $\singletask$-dominating $\IFAMASS$}\label{sec-ifamass-reach}
 
-From the definition of the configuration reachability problem in Section~\ref{sec-conf-reach}, for the $\singletask$-dominating $\IFAMASS$ $\Mm$, we should solve the following problem: given an {\NFA} $\Aa' = (Q', \act, \delta', I', F')$ over the alphabet $\act$, decide whether $\confs((\aft(A_0), \Aa')) \cap \RConfs(\Mm) \neq \emptyset$. 
+From the definition of the configuration reachability problem in Section~\ref{sec-conf-reach}, for the $\singletask$-dominating $\IFAMASS$ $\Mm$, we need to decide whether $\confs((\aft(A_0), \Aa')) \cap \RConfs(\Mm) \neq \emptyset$ given an {\NFA} $\Aa' = (Q', \act, \delta', I', F')$ over the alphabet $\act$. 
 
 While it is relatively easy to simulate the operations $\POP, \PUSH, \STP, \CTP$, %by the transition rules of $\Pp_\Aut$, 
 it is challenging to  simulate $\RTF$. The semantics of $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ requires to move the topmost occurrence of $B$ (if there is any) to the top of the stack. The most direct way to simulate  $A \xrightarrow{\startactivity(\phi)}B$ such that $\phi \models \neg \ctpflag \wedge \rtfflag$ ans $A \neq B$ is by two transition rules $p \xrightarrow{A / B | \tau_{B, A}} p$ and  $p \xrightarrow{A / BA | \tau_{\not B}} p$
@@ -652,7 +652,7 @@ $\preceq$ is union-distributive over $\Tranbasis_\Mm$-representations.
 \end{proof}
 
 %\subsection*{Proof of Proposition~\ref{prop-tranbasis-udist}}
-\begin{proof}[Proposition~\ref{prop-tranbasis-udist}]
+\begin{proof}[of Proposition~\ref{prop-tranbasis-udist}]
 
 Suppose that $\beta \in \Tranbasis_\Mm$ and $\tau \in \langle \TranSet_\Mm \rangle$ whose $\Tranbasis_\Mm$-representation is $\beta_\tau=\beta_{\tau, 1} \cup \cdots \cup \beta_{\tau, n_\tau}$, and $\tau \preceq \beta$. We show $ \beta_{\tau, i} \preceq \beta$ for some $i \in [n_\tau]$.
 
