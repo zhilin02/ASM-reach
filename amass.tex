@@ -6,7 +6,7 @@ In this section, we introduce \textbf{A}ndroid \textbf{S}tack \textbf{M}achine (
 %
 Following the overview of Section~\ref{sec:amm}, we concentrate on the launch mode, task affinity and intent flags when an activity is launched.  
 
-There are four launch modes in Android: ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''. Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
+There are four launch modes in Android, i.e., ``standard (STD)'', ``singleTop (STP)'', ``singleTask (STK)'' and ``singleInstance (SIT)''. Furthermore, Android provides 23 intent flags related to activities,\footnote{https://developer.android.com/reference/android/content/Intent\#flags}
 %\cite{intent-flags}, 
 namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. Among these 23 intent flags, we consider the following five that are commonly used in Android apps, namely,
 \begin{itemize}
@@ -21,9 +21,11 @@ namely, the flags whose names start with $\rm FLAG\_ACTIVITY$. Among these 23 in
 	%	\item $\dots$.
 \end{itemize}
 
+Let $\flagset=\{\ntkflag, \ctpflag, \stpflag, \ctkflag, \rtfflag \}$ denote the set of intent flags, $\bool(\flagset)$ denote the set of formulae $\phi = \bigwedge \limits_{F \in \flagset} \theta_F$, where $\theta_F = F$ or $\neg F$. For convenience, we use $\bot$ to denote $ \bigwedge \limits_{F \in \flagset} \neg F$. 
+
+
 \subsection{Android Stack Machine}
 
-Let $\flagset=\{\ntkflag, \ctpflag, \stpflag, \ctkflag, \rtfflag \}$ denote the set of intent flags, $\bool(\flagset)$ denote the set of formulae $\phi = \bigwedge \limits_{F \in \flagset} \theta_F$, where $\theta_F = F$ or $\neg F$. For convenience, we use $\bot$ to denote $ \bigwedge \limits_{F \in \flagset} \neg F$. 
 
 \begin{definition}[Android Stack Machine, \AMASS] \label{def:afsm}
 An {\AMASS} is a tuple $\Mm = (\act, A_0, \lmd, \aft, \Delta)$, where 
