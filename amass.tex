@@ -30,7 +30,7 @@ Let $\flagset=\{\ntkflag, \ctpflag, \stpflag, \ctkflag, \rtfflag \}$ denote the 
 \begin{definition}[Android Stack Machine, \AMASS] \label{def:afsm}
 An {\AMASS} is a tuple $\Mm = (\act, A_0, \lmd, \aft, \Delta)$, where 
 \begin{itemize}
-\item $\act$ is a finite set of activities, and $A_0 \in \act$ is the main activity. Let $m=|\act|$.
+\item $\act$ is a finite set of activities, and $A_0 \in \act$ is the main activity. (Let $m=|\act|$.)
 \item $\lmd : \act \rightarrow \{\standard,\singletop,\singletask,\singleinstance\}$ is the launch-mode function,
 %
 \item $\aft : \act \rightarrow [m]$ is the task-affinity function, 
@@ -45,7 +45,7 @@ We use $\act_{\star}$ to denote $\{B\in\act\mid \lmd(B)= \star\}$ for $\star\in\
 For readability, we write a transition rule $(A, \startactivity(B, \phi))\in \Delta$ as $A \xrightarrow{\startactivity(\phi)} B$
 
 
-We call an activity of the launch mode $\STD$ as an $\STD$-activity, similarly for $\STP$, $\STK$, and $\SIT$. 
+We refer to an activity of the launch mode $\STD$ as an $\STD$-activity, similarly for $\STP$, $\STK$ and $\SIT$. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\subsection{Semantics of \AMASS}\label{sec:semantics-amass}
 
@@ -86,8 +86,7 @@ We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rh
 
 It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. %Therefore, in the sequel, 
 To make it more accessible, we %separate the concerns further and 
-shall consider two sub-models of $\AMASS$, namely, $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. 
-More precisely, 
+shall consider two fragments of $\AMASS$, namely, $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. More precisely, 
 \begin{itemize}
 	\item an $\LMAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the transition rules $A \xrightarrow{\alpha(\phi)} B$ (except $\back$) satisfy that $\phi = \bot$, 
 	\item an $\IFAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the activities $A\in\act$ satisfy that $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$.
