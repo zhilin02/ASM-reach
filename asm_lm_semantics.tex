@@ -73,7 +73,8 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
 			%		\item if $\gettsk(\rho, B)=*$, then $\rho'= \newtsk(\rho,B )$.
 			%	\end{itemize}
 		%	\endminipage}
-	
+
+\medskip	
 	
 	\noindent \fbox{\fbox{$\lmd(B) = \STD$}}
 	
@@ -148,7 +149,7 @@ Let $\rho = ((S_1,\aname_1),\cdots,(S_n,\aname_n))$ be the current configuration
 %	%%%%%%%%%%%%%%%%%%%%%%
 
 It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %preserves the invariant of configurations, that is, 
-	satisfies that, if the task affinities of two non-$\singleinstance$ tasks are different in $\rho$ and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then the task affinities of two non-$\singleinstance$ tasks are different in $\rho'$. 
+	satisfies that, if the task affinities of two non-$\singleinstance$ tasks are different in $\rho$ and $\rho \xrightarrow[\Mm]{\tau} \rho'$ for some $\tau$, then the task affinities of two non-$\singleinstance$ tasks are different in $\rho'$. This justifies the second constraint in the definition of configurations in the previous section. 
 	
 	
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -195,7 +196,7 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 			$$\lmd(D) = \SIT \mbox{ and } \gettsk((([CB],2),([A],1)), D) = *,$$ 
 			resulting in the configuration $(([D],2),([CB],2),([A],1))$,
 			%
-			\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $A$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
+			\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $B$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
 			$$\gettsk((([D],2),([CB],2),([A],1)), B) = ([CB],2)$$
 			and $B$ occurs in $([CB], 2)$, resulting in the configuration 
 			$$(([B],2),([D],2),([A],1)),$$
@@ -226,6 +227,7 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 			% \vspace{-6mm}	
 			\label{lmasm-example}
 		\end{figure}
+Finally, if we remove $\tau_5$ from $\Mm$, let $\Mm'$ denote the resulting $\LMAMASS$, then $\Mm'$ is an $\STK$-dominating $\LMAMASS$: In $\Mm'$, there is only one $\STK$-activity, namely, $B$, moreover, there is only one $\SIT$-activity, that is, $D$, and there is exactly one transition starting from $D$, namely, $D \xrightarrow{\startactivity(\bot)} B$, where $\lmd(B)= \singletask$. 
 	\end{example}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of the example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Intuitively, $\STD$ is similar to $\STP$, without considering the case where $\lmd(A) = \SIT$, when a $\STD$ activity $B$ is started, it is directly pushed into the top task. 
