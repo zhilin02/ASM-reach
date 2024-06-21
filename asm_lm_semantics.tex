@@ -167,7 +167,7 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 					\hline
 					$C$ & $\STP$ & 2 \\
 					\hline
-					$D$ & $\SIT$ & 2 \\
+					$D$ & $\SIT$ & 3 \\
 					\hline
 				\end{tabular}
 				\caption{Attributes of activities}
@@ -175,12 +175,12 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 			\end{center}
 		\end{table}
 		
-		Moreover, $\Delta = \{\tau_1, \tau_2, \tau_3, \tau_4, \tau_5\}$, where 
+		Moreover, $\Delta = \{\back,\tau_1, \tau_2, \tau_3, \tau_4\}$, where 
 		$\tau_1 = A \xrightarrow{\startactivity(\bot)} B$,
 		$\tau_2 = B \xrightarrow{\startactivity(\bot)} C$,
 		$\tau_3 = C \xrightarrow{\startactivity(\bot)} D$,
 		$\tau_4 = D \xrightarrow{\startactivity(\bot)} B$,
-		$\tau_5 = D \xrightarrow{\startactivity(\bot)} C$.
+		% $\tau_5 = D \xrightarrow{\startactivity(\bot)} C$.
 		% $\rho_0 = (([D_1],D_1,1))$, and\\
 		Then the configurations that are reachable from the initial configuration $(([A], 1))$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{lmasm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
 		For instance, 
@@ -191,22 +191,22 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 			%
 			\item if $B \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([B],2),([A],1))$, then $C$ is pushed, since $\lmd(C) = \STP$ and $B\neq C$, resulting in the configuration $(([CB],2),([A],1))$,
 			%
-			\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([A],1))$, then a new task $([D], 2)$ is created, since 
+			\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([A],1))$, then a new task $([D], 3)$ is created, since 
 			$$\lmd(D) = \SIT \mbox{ and } \gettsk((([CB],2),([A],1)), D) = *,$$ 
-			resulting in the configuration $(([D],2),([CB],2),([A],1))$,
+			resulting in the configuration $(([D],3),([CB],2),([A],1))$,
 			%
-			\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $A$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
-			$$\gettsk((([D],2),([CB],2),([A],1)), B) = ([CB],2)$$
+			\item if $D \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([D],3),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top and all the activities above $A$, which is $C$ here, are removed from the task, since $\lmd(B) = \STK$, 
+			$$\gettsk((([D],3),([CB],2),([A],1)), B) = ([CB],2)$$
 			and $B$ occurs in $([CB], 2)$, resulting in the configuration 
-			$$(([B],2),([D],2),([A],1)),$$
+			$$(([B],2),([D],3),([A],1)),$$
 			%
-			\item if $D \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top, but $C$ will not be pushed, since $\lmd(C) = \STP$, $\lmd(D) = \SIT$,
-			$$\gettsk((([D],2),([CB],2),([A],1)), C) = ([CB],2)$$
-			and $C$ is the top activity of $([CB], 2)$, resulting in the configuration $(([CB],2),([D],2),([A],1))$,
+			% \item if $D \xrightarrow{\startactivity(\bot)} C$ is applied to the configuration $(([D],2),([CB],2),([A],1))$, then the task $([CB],2)$ is moved to the top, but $C$ will not be pushed, since $\lmd(C) = \STP$, $\lmd(D) = \SIT$,
+			% $$\gettsk((([D],2),([CB],2),([A],1)), C) = ([CB],2)$$
+			% and $C$ is the top activity of $([CB], 2)$, resulting in the configuration $(([CB],2),([D],2),([A],1))$,
 			%
-			\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([D],2),([A],1))$, then the task $([D],2)$ is moved to the top, since $\lmd(D) = \SIT$ and
-			$$\gettsk((([CB],2),([D],2),([A],1)), D) = ([D],2)$$
-			resulting in the configuration $(([D],2),([CB],2),([A],1))$.
+			\item if $C \xrightarrow{\startactivity(\bot)} D$ is applied to the configuration $(([CB],2),([D],3),([A],1))$, then the task $([D],3)$ is moved to the top, since $\lmd(D) = \SIT$ and
+			$$\gettsk((([CB],2),([D],3),([A],1)), D) = ([D],3)$$
+			resulting in the configuration $(([D],3),([CB],2),([A],1))$.
 		\end{itemize}
 		Note that for $\Mm$, there are only finitely many configurations reachable from the initial configuration, which may not be the case for $\LMAMASS$ in general.  
 		% $(([D_1],D_1,1))$\\
@@ -220,7 +220,7 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 		\begin{figure}
 			% \vspace{-3mm}
 			\centering
-			\includegraphics[scale = 0.75]{lmasm-example.pdf}
+			\includegraphics[scale = 1]{lmasm-example.pdf}
 			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in $\LMAMASS$}
 			%in $\phi$
 			% \vspace{-6mm}	
