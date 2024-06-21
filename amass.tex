@@ -36,7 +36,7 @@ An {\AMASS} is a tuple $\Mm = (\act, A_0, \lmd, \aft, \Delta)$, where
 \item $\aft : \act \rightarrow [m]$ is the task-affinity function, 
 % for each activity $A$ with $\lmd(A) = \SIT$, $\aft(A)$ is unique,
 %
-\item $\Delta \subseteq \{\back\} \cup \act \times \{\startactivity(A,\phi)\mid A \in \act, \phi \in \bool(\flagset)\}$ is a finite set of transition rules.
+\item $\Delta \subseteq \{\back\} \cup \act \times \{\startactivity(A,\phi)\mid A \in \act, \phi \in \bool(\flagset)\}$ is a finite set of transition rules. We assume that $\back \in \Delta$.  (Intuitively, the $\back$ action is always enabled. )
 %$(\beta_1(F_1, i_1), \cdots, \beta_k(F_k, i_k))$ such that for each $j \in [k]$, $\beta_j \in \{\ADD,\REM, \REP\}$, $F_j \in \frag$, and $i_j \in \Nn$. 
 \end{itemize}
 %
@@ -58,7 +58,7 @@ For $S_1 \in \act^+$ and $S_2 \in \act^+$, we use $S_1 \cdot S_2$ to denote the 
 
 A \emph{configuration} of $\Mm$ is $\rho = ((S_1,\aname_1), \cdots, (S_n,\aname_n))$ such that
 \begin{itemize}
-\item for each $i \in [n]$, $(S_i,\aname_i)$ is a task, $S_i = [A_{i,1}, \cdots, A_{i, m_i}]$ is a task and $\aname_i$ is the task affinity of $S_i$ for each $i \in [n]$, moreover, 
+\item for each $i \in [n]$, $(S_i,\aname_i)$ is a task, $S_i = [A_{i,1}, \cdots, A_{i, m_i}]$ is a task and $\aname_i$ is the task affinity of $S_i$, moreover, 
 %
 \item for each $1 \le i < j \le n$ such that $(S_i, \aname_i)$ and $(S_j, \aname_j)$ are non-$\SIT$ tasks,  we have $ \aname_i \neq \aname_j$.  (Intuitively, the task affinities of every two non-$\SIT$ tasks are different. )
 \end{itemize}
@@ -85,11 +85,11 @@ We shall define the semantics of an {\AMASS} $\Mm$ as a transition relation $\rh
 
 
 It turns out that the semantics of {\AMASS} is highly complicated due to the complex interplay between launch modes and intent flags. %Therefore, in the sequel, 
-To make it more accessible, we %separate the concerns further and 
+To make it more accessible, before considering the general {\AMASS} model, we %separate the concerns further and 
 shall consider two fragments of $\AMASS$, namely, $\LMAMASS$ and $\IFAMASS$, which focus on launch modes and intent flags of $\AMASS$ respectively. More precisely, 
 \begin{itemize}
 	\item an $\LMAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the transition rules $A \xrightarrow{\alpha(\phi)} B$ (except $\back$) satisfy that $\phi = \bot$, 
-	\item an $\IFAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the activities $A\in\act$ satisfy that $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$.
+	\item an $\IFAMASS$ is an $\AMASS$ $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ where all the activities $A\in\act$ satisfy that $\lmd(A) = \STD$ or $\STP$ and $\aft(A) = \aft(A_0)$.
 \end{itemize}
 %To ease the understanding, in the sequel, we shall define the semantics of the two sub-models $\LMAMASS$ and $\IFAMASS$ first, then define the semantics of $\AMASS$. 
 
@@ -113,7 +113,7 @@ concentrate on $\STK$-dominating {\AMASS} which imposes further constraints on {
 \begin{definition}[$\STK$-dominating \AMASS] \label{def:stk-amass}
 Let $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ be an $\AMASS$. Then $\Mm$ is  said to be \emph{$\STK$-dominating} if the following constraints are satisfied.
 		\begin{enumerate}
-			\item $\back\in\Delta$,
+%			\item $\back\in\Delta$,
 			\item the task affinities of $\singletask$-activities are mutually distinct,
 			%        \item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A\in\act_{\singleinstance}$, it holds that $B\in\act_{\singleinstance}\cup\act_{\singletask}$,
 			\item for each transition $A \xrightarrow{\startactivity(\phi)} B\in\Delta$ such that $A \in \act_\singleinstance$ or $\phi\models \ntkflag$, $B \in \act_{\singleinstance} \cup \act_{\singletask}$.
@@ -124,7 +124,10 @@ Intuitively, in an $\STK$-dominating $\AMASS$, the task creation or task switchi
 each task of $\Mm$ contains at most one $\STK$-activity, and  %whenever a task creation or task switching action occurs, the launched activity is of $\singleinstance$ or $\singletask$ launch mode, equivalently speaking, 
 whenever an $\standard$ or $\singletop$-activity is started, no task creation or task switching actions occur.  %This intuition is formalized by the proposition below.
 	%For the two sub-models of $\AMASS$, i.e., $\LMAMASS$ and $\IFAMASS$, an $\LMAMASS$ (resp. $\IFAMASS$) is said to be $\STK$-dominating if the above four constraints are satisfied.
-	
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hide{	
 \begin{example}
  We  use the following example to illustrate the concept of $\STK$-dominating $\AMASS$.
 		Let $\Mm=(\act,A,\lmd,\aft,\Delta)$, where 
@@ -167,7 +170,9 @@ whenever an $\standard$ or $\singletop$-activity is started, no task creation or
 			\label{stk-asm-example}
 \end{figure}
 \end{example}
-
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -194,7 +199,7 @@ The ultimate goal of the paper is to show the decidability of the configuration 
 
 For technical convenience, we assume that \emph{the affinities of $\singleinstance$-activities are mutually distinct and are different from those of the other activities}, that is, for $A, B \in \act_\singleinstance$ with $A \neq B$, we assume that  $\aft(A) \neq \aft(B)$ and $\aft(\act_\singleinstance) \cap \aft(\act \setminus \act_\singleinstance) = \emptyset$.
 %
-Note that this assumption is not a restriction, since regarding the task allocation mechanism, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. 
+Note that this assumption is not a restriction, since as we shall see from the semantics of {\AMASS}, the affinities of $\singleinstance$-activities are redundant and independent of those of the other activities. 
 
 %With this assumption, the task allocation mechanism (formalized by $\gettsk(\rho, B)$) can be specified by the \emph{name function} $\namefun_B(\theta)$ defined in the sequel:  Let $\theta = \aname_1 \cdots \aname_k$ and $B \in \act$. Then $\namefun_B(\theta) = i$ if $\aft(B) = \aname_i$ for some $i \in [k]$, and $\namefun_B(\theta) = \bot$ otherwise. 
 
