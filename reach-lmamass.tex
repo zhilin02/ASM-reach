@@ -25,9 +25,16 @@ In this section, we first define the semantics of $\LMAMASS$, then show how to s
 %Let us assume that $\Mm=(\act, A_0, \lmd, \aft, \Delta)$ is an $\singletask$-dominating $\LMAMASS$.
 
 \subsection{Configuration reachability of $\STK$-dominating $\LMAMASS$}
+
+The goal of this subsection is to prove the following result. 
+\begin{theorem}\label{thm-reach-lmamass}
+The configuration reachability of $\STK$-dominating $\LMAMASS$ is decidable. 
+\end{theorem}
+
+In the sequel, let us assume that $\Mm$ is an $\STK$-dominating $\LMAMASS$. 
   
 Let $(\Aut_1,\cdots,\Aut_k)$ be an {\NFA} tuple over the alphabet $\act$, and $\theta = \aname_1\cdots\aname_k$ be an affinity sequence. 
-Our goal is to decide whether there is a configuration $\rho$ that is reachable from the initial configuration and accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$.
+Our goal is to decide whether there is a configuration $\rho$ in $\Mm$ that is reachable from the initial configuration and accepted by $(\theta, (\Aut_1,\cdots,\Aut_k))$.
 % satisfying that for each $i\in[k]$, $\aname_i=\aname_i'$, $S_i\in\ConfSet(\Aut_i)$, moreover, $(([A_0],\aft(A_0)))\xRightarrow[\Mm]{}\rho$.
 
 The main idea is to show that the set of configurations that are reachable from the initial configuration can be represented finitely as recognizable relations defined below. 
@@ -39,7 +46,7 @@ A string relation $R \subseteq (\act^*)^k$ is \emph{recognizable}  if it is a fi
 %Our approach to tackle this case is to simulate the behaviors of a single task by a {\PDS}, and use a set of {\NFA} tuples to represent the configurations of {\AMASS} $\Mm$.
 %Theorem~\ref{thm:iff-recog} shows the reachability problem of $\STK$-dominating $\LMAMASS$ is decidable, and we prove Theorem~\ref{thm:iff-recog} by Lemma~\ref{lem:iff-forward} and Lemma~\ref{lem:iff-backward}.
 
-Let $\Theta_\Mm = \left \{ \aname_1 \cdots \aname_k \in (\aft(\act))^+ \mid k \le |\act_{\singleinstance}| + |\aft(\act)| \right\}$. Intuitively, $\Theta_\Mm$ denotes the set of affinity sequences  in the configurations of $\Mm$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, let
+Let $\Theta_\Mm = \left \{ \aname_1 \cdots \aname_k \in (\aft(\act))^+ \mid k \le |\aft(\act)| \right\}$. Intuitively, $\Theta_\Mm$ denotes the set of affinity sequences  in the configurations of $\Mm$. For each $\theta=\aname_1 \cdots \aname_k \in \Theta_\Mm$, let
 %
 $$
 \begin{array}{l}
@@ -61,6 +68,7 @@ Since each task $S_i$ can be seen as a string from $\act^+$, $\RLang(\Mm, \theta
 \end{proposition}
 
 
+To prove Theorem~\ref{thm-reach-lmamass}, it is sufficient to prove the following lemma. 
 \begin{lemma}\label{lem:iff-recog}
     For each $\theta \in \Theta_\Mm$, $\RLang(\Mm, \theta)$ is a recognizable relation and its $\NFA$-representation can be effectively computed.
 \end{lemma} 
@@ -70,7 +78,7 @@ By Lemma~\ref{lem:iff-recog}, for each $\theta = \aname_1 \cdots \aname_k \in \T
 Then the configuration reachability problem of $\Mm$ is solved as follows: If there is $\theta =  \aname_1 \cdots \aname_k \in \Theta_\Mm$ such that $\Lang(\Aut_{\theta, i, j}) \cap \Lang(\Aut_j) \neq \emptyset$ for each $j \in [k]$, then report ``yes'', otherwise, report ``no''.
 
 % The rest of this section is devoted to the proof of Theorem~\ref{thm:iff-recog}.
-The rest of this section is devoted to the proof of Lemma~\ref{lem:iff-recog}. We shall distinguish whether $\lmd(A_0) = \STK$. 
+The rest of this subsection is devoted to the proof of Lemma~\ref{lem:iff-recog}. We shall distinguish whether $\lmd(A_0) = \STK$. 
 The former case is simpler because, by Proposition~\ref{prop-stk}, all tasks will be rooted at $\STK$ activities. For the latter, the more general case, the back stack may contain, apart from the tasks rooted at $\STK$ activities, one single task rooted at $A_0$. 
 We shall consider the two cases in Section~\ref{sec:lmamass-stk} and Section~\ref{sec:lmamass-nostk} respectively.
 
@@ -85,7 +93,7 @@ Before presenting the rules, let us introduce several notations. Let $A \in \act
 We define a {\PDS} $\Pp_{A} = (P_A, \Gamma_{A}, \Delta_{A})$, where 
 \begin{itemize}
 \item $P_A = \{p_0, p_{\pop}\}$, 
-\item $\Gamma_{A} = \act_{\standard} \cup \act_{\singletop} \cup \{A\}$ if $\lmd(A) = \singletask$.
+\item $\Gamma_{A} = \act_{\standard} \cup \act_{\singletop} \cup \{A\}$, 
 \item $\Delta_{A}$ is defined as follows: 
 \begin{itemize}
 %\item $(p_1, A, p_1) \in \Delta_A$. 
@@ -96,7 +104,7 @@ We define a {\PDS} $\Pp_{A} = (P_A, \Gamma_{A}, \Delta_{A})$, where
 \begin{itemize}
     \item if either $\lmd(A'') = \STD$ or $\lmd(A'') = \singletop$ and $A' \neq A''$, we have $(p_0, A', A''A', p_0) \in \Delta_{A}$,    
     % \item For each transition $A\xrightarrow{\startactivity(\bot)}B\in\Delta$, if $\lmd(B) = \STP$ and $A\neq B$, then $(p_0, A, BA, p_0)\in\Delta_{A'}$,
-    \item if $\lmd(A) = \singletask$, $A' \neq A$ and $A'' = A$, then $(p_0, A', \epsilon, p_{\pop}) \in \Delta_{A}$, and for each $B \in \Gamma_{A} \setminus \{A\}$, $(p_{\pop}, B, \epsilon, p_{\pop}) \in \Delta_{A}$, moreover, $(p_{\pop}, A, A, p_0) \in \Delta_{A}$. (Intuitively, these transition rules simulate the action of popping the task until reaching an instance of $A$. )
+    \item if $A' \neq A$ and $A'' = A$, then $(p_0, A', \epsilon, p_{\pop}) \in \Delta_{A}$, and for each $B \in \Gamma_{A} \setminus \{A\}$, $(p_{\pop}, B, \epsilon, p_{\pop}) \in \Delta_{A}$, moreover, $(p_{\pop}, A, A, p_0) \in \Delta_{A}$. (Intuitively, these transition rules simulate the action of popping the task until reaching an instance of $A$. )
 \end{itemize}
 \end{itemize}
 Note that in the definition of $\Delta_{A}$, the transition rules $A' \xrightarrow{\startactivity(\bot)} A'' \in \Delta_A$ satisfying the following condition are ignored: $\lmd(A') = \singleinstance$, or $\lmd(A'') = \singleinstance$, or $\lmd(A'') = \singletask$ and $A'' \neq A$. 
@@ -112,7 +120,7 @@ In the sequel, we define the $\Pp_{A}$-{\NFA}s $\Aut_{A}$ and $\Aut_{A\rightsqui
 \begin{itemize}
     \item $\Aut_{A} = (P', \Gamma_A, \{(p_0, A, p_f)\},\{p_0\},\{p_f\} )$, where $P' = P_A \cup \{p_f\} \cup \{\langle p_0,A'\rangle \mid A'\in\Gamma_A\}$ with $p_f \not \in P_A$.  
     %
-    \item For $B \in \Gamma_A$, $\Aut_{A\rightsquigarrow B}$ is obtained from $(\Aut_{A})^{\post^*}_{\Pp_A}$ by \emph{removing all non-$B$ transitions out of $p_0$}, then removing all transitions that cannot be reached from $p_0$. 
+    \item For $B \in \Gamma_A$, $\Aut_{A\rightsquigarrow B}$ is obtained from $(\Aut_{A})^{\post^*}_{\Pp_A}(p_0)$ by \emph{removing all non-$B$ transitions out of $p_0$}, then removing all transitions that cannot be reached from $p_0$. 
 \end{itemize}
 Note that it is possible that $\Lang(\Aut_{A\rightsquigarrow B}) = \emptyset$.
 From the definition of $\Pp_A$, $\Aut_A$, and $\Aut_{A\rightsquigarrow B}$, we know that $\Lang((\Aut_A)^{\post^*}_{\Pp_A}) = \bigcup\limits_{B\in\Gamma_A} \Lang(\Aut_{A\rightsquigarrow B})$ and $\Lang(\Aut_{A\rightsquigarrow A}) = \Lang(\Aut_A)$. 
@@ -453,9 +461,9 @@ We conclude that the claim holds for $n$ in this case.
 
 
 
-\subsubsection{The case $\lmd(A_0) \neq \STK$}\label{sec:lmamass-nostk}
+\subsubsection{The case $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$}\label{sec:lmamass-nostk}
 %
-We then turn to the more general case $\lmd(A_0)\neq\STK$ which is more involved. In this case we prove Lemma~\ref{lem:iff-recog} by also showing the set of configurations that are reachable from the initial configuration can be saturated by repeatedly applying a finite set of rules.
+We then turn to the case that $\lmd(A_0)\neq\STK$ and  $\lmd(A_0) \neq \SIT$ which is more involved. In this case, we prove Lemma~\ref{lem:iff-recog} by also showing the set of configurations that are reachable from the initial configuration can be saturated by repeatedly applying a finite set of rules.
 
 Without loss of generality, we assume that there is $A'_0 \in \act$ such that $\lmd(A_0')=\STK$ and $\aft(A_0') = \aft(A_0)$. Note that such an $A'_0$ is unique, if it exists, since the task affinities of $\singletask$ activities are mutually distinct, according to the definition of $\singletask$-dominating $\AMASS$. The situation that there does not exist $A'_0 \in \act$ such that $\lmd(A_0')=\STK$ and $\aft(A_0') = \aft(A_0)$ can be reasoned about in a simpler and similar way. 
 
@@ -463,7 +471,7 @@ Without loss of generality, we assume that there is $A'_0 \in \act$ such that $\
 %If this happens, no $A_0$-task will be recreated again, and thus, it is the same case with $\lmd(A_0) = \STK$,
 %the challenging case is that we have both $A_0$-task and non-$A_0'$-tasks. 
 
-Because $\lmd(A_0) \neq \singletask$, the $A_0$-task is different from all the other tasks where the bottom activities are $\singletask$-activities. The difference is manifested  when a transition $A \xrightarrow{\startactivity(\bot)} A'_0$ is applied. In this case, although the $A_0$-task will be moved to the top (if it is not the top task), its content will not be reset to $A_0$, instead, all the activities above $A'_0$ (if there is any) will be popped, but everything below $A'_0$ (including $A'_0$ itself) will be preserved.  
+Because $\lmd(A_0) \neq \STK$ and $\lmd(A_0) \neq \SIT$, the $A_0$-task is different from all the other tasks where the bottom activities are $\singletask$-activities. The difference is manifested  when a transition $A \xrightarrow{\startactivity(\bot)} A'_0$ is applied. In this case, although the $A_0$-task will be moved to the top (if it is not the top task), its content will not be reset to $A_0$, instead, all the activities above $A'_0$ (if there is any) will be popped, but everything below $A'_0$ (including $A'_0$ itself) will be preserved.  
 
 %The difficulty is the bottom activity of $A_0$-task is not $A_0'$, since when the transition $A\xrightarrow{\startactivity(\bot)}A_0'$ is fired, the content of $A_0$-task is not $[A_0']$. Hence the behaviors of $A_0$-task is different from the non-$A_0$-tasks.  
 
@@ -540,7 +548,7 @@ Note that it is possible that $\Lang(\Aut_{A_0\rightsquigarrow B}) =\emptyset$ o
 \begin{itemize}
     \item $p_0,p_1$ (resp. $p_f$) has no incoming (resp. outgoing) transitions in $\Aut_{A_0}$, $\Aut_{A_0\rightsquigarrow B}$ and $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$.
     %
-    \item All the incoming non-$\varepsilon$ transitions of $\langle p_b, A\rangle$ for $b \in \{0,1\}$ and $A \in \Gamma_{A_0}$ in $\Aut_{A_0\rightsquigarrow B}$ and $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$ are $A$-transitions.
+    \item All the incoming non-$\varepsilon$ transitions of $\langle p_b, A\rangle$ for $b \in \{0,1\}$ and $A \in \Gamma_{A_0}$ in $\Aut_{A_0\rightsquigarrow B}$ and $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$ are $A$-labeled transitions.
  %moreover, $\langle p_1, A\rangle$ for $A\in\Gamma_{A_0}$ cannot be reached from $p_0$ in $\Aut_{A_0\stackrel{C}\rightsquigarrow B}$,
     %
 %    \item $\Lang(\Aut_{A_0})\subseteq\Lang(\Aut_{A_0\rightsquigarrow A_0})$, 
@@ -732,9 +740,11 @@ The following facts hold for $(\Aut_{A_0 \rightsquigarrow B})^{\post^*}_{\Pp_{A_
 %    \item $\Lang((\Aut_{A_0})^{\post^*}_{\Pp_{A_0}}(p_1)) = \bigcup\limits_{B\in\Gamma_{A_0},\Lang(\Aut_{A_0\rightsquigarrow C})\neq\emptyset,C\xrightarrow{\startactivity(\bot)}A_0\in\Delta}\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B})$, 
 %    moreover, for each $S\in\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B})$, $A_0'\in S$ and $A_0'$ occurs in $S$ exactly once.
 %
-    \item If $ \Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B}) \neq \emptyset$, then $\Lang((\Aut_{A_0\stackrel{C}\rightsquigarrow B})^{\post^*}_{\Pp_{A_0}}(p_0)) = \Lang((\Aut_{A_0 \rightsquigarrow C})^{\post^*}_{\Pp_{A_0}}(p_0))$ and 
+    \item If $ \Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B}) \neq \emptyset$, then 
+    $$\Lang((\Aut_{A_0\stackrel{C}\rightsquigarrow B})^{\post^*}_{\Pp_{A_0}}(p_0)) = \Lang((\Aut_{A_0 \rightsquigarrow C})^{\post^*}_{\Pp_{A_0}}(p_0))$$ 
+    and 
     $$\Lang((\Aut_{A_0\stackrel{C}\rightsquigarrow B})^{\post^*}_{\Pp_{A_0}}(p_1)) = 
-    \bigcup\limits_{B'\in\Gamma_{A_0}}\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B'}) \cup  \Lang((\Aut_{A_0 \rightsquigarrow C})^{\post^*}_{\Pp_{A_0}}(p_1)).$$
+    \bigcup\limits_{B'\in\Gamma_{A_0}}\Lang(\Aut_{A_0\stackrel{C}\rightsquigarrow B'}).$$
 \end{itemize}
 \end{proposition}
 

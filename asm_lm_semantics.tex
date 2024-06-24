@@ -25,6 +25,7 @@
 
 
 %Via extensive experiments, we identify a crucial notion, i.e., task affinity of tasks, which plays a pivotal role in such a mechanism.
+\paragraph*{Task allocation mechanism}
 When an activity is launched, it may not be put in the top task, in which case  
 %When an activity $B$ is launched and not going to be put in the top task, 
 the following rules are used to determine which task will it be allocated. 
@@ -35,7 +36,7 @@ the following rules are used to determine which task will it be allocated.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{Caveat.} The intuition is stated to facilitate readers to under the transitions rules at a high level. They are not necessarily precise at a formal level. For instance, when a new $\STD$-activity is stated by an $\SIT$-activity, the $\STD$-activity will not necessarily be pushed to the top task. 
+\noindent\textbf{Caveat.} The intuition is stated to facilitate readers to understand the transitions rules at a high level. They are not necessarily precise at a formal level. For instance, when a new $\STD$-activity is stated by an $\SIT$-activity, the $\STD$-activity will not necessarily be pushed to the top task. 
 %Task allocation mechanism is to specify to which task will it be allocated when an activity is launched. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{auxdef.tex}
@@ -184,6 +185,15 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 		% $\tau_5 = D \xrightarrow{\startactivity(\bot)} C$.
 		% $\rho_0 = (([D_1],D_1,1))$, and\\
 		Then the configurations that are reachable from the initial configuration $(([A], 1))$ by executing the transition rules from $\Delta$ are illustrated in Figure~\ref{lmasm-example}, where the vertices denote the configurations and the edges denote the elements of $\xrightarrow[\Mm]{}$. 
+		\begin{figure}[t]
+			% \vspace{-3mm}
+			\centering
+			\includegraphics[scale = 0.75]{lmasm-example.pdf}
+			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in $\LMAMASS$}
+			%in $\phi$
+			% \vspace{-6mm}	
+			\label{lmasm-example}
+		\end{figure}
 		For instance, 
 		\begin{itemize}
 			\item if $A \xrightarrow{\startactivity(\bot)} B$ is applied to the configuration $(([A], 1))$, then a new task $([B],2)$ is created, since $\lmd(B) = \STK$ and $\gettsk((([A],1)), B) = *$, resulting in the configuration $(([B],2),([A],1))$,
@@ -220,17 +230,21 @@ It is not hard to verify that the transition relation $\xrightarrow[\Mm]{}$ %pre
 		% $\xrightarrow[\tau_3]{\Mm}(([K_2],K_2,0),([P_1D_1],D_1,1))$\\
 		% $\xrightarrow[\tau_4]{\Mm}(([D_1K_2],K_2,0),([P_1D_1],D_1,1))$\\
 		% $\xrightarrow[\tau_5]{\Mm}(([T_2],T_2,0),([D_1K_2],K_2,0),([P_1D_1],D_1,1))$\\
-		% $\xrightarrow[\tau_6]{\Mm}(([K_2],K_2,0),([T_2],T_2,0),([P_1D_1],D_1,1))$\\
-		
-		\begin{figure}
-			% \vspace{-3mm}
-			\centering
-			\includegraphics[scale = 1]{lmasm-example.pdf}
-			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in $\LMAMASS$}
-			%in $\phi$
-			% \vspace{-6mm}	
-			\label{lmasm-example}
-		\end{figure}
+%<<<<<<< HEAD
+%		% $\xrightarrow[\tau_6]{\Mm}(([K_2],K_2,0),([T_2],T_2,0),([P_1D_1],D_1,1))$\\
+%		
+%		\begin{figure}
+%			% \vspace{-3mm}
+%			\centering
+%			\includegraphics[scale = 1]{lmasm-example.pdf}
+%			\caption{Configurations reachable from the initial configuration $(([A], 1))$ in $\LMAMASS$}
+%			%in $\phi$
+%			% \vspace{-6mm}	
+%			\label{lmasm-example}
+%		\end{figure}
+%=======
+		% $\xrightarrow[\tau_6]{\Mm}(([K_2],K_2,0),([T_2],T_2,0),([P_1D_1],D_1,1))$\\		
+ 
 Finally, let $\Mm'$ denote the $\LMAMASS$ obtained from $\Mm$ by removing $\tau_5$, then $\Mm'$ is an $\STK$-dominating $\LMAMASS$: In $\Mm'$, there is only one $\STK$-activity, namely, $B$, moreover, there is only one $\SIT$-activity, that is, $D$, and there is exactly one transition starting from $D$, namely, $D \xrightarrow{\startactivity(\bot)} B$, where $\lmd(B)= \singletask$. 
 	\end{example}
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% end of the example %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
