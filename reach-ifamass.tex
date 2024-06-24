@@ -4,6 +4,18 @@
 
 
 \subsection{Configuration reachability of $\STK$-dominating $\IFAMASS$}
+
+The goal of this subsection is to show the following result. 
+
+\begin{theorem}\label{thm-reach-ifamass}
+The configuration reachability of $\STK$-dominating $\IFAMASS$ is decidable. 
+\end{theorem}
+
+
+
+From the definition of the semantics, we can see that the effect of $\lmd(A) = \singletop$ is the same as that of the intent flag $\STP$, namely, the case $\lmd(A) = \standard$ and $\phi \models \STP$. Therefore, in the sequel, for simplicity, we assume that in $\Mm$, \emph{for each activity $A$, we have $\lmd(A) = \standard$}. 
+
+
 %Let us assume that $\Mm = (\act, A_0, \lmd, \aft, \Delta)$ is an $\STK$-dominating $\IFAMASS$, that is, for all activities $A \in \act$, $\lmd(A) = \standard$ and $\aft(A) = \aft(A_0)$, moreover, for each transition $A \xrightarrow{\startactivity(\phi)} B \in \Delta$, we have $\phi \models \neg \ntkflag$. As a result, 
 Recall that for  $\STK$-dominating $\IFAMASS$, there is only one task in each configuration. %of $\Mm$.
 However,, the reachability problem %of $\Mm$ is far from trivial, 

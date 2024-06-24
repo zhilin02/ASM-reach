@@ -8,7 +8,7 @@
 
 %To define the semantics of $\IFAMASS$, we adapt slightly the notion of configurations and the auxiliary functions and predicates. 
 
-Recall that in an  $\STK$-dominating  $\IFAMASS$, $\lmd(A) = \STD$ and $\aft(A) = \aft(A_0)$ for each activity $A$. As a result, there is only one task in each configuration and the task allocation mechanism can be ignored here. Therefore, a configuration here is simply a word $[A_1,\cdots,A_m]\in\act^+$. 
+Recall that in an  $\STK$-dominating  $\IFAMASS$, $\lmd(A) = \STD$ or $\STP$, and $\aft(A) = \aft(A_0)$ for each activity $A$. As a result, there is only one task in each configuration and the task allocation mechanism can be ignored here. Therefore, a configuration here is simply a word $[A_1,\cdots,A_m]\in\act^+$. 
 % there is only one task in $\IFAMASS$.
 
 %Before formally defining the semantics of $\Mm$, let us first describe the intuitions of the intent flags. 
@@ -44,15 +44,16 @@ For the configuration $\rho = [A_1,\cdots,A_m]$,
 Intuitively $\mvacttop(\rho, B)$ is used for defining the semantics of $\rtfflag$, and $\clrtsk(\rho, B)$ is used for defining the semantics of $\ctkflag$.
 
 %We are ready to define the semantics of $\IFAMASS$, that is, the relation $\rho \xrightarrow[\Mm]{\tau} \rho'$.
-Let $\rho = [A_1,\cdots,A_m]$ for some $m\ge 1$ be the current configuration and $A_1 = A$. 
+Let $\rho = [A_1,\cdots,A_m]$ for some $m\ge 1$ be the current configuration and $A_1 = A$. We show how $\rho'$ is obtained from $\rho$ and $\tau$. 
 
-If $\tau = \back$ then $\rho' = \pop(\rho)$.
+If $\tau = \back$ then $\rho' = \Pop(\rho)$.
 
-For the rule  $\tau = A\xrightarrow[]{\startactivity(\phi)}B$,
-
+If $\tau = A\xrightarrow[]{\startactivity(\phi)}B$, then
 \begin{itemize}
-	\item If $\phi\models\ctkflag\wedge\ntkflag$, then $\rho' = \clrtsk(\rho, B)$.
-	\item Otherwise,
+\item if $\lmd(A) = \standard$, then
+\begin{itemize}
+	\item if $\phi\models\ctkflag\wedge\ntkflag$, then $\rho' = \clrtsk(\rho, B)$,
+	\item otherwise,
 	\begin{itemize}
 		\item if $\phi \models\ctpflag$ and $B \in \rho$, then $\rho' =\clrtop(\rho, B)$,
 		\item otherwise,
@@ -61,10 +62,28 @@ For the rule  $\tau = A\xrightarrow[]{\startactivity(\phi)}B$,
 			\item otherwise,
 			\begin{itemize}
 				\item if $\phi \models \stpflag$ and $A = B$, then $\rho' = \rho$,
+				\item otherwise, $\rho' = \push(\rho, B)$,
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+\item if $\lmd(A) = \singletop$, then 
+\begin{itemize}
+	\item if $\phi\models\ctkflag\wedge\ntkflag$, then $\rho' = \clrtsk(\rho, B)$,
+	\item otherwise,
+	\begin{itemize}
+		\item if $\phi \models\ctpflag$ and $B \in \rho$, then $\rho' =\clrtop(\rho, B)$,
+		\item otherwise,
+		\begin{itemize}
+			\item if $\phi \models \rtfflag$ and $B \in \rho$, then $\rho'=\mvacttop(\rho, B)$,
+			\item otherwise,
+			\begin{itemize}
+				\item if $A = B$, then $\rho' = \rho$,
 				\item otherwise, $\rho' = \push(\rho, B)$.
 			\end{itemize}
 		\end{itemize}
 	\end{itemize}
+\end{itemize}
 \end{itemize}
 
 We use the following example to illustrate the semantics.
